@@ -26,10 +26,31 @@ public class MySQLAccess {
         }
     }
 
-    public void runStatement(){
+    public ResultSet runStatement(String query){
+        Statement statement = null;
+        ResultSet rs = null;
 
+        if (query.isEmpty()){ return rs; }
+
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+        } catch (SQLException e) {
+            System.err.println("Error in SQL query");
+        } finally {
+            if (statement != null) {
+                try{
+                    statement.close();
+                } catch (SQLException ex){
+                    System.err.println("Error in closing SQL query");
+                }
+            }
+        }
+
+        return rs;
     }
-
+    
     public void sampleQuery(){
         //Sample SQL query
         Statement statement = null;
