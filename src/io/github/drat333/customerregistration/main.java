@@ -4,25 +4,10 @@ import java.sql.*;
 import java.util.Scanner;
 
 public class main {
-    //MySQL server info
-    private static String url = "jdbc:mysql://sql2.njit.edu:3306/az62";
-    private static String DBUsername = "az62";
-    private static String DBpassword = "8wlgKd19A";
-    private static Connection connection;
-    private static String dbName = "az62";
-
 
     public static void main(String[] args) throws Exception {
 
-        //Connect to database
-        System.out.println("Connecting to MySQL server...");
-        try {
-            connection = DriverManager.getConnection(url, DBUsername, DBpassword);
-        } catch (java.sql.SQLException e){
-            System.err.println("MySQL server access denied, check your credentials.");
-            return;
-        }
-
+        MySQLAccess sql = new MySQLAccess();    //initialize connection to MySQL server
         clearConsole();
 
         ///////////////////////
@@ -38,12 +23,15 @@ public class main {
             System.out.println("3 | Exit");
             resp = scanner.nextLine();
 
-            System.out.println(resp);
             switch (resp) {
                 case "1":
+                    System.out.println(resp);
                     login(scanner);
+                    break;
                 case "2":
+                    System.out.println(resp);
                     register(scanner);
+                    break;
                 case "3":
                     System.out.println("Goodbye!");
                     return;
@@ -53,51 +41,19 @@ public class main {
         }
     }
 
-    private static void sampleQuery(){
-        //Sample SQL query
-        Statement statement = null;
-        ResultSet rs;
-        String query = "SELECT * FROM HOTEL";
-        try {
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-
-            System.out.println("\n" + query);
-            System.out.println("HotelID\t| Street\t| Country\t\t| State\t| Zip");
-            while (rs.next()) {
-                String HotelID = rs.getString("HotelID");
-                String Street = rs.getString("Street");
-                String Country = rs.getString("Country");
-                String State = rs.getString("State");
-                String Zip = rs.getString("Zip");
-                System.out.println(HotelID + "\t" + Street + "\t" + Country + "\t\t" + State + "\t" + Zip);
-            }
-
-        } catch (SQLException e) {
-            System.err.println("Error in SQL query");
-        } finally {
-            if (statement != null) {
-                try{
-                    statement.close();
-                } catch (SQLException ex){
-                    System.err.println("Error in closing SQL query");
-                }
-            }
-        }
-    }
-
     private static void login(Scanner scanner){
         //clearConsole();
-        System.out.print("User name: ");
-        String user = scanner.nextLine();
-        System.out.print("Password: ");
+        System.out.println("Email: ");
+        String email = scanner.nextLine();
+        System.out.println("Password: ");
         String pass = scanner.nextLine();
 
-        if (user != "admin" || pass != "admin"){        //SQL statement to check user credentials
+        if (email != "admin" || pass != "admin"){        //SQL statement to check user credentials
             System.out.println("Access denied.");
         }
 
         //account management
+
     }
 
     private static void register(Scanner scanner){
