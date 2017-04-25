@@ -1,9 +1,5 @@
 package io.github.drat333.customerregistration;
 
-/**
- * Created by Adrian on 4/18/2017.
- */
-
 import java.sql.*;
 import java.util.Scanner;
 
@@ -22,8 +18,8 @@ public class main {
         System.out.println("Connecting to MySQL server...");
         try {
             connection = DriverManager.getConnection(url, DBUsername, DBpassword);
-        } catch (com.mysql.jdbc.exceptions.jdbc4.CommunicationsException e){
-            System.err.println("Failed to connect to MySQL server, exiting.");
+        } catch (java.sql.SQLException e){
+            System.err.println("MySQL server access denied, check your credentials.");
             return;
         }
 
@@ -42,12 +38,14 @@ public class main {
             System.out.println("3 | Exit");
             resp = scanner.nextLine();
 
+            System.out.println(resp);
             switch (resp) {
                 case "1":
                     login(scanner);
                 case "2":
                     register(scanner);
                 case "3":
+                    System.out.println("Goodbye!");
                     return;
                 default:
                     System.out.println("Invalid response!");
@@ -89,21 +87,28 @@ public class main {
     }
 
     private static void login(Scanner scanner){
-        String user = scanner.next("User name: ");
-        String pass = scanner.next("Password: ");
+        //clearConsole();
+        System.out.print("User name: ");
+        String user = scanner.nextLine();
+        System.out.print("Password: ");
+        String pass = scanner.nextLine();
 
-        if (!(user == pass && user == "admin")){        //SQL statement to check user credentials
-            System.out.println("Access denied");
+        if (user != "admin" || pass != "admin"){        //SQL statement to check user credentials
+            System.out.println("Access denied.");
         }
 
         //account management
     }
 
     private static void register(Scanner scanner){
-        String user = scanner.next("Enter a user name: ");
+        //clearConsole();
+        System.out.print("Enter a user name: ");
+        String user = scanner.nextLine();
         //SQL query checks for existing username
-        String pass = scanner.next("Enter a password: ");
-        String confirmPass = scanner.next("Re-enter your password: ");
+        System.out.print("Enter a password: ");
+        String pass = scanner.nextLine();
+        System.out.print("Confirm your password: ");
+        String confirmPass = scanner.nextLine();
         if (pass == confirmPass){
             //insert password into db
         }
