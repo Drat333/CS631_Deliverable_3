@@ -1,4 +1,4 @@
-package io.github.drat333.customerregistration;
+package io.github.drat333.reservations_reviews;
 
 import java.sql.*;
 
@@ -20,7 +20,7 @@ public class MySQLAccess {
         System.out.println("Connecting to MySQL server...");
         try {
             connection = DriverManager.getConnection(url, DBUsername, DBpassword);
-        } catch (java.sql.SQLException e){
+        } catch (SQLException e){
             System.err.println("MySQL server access denied, check your credentials.");
             return;
         }

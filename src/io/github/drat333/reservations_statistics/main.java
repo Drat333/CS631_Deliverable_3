@@ -1,8 +1,10 @@
-package io.github.drat333.customerregistration;
+package io.github.drat333.reservations_statistics;
 
-import java.sql.*;
 import java.util.Scanner;
 
+/**
+ * Created by Adrian on 4/28/2017.
+ */
 public class main {
 
     public static void main(String[] args) throws Exception {
@@ -17,7 +19,7 @@ public class main {
             String resp;    //user response
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("\n\n\n\n\nWelcome to the Hulton Customer Registration app!");
+            System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation Statistics app!");
             System.out.println("1 | Login to existing account");
             System.out.println("2 | Register a new account");
             System.out.println("3 | Exit");
@@ -41,40 +43,9 @@ public class main {
         }
     }
 
-    private static void login(Scanner scanner){
-        //clearConsole();
-        System.out.println("Email: ");
-        String email = scanner.nextLine();
-        System.out.println("Password: ");
-        String pass = scanner.nextLine();
-
-        if (email != "admin" || pass != "admin"){        //SQL statement to check user credentials
-            System.out.println("Access denied.");
-        }
-
-        //account management
-
-    }
-
-    private static void register(Scanner scanner){
-        //clearConsole();
-        System.out.print("Enter a user name: ");
-        String user = scanner.nextLine();
-        //SQL query checks for existing username
-        System.out.print("Enter a password: ");
-        String pass = scanner.nextLine();
-        System.out.print("Confirm your password: ");
-        String confirmPass = scanner.nextLine();
-        if (pass == confirmPass){
-            //insert password into db
-        }
-
-        //basic account setup
-    }
 
 
     private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
-
 }
