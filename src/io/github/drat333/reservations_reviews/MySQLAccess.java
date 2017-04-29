@@ -10,6 +10,7 @@ public class MySQLAccess {
     private String DBpassword;
     private Connection connection;
     private String dbName;
+    private boolean connected;
 
     public MySQLAccess(){
         url = "jdbc:mysql://sql2.njit.edu:3306/az62";
@@ -20,9 +21,10 @@ public class MySQLAccess {
         System.out.println("Connecting to MySQL server...");
         try {
             connection = DriverManager.getConnection(url, DBUsername, DBpassword);
+            connected = true;
         } catch (SQLException e){
             System.err.println("MySQL server access denied, check your credentials.");
-            return;
+            connected = false;
         }
     }
 
@@ -49,6 +51,10 @@ public class MySQLAccess {
         }
 
         return rs;
+    }
+
+    public boolean connected(){
+        return connected;
     }
 
     public void sampleQuery(){

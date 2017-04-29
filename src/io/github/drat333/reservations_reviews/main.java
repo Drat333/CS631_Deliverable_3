@@ -1,5 +1,6 @@
 package io.github.drat333.reservations_reviews;
 
+import java.sql.ResultSet;
 import java.util.Scanner;
 
 /**
@@ -11,6 +12,7 @@ public class main {
     //user variables
     public static boolean loggedIn;
     public static String username;
+    public static String userDisplayName;
 
     //variables for Scanner
     public static Scanner scanner;
@@ -19,6 +21,9 @@ public class main {
     public static void main(String[] args) {
 
         MySQLAccess sql = new MySQLAccess();    //initialize connection to MySQL server
+        if (!sql.connected()){
+            return;
+        }
         clearConsole();
 
         ///////////////////////
@@ -27,7 +32,7 @@ public class main {
         while (true) {
             scanner = new Scanner(System.in);
 
-            System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation and Reviews app!");
+            System.out.println("\n\n\nWelcome to the Hulton Reservation and Reviews app!");
             System.out.println("1 | Login");
             System.out.println("0 | Exit");
             resp = scanner.nextLine();
@@ -36,11 +41,12 @@ public class main {
                 case "1":
                     System.out.println(resp);
                     if (login()){
+                        goodbye();
                         return;
                     }
                     break;
                 case "0":
-                    System.out.println("Goodbye!");
+                    goodbye();
                     return;
                 default:
                     System.out.println("Invalid response!");
@@ -50,29 +56,45 @@ public class main {
             }
         }
 
-        System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation and Reviews app!");
-        System.out.println("1 | Search hotels and make a reservation");
-        System.out.println("2 | Find discounts for an existing reservation");
-        System.out.println("3 | Logout");
-        System.out.println("  |");
-        System.out.println("0 | Exit");
-        resp = scanner.nextLine();
+        while(true) {
+            System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation and Reviews app, " + userDisplayName + "!");
+            System.out.println("1 | Search hotels and make a reservation");
+            System.out.println("2 | Find discounts for an existing reservation");
+            System.out.println("3 | Leave a review");
+            System.out.println("4 | Logout");
+            System.out.println("  |");
+            System.out.println("0 | Exit");
+            resp = scanner.nextLine();
 
-        switch (resp){
-            case "1":
-                if (hotelSearch()){
+            switch (resp) {
+                case "1":
+                    if (hotelSearch()) {
+                        goodbye();
+                        return;
+                    }
+                    break;
+                case "2":
+                    if (findDiscounts()) {
+                        goodbye();
+                        return;
+                    }
+                    break;
+                case "3":
+                    if (leaveReviews()) {
+                        goodbye();
+                        return;
+                    }
+                case "4":
+                    //no need for SQL statements here (probably)
+                    username = null;
+                    userDisplayName = null;
+                    loggedIn = false;
+                    main(null);     //log out then return to main menu
+                case "0":
+                    goodbye();
                     return;
-                }
-                break;
-            case "2":
-                break;
-            case "3":
-                loggedIn = false;
-                main(null);     //log out then return to main menu
-            case "0":
-                return true;
+            }
         }
-
 
     }
 
@@ -94,11 +116,12 @@ public class main {
                     case "1":
                         break;
                     case "0":
-                        return true;
+                        return true;    //quit application
                     default:
                         System.out.println("Invalid response!");
                 }
             } else{
+                userDisplayName = "admin";  //SQL statement: get user's real name
                 loggedIn = true;
                 return false;
             }
@@ -107,10 +130,110 @@ public class main {
 
 
     private static boolean hotelSearch(){
+        // TODO: 4/28/2017 Implement (in separate class, for organization?). Fill in commented areas
 
+        clearConsole();
+
+        while (true) {
+            String country;
+            String state;
+            String hotelID; //make an int?
+            String hotelName;
+
+            System.out.println("======Hulton Hotel Search======");
+            System.out.println("Type 'exit' to return to the main menu at any time.");
+
+            System.out.println("Enter a country:");
+            country = scanner.nextLine();
+            if (country.compareToIgnoreCase("exit") == 0){
+                return false;
+            }
+            //SQL statement to confirm hotels exist in that country
+
+            System.out.println("Enter a state in " + country + ":");
+            state = scanner.nextLine();
+            if (state.compareToIgnoreCase("exit") == 0){
+                return false;
+            }
+
+            //SQL statement to confirm hotels exist in that state
+
+            //if hotels > 1, list and ask which hotel
+            if (false /*placeholder*/) {
+                System.out.println("Which hotel?");
+                resp = scanner.nextLine();
+                if (resp.compareToIgnoreCase("exit") == 0){
+                    return false;
+                }
+            }
+
+            //assign hotelID
+            System.out.println("You have chosen " + hotelName);
+            System.out.println("Would you like create a reservation? (Y/N)");
+            resp = scanner.nextLine();
+
+            if (resp.compareToIgnoreCase("y") == 0){
+                ResultSet rs; //= sql statement that gets all available rooms
+
+                while (true) {
+                    System.out.println("Which room would you like to reserve?");
+                    int i = 1;
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        //print room information nicely. not explicitly like below, this is a loop
+                        System.out.println("1 | A very nice room");
+                        System.out.println("2 | Slightly less nice room");
+                        System.out.println("3 | 'I mean I guess, fine' room");
+                        i++;
+                    }
+                    //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+                    resp = scanner.nextLine();
+                    if (resp.compareToIgnoreCase("exit") == 0) {
+                        return false;
+                    }
+
+                    //try to convert the input into an int
+                    int selection;
+                    try {
+                        selection = Integer.parseInt(resp);
+                        if (selection < 1 || selection > i){
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
+
+                    String roomID;
+                    rs.beforeFirst();
+                    while (i !=0){
+                        rs.next();
+                        i--;
+                    }
+                    roomID = rs.getString("RoomNo");
+                }
+            }
+        }
+        return false;
+    }
+
+    private static boolean findDiscounts(){
+        // TODO: 4/28/2017 Implement (in separate class, for organization?)
+        return false;
+    }
+
+    private static boolean leaveReviews(){
+        // TODO: 4/28/2017 Implement (in separate class, for organization?)
+        return false;
     }
 
     private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
+
+    private static void goodbye() {
+        clearConsole();
+        System.out.println("Thank you for using the Hulton Reservation and Review app.");
+        System.out.println("Goodbye!");
     }
 }

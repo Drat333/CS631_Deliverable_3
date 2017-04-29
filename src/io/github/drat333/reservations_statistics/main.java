@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 /**
  * Created by Adrian on 4/28/2017.
+ *
  */
 public class main {
 
@@ -19,7 +20,7 @@ public class main {
             String resp;    //user response
             Scanner scanner = new Scanner(System.in);
 
-            System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation Statistics app!");
+            System.out.println("\n\n\nWelcome to the Hulton Reservation Statistics app!");
             System.out.println("1 | Login to existing account");
             System.out.println("2 | Register a new account");
             System.out.println("3 | Exit");
@@ -28,11 +29,11 @@ public class main {
             switch (resp) {
                 case "1":
                     System.out.println(resp);
-                    login(scanner);
+                    //login(scanner);
                     break;
                 case "2":
                     System.out.println(resp);
-                    register(scanner);
+                    //register(scanner);
                     break;
                 case "3":
                     System.out.println("Goodbye!");
@@ -47,5 +48,11 @@ public class main {
 
     private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    }
+
+    private static void goodbye() {
+        clearConsole();
+        System.out.println("Thank you for using the Hulton Reservation Statistics app.");
+        System.out.println("Goodbye!");
     }
 }
