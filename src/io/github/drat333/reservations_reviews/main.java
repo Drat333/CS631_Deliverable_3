@@ -1,6 +1,8 @@
 package io.github.drat333.reservations_reviews;
 
+import java.sql.Array;
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 /**
@@ -8,6 +10,8 @@ import java.util.Scanner;
  * NOTES: methods like login() return booleans; true = exit, false = continue operations
  */
 public class main {
+
+    public static MySQLAccess sql;
 
     //user variables
     public static boolean loggedIn;
@@ -18,9 +22,15 @@ public class main {
     public static Scanner scanner;
     public static String resp;      //user response
 
+
+
+
+
+
+
     public static void main(String[] args) {
 
-        MySQLAccess sql = new MySQLAccess();    //initialize connection to MySQL server
+        sql = new MySQLAccess();    //initialize connection to MySQL server
         if (!sql.connected()){
             return;
         }
@@ -68,22 +78,14 @@ public class main {
 
             switch (resp) {
                 case "1":
-                    if (hotelSearch()) {
-                        goodbye();
-                        return;
-                    }
+                    hotelSearch();
                     break;
                 case "2":
-                    if (findDiscounts()) {
-                        goodbye();
-                        return;
-                    }
+                    findDiscounts();
                     break;
                 case "3":
-                    if (leaveReviews()) {
-                        goodbye();
-                        return;
-                    }
+                    leaveReviews();
+                    break;
                 case "4":
                     //no need for SQL statements here (probably)
                     username = null;
@@ -98,6 +100,11 @@ public class main {
 
     }
 
+
+
+
+
+
     private static boolean login(){
         //clearConsole();
         while (true) {
@@ -106,7 +113,7 @@ public class main {
             System.out.println("Password: ");
             String pass = scanner.nextLine();
 
-            if (email.compareTo("admin") != 0 || pass.compareTo("admin") != 0) {        //SQL statement to check user credentials
+            if (email.equals("admin") || pass.equals("admin")) {        //SQL statement to check user credentials
                 System.out.println("Invalid credentials.");
                 System.out.println("1 | Login again");
                 System.out.println("0 | Exit");
@@ -129,85 +136,147 @@ public class main {
     }
 
 
-    private static boolean hotelSearch(){
-        // TODO: 4/28/2017 Implement (in separate class, for organization?). Fill in commented areas
 
+
+
+
+
+
+    private static void hotelSearch() {
+        // TODO: 4/28/2017 Implement (in separate class, for organization?). Fill in SQL statements and test.
+        // this method should not make any table changes until the end, when the customer confirms their choices
 
         String country;
         String state;
         String hotelID; //make an int?
         String hotelName;
 
+
+
         //search for a hotel
-        while (true) {
+        hotels: while (true) {
             clearConsole();
             System.out.println("======Hulton Hotel Search======");
             System.out.println("Type 'exit' to return to the main menu at any time.");
 
             System.out.println("\nEnter a country:");
             country = scanner.nextLine();
-            if (country.compareToIgnoreCase("exit") == 0) {
-                return false;
+            if (country.equalsIgnoreCase("exit")) {
+                return;
             }
             //SQL statement to confirm hotels exist in that country
 
             System.out.println("Enter a state in " + country + ":");
             state = scanner.nextLine();
-            if (state.compareToIgnoreCase("exit") == 0) {
-                return false;
+            if (state.equalsIgnoreCase("exit")) {
+                return;
             }
 
-            //SQL statement to confirm hotels exist in that state
+            ResultSet rs = sql.runStatement("temp"); //SQL statement to confirm hotels exist in that state
 
-            //if hotels > 1, list and ask which hotel
-            if (false /*placeholder*/) {
-                System.out.println("Which hotel?");
-                resp = scanner.nextLine();
-                if (resp.compareToIgnoreCase("exit") == 0) {
-                    return false;
+            //TODO: check if there are hotels available from input
+            while (true) {
+                System.out.println("Which hotel in " + state + ", " + country + " would you like to view?");
+                int i = 1;
+                try {
+                    //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        System.out.println(Integer.toString(i) + " | " +
+                                rs.getString("Street"));
+                        i++;
+                    }
+                } catch (java.sql.SQLException e) {
+                    System.err.println(e);
                 }
+
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return;
+                }
+
+                //try to convert the input into an int
+                int selection;
+                try {
+                    selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;  //make em do it again
+                }
+
+                try {
+                    rs.beforeFirst();
+                    while (i != 0) {
+                        rs.next();
+                        i--;
+                    }
+                    hotelID = rs.getString("HotelID");
+                    System.out.println("\nYou have chosen the hotel at " + rs.getString("Street") + " in " + state + ", " + country + ".");
+                } catch (java.sql.SQLException e) {
+                    System.err.println(e);
+                    continue;
+                    //I don't know what this error would mean
+                }
+                break;
             }
 
-            //assign hotelID
-            System.out.println("You have chosen " + hotelName);
-            System.out.println("Would you like create a reservation? (Y/N)");
-            resp = scanner.nextLine();
+            //hotel has been chosen at this point
+            scanner:
+            while (true) {
 
-            if (resp.compareToIgnoreCase("y") == 0) {
-                break;
+                System.out.println("Would you like to create a reservation? (Y/N)");
+                resp = scanner.nextLine();
+
+                switch(resp.toUpperCase()){
+                    case "Y":
+                        break hotels;
+                    case "N":
+                        continue hotels;
+                    case "EXIT":
+                        return;
+                    default:
+                        System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
+                        continue scanner;
+                }
             }
         }
 
 
         //start making a reservation - pick a room
-        ResultSet rs; //= sql statement that gets all AVAILABLE rooms
-        while (true) {
-            System.out.println("Which room would you like to reserve?");
+        ResultSet rs = sql.runStatement("temp"); //= sql statement that gets all AVAILABLE rooms
+        rooms: while (true) {
+            System.out.println("\nWhich room would you like to reserve?");
             int i = 1;
             try {
+                //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
-                    //print room information nicely. not explicitly like below, this is a loop
-                    System.out.println("1 | A very nice room");
-                    System.out.println("2 | Slightly less nice room");
-                    System.out.println("3 | 'I mean I guess, fine' room");
+                    System.out.println(Integer.toString(i) + " | " +
+                            rs.getString("Rtype") + ": " +
+                            rs.getString("Capacity") + " people, " +
+                            rs.getString("Price") + " per day");
+                    System.out.println("\t" + rs.getString("Description"));
                     i++;
                 }
-            } catch (java.sql.SQLException e){
+            } catch (java.sql.SQLException e) {
                 System.err.println(e);
+                continue;
                 //I don't know what this error would mean
             }
-            //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+
             resp = scanner.nextLine();
-            if (resp.compareToIgnoreCase("exit") == 0) {
-                return false;
+            if (resp.equalsIgnoreCase("exit")) {
+                return;
             }
 
             //try to convert the input into an int
             int selection;
             try {
                 selection = Integer.parseInt(resp);
-                if (selection < 1 || selection > i){
+                if (selection < 1 || selection > i) {
                     throw new NumberFormatException();
                 }
             } catch (NumberFormatException e) {
@@ -218,12 +287,12 @@ public class main {
             String roomID;
             try {
                 rs.beforeFirst();
-                while (i !=0){
+                while (i != 0) {
                     rs.next();
                     i--;
                 }
                 roomID = rs.getString("RoomNo");
-            } catch (java.sql.SQLException e){
+            } catch (java.sql.SQLException e) {
                 System.err.println(e);
                 //I don't know what this error would mean
             }
@@ -231,23 +300,24 @@ public class main {
         }
 
 
+
         //pick reservation dates
-        while (true) {
+        dates: while (true) {
             System.out.println("Enter your desired start date for your stay: ");
             String startDate = scanner.nextLine();
-            if (startDate.compareToIgnoreCase("exit") == 0) {
-                return false;
+            if (startDate.equalsIgnoreCase("exit")) {
+                return;
             }
 
             System.out.println("Enter your desired end date for your stay:");
             String endDate = scanner.nextLine();
-            if (endDate.compareToIgnoreCase("exit") == 0) {
-                return false;
+            if (endDate.equalsIgnoreCase("exit")) {
+                return;
             }
 
             //SQL statement checks if date is available
 
-            if (true /*placeholder, dates unavailable*/){
+            if (startDate == endDate /*placeholder, dates available*/) {
                 System.out.println("\nCongrats! Those dates are available.");
                 break;
             } else {
@@ -255,37 +325,130 @@ public class main {
             }
         }
 
+
+
         //pick breakfasts
-        //rs = sql statement that gets all breakfasts available
-        while (true){   //if breakfasts are available
-            System.out.println("\n\nBreakfasts are available for your reservation.");
-            System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
+        rs = sql.runStatement("temp"); //sql statement that gets all breakfasts available
+        ArrayList<String> BType = new ArrayList();
+        ArrayList<Integer> BCount = new ArrayList();
 
-            // TODO: 4/28/2017 put this in an array of some sort
-            String bType;
-            try{
+        breakfasts: while (true) {
+            try {
                 rs.beforeFirst();
-                while (rs.next()){
-                    System.out.println(bType + " breakfast: ");
-                    
+                rs.next();
+                if (!rs.wasNull()) {
+                    System.out.println("\n\nBreakfasts are available for your reservation.");
+                    System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
 
+                    rs.beforeFirst();
+                    while (rs.next()) {   //if breakfasts are available
+                        BType.add(rs.getString("BType"));
+                        System.out.print(rs.getString("BType") + " ($ " + rs.getString("BPrice") + "/order): ");
+
+                        resp = scanner.nextLine();
+                        if (resp.equalsIgnoreCase("exit")) {
+                            return;
+                        }
+
+                        //try to convert the input into an int
+                        int selection;
+                        try {
+                            selection = Integer.parseInt(resp);
+                            if (selection < 0) {
+                                throw new NumberFormatException();
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("\nPlease enter a valid number (at least 0), or type 'exit' to return to main menu.\n");
+                            break;  //make em do it again
+                        }
+
+                        BCount.add(selection);
+                    }
                 }
+            } catch (java.sql.SQLException e) {
+                System.err.println(e);
             }
 
-
+            break;
         }
 
-        return false;
+
+
+        //pick services
+        rs = sql.runStatement("temp");   //sql query that gets the services available
+        ArrayList<String> SType = new ArrayList();
+        services: while (true) {
+            try {
+                rs.beforeFirst();
+                rs.next();
+                if (!rs.wasNull()) {
+                    System.out.println("\n\nServices are available for your reservation.");
+                    System.out.println("Please indicate (Y/N) for each service.");
+
+                    rs.beforeFirst();
+                    while (rs.next()) {   //if services are available
+                        System.out.print(rs.getString("SType") + " ($" + rs.getString("SPrice") + "): ");
+
+                        resp = scanner.nextLine();
+                        switch(resp.toUpperCase()) {
+                            case "Y":
+                                SType.add(rs.getString("SType"));
+                                break;
+                            case "N":
+                                break;
+                            case "EXIT":
+                                return;
+                            default:
+                                System.out.println("\nPlease indicate (Y/N) for if you want the service, or exit to return to the main menu.\n");
+                                break;
+                        }
+                    }
+                }
+            } catch (java.sql.SQLException e){
+                System.err.println(e);
+                continue services;
+            }
+            break;
+        }
+
+        int TotalPrice; //TODO: this is probably optional but could be nice to implement. requires sql query
+        System.out.println("\nAll aspects of your visit are set!");
+
+        confirmation: while (true) {
+            System.out.println("Would you like to confirm your reservation now? (Y/N)"); //total price ~would~ go here
+
+            resp = scanner.nextLine();
+
+            switch(resp.toUpperCase()) {
+                case "Y":
+                    //insert all values into sql tables
+                    System.out.println("Congratulations! You have successfully reserved your visit.");  //TODO: perhaps add more info here?
+                    break;
+                case "N":
+                    break;
+                case "EXIT":
+                    return;
+            }
+        }
+
     }
 
-    private static boolean findDiscounts(){
+
+
+
+
+
+
+
+
+    private static void findDiscounts(){
         // TODO: 4/28/2017 Implement (in separate class, for organization?)
-        return false;
+        return;
     }
 
-    private static boolean leaveReviews(){
+    private static void leaveReviews(){
         // TODO: 4/28/2017 Implement (in separate class, for organization?)
-        return false;
+        return;
     }
 
     private static void clearConsole(){
