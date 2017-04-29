@@ -43,13 +43,15 @@ public class main {
 
     private static void login(Scanner scanner){
         //clearConsole();
+        scanner.reset();
         System.out.println("Email: ");
         String email = scanner.nextLine();
         System.out.println("Password: ");
         String pass = scanner.nextLine();
-
-        if (email != "admin" || pass != "admin"){        //SQL statement to check user credentials
-            System.out.println("Access denied.");
+        System.out.println(email + " " + pass);
+ 
+        if (email.equals("admin") || pass.equals("admin")){        //SQL statement to check user credentials
+            System.out.println("Success!");
         }
 
         //account management
