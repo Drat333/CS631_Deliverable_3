@@ -132,27 +132,28 @@ public class main {
     private static boolean hotelSearch(){
         // TODO: 4/28/2017 Implement (in separate class, for organization?). Fill in commented areas
 
-        clearConsole();
 
+        String country;
+        String state;
+        String hotelID; //make an int?
+        String hotelName;
+
+        //search for a hotel
         while (true) {
-            String country;
-            String state;
-            String hotelID; //make an int?
-            String hotelName;
-
+            clearConsole();
             System.out.println("======Hulton Hotel Search======");
             System.out.println("Type 'exit' to return to the main menu at any time.");
 
-            System.out.println("Enter a country:");
+            System.out.println("\nEnter a country:");
             country = scanner.nextLine();
-            if (country.compareToIgnoreCase("exit") == 0){
+            if (country.compareToIgnoreCase("exit") == 0) {
                 return false;
             }
             //SQL statement to confirm hotels exist in that country
 
             System.out.println("Enter a state in " + country + ":");
             state = scanner.nextLine();
-            if (state.compareToIgnoreCase("exit") == 0){
+            if (state.compareToIgnoreCase("exit") == 0) {
                 return false;
             }
 
@@ -162,7 +163,7 @@ public class main {
             if (false /*placeholder*/) {
                 System.out.println("Which hotel?");
                 resp = scanner.nextLine();
-                if (resp.compareToIgnoreCase("exit") == 0){
+                if (resp.compareToIgnoreCase("exit") == 0) {
                     return false;
                 }
             }
@@ -172,48 +173,108 @@ public class main {
             System.out.println("Would you like create a reservation? (Y/N)");
             resp = scanner.nextLine();
 
-            if (resp.compareToIgnoreCase("y") == 0){
-                ResultSet rs; //= sql statement that gets all available rooms
-
-                while (true) {
-                    System.out.println("Which room would you like to reserve?");
-                    int i = 1;
-                    rs.beforeFirst();
-                    while (rs.next()) {
-                        //print room information nicely. not explicitly like below, this is a loop
-                        System.out.println("1 | A very nice room");
-                        System.out.println("2 | Slightly less nice room");
-                        System.out.println("3 | 'I mean I guess, fine' room");
-                        i++;
-                    }
-                    //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
-                    resp = scanner.nextLine();
-                    if (resp.compareToIgnoreCase("exit") == 0) {
-                        return false;
-                    }
-
-                    //try to convert the input into an int
-                    int selection;
-                    try {
-                        selection = Integer.parseInt(resp);
-                        if (selection < 1 || selection > i){
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;
-                    }
-
-                    String roomID;
-                    rs.beforeFirst();
-                    while (i !=0){
-                        rs.next();
-                        i--;
-                    }
-                    roomID = rs.getString("RoomNo");
-                }
+            if (resp.compareToIgnoreCase("y") == 0) {
+                break;
             }
         }
+
+
+        //start making a reservation - pick a room
+        ResultSet rs; //= sql statement that gets all AVAILABLE rooms
+        while (true) {
+            System.out.println("Which room would you like to reserve?");
+            int i = 1;
+            try {
+                rs.beforeFirst();
+                while (rs.next()) {
+                    //print room information nicely. not explicitly like below, this is a loop
+                    System.out.println("1 | A very nice room");
+                    System.out.println("2 | Slightly less nice room");
+                    System.out.println("3 | 'I mean I guess, fine' room");
+                    i++;
+                }
+            } catch (java.sql.SQLException e){
+                System.err.println(e);
+                //I don't know what this error would mean
+            }
+            //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+            resp = scanner.nextLine();
+            if (resp.compareToIgnoreCase("exit") == 0) {
+                return false;
+            }
+
+            //try to convert the input into an int
+            int selection;
+            try {
+                selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i){
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                continue;  //make em do it again
+            }
+
+            String roomID;
+            try {
+                rs.beforeFirst();
+                while (i !=0){
+                    rs.next();
+                    i--;
+                }
+                roomID = rs.getString("RoomNo");
+            } catch (java.sql.SQLException e){
+                System.err.println(e);
+                //I don't know what this error would mean
+            }
+            break;
+        }
+
+
+        //pick reservation dates
+        while (true) {
+            System.out.println("Enter your desired start date for your stay: ");
+            String startDate = scanner.nextLine();
+            if (startDate.compareToIgnoreCase("exit") == 0) {
+                return false;
+            }
+
+            System.out.println("Enter your desired end date for your stay:");
+            String endDate = scanner.nextLine();
+            if (endDate.compareToIgnoreCase("exit") == 0) {
+                return false;
+            }
+
+            //SQL statement checks if date is available
+
+            if (true /*placeholder, dates unavailable*/){
+                System.out.println("\nCongrats! Those dates are available.");
+                break;
+            } else {
+                System.out.println("We're sorry, those dates are unavailable.");
+            }
+        }
+
+        //pick breakfasts
+        //rs = sql statement that gets all breakfasts available
+        while (true){   //if breakfasts are available
+            System.out.println("\n\nBreakfasts are available for your reservation.");
+            System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
+
+            // TODO: 4/28/2017 put this in an array of some sort
+            String bType;
+            try{
+                rs.beforeFirst();
+                while (rs.next()){
+                    System.out.println(bType + " breakfast: ");
+                    
+
+                }
+            }
+
+
+        }
+
         return false;
     }
 
