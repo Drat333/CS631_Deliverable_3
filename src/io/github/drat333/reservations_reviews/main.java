@@ -69,9 +69,8 @@ public class main {
         while(true) {
             System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation and Reviews app, " + userDisplayName + "!");
             System.out.println("1 | Search hotels and make a reservation");
-            System.out.println("2 | Find discounts for an existing reservation");
-            System.out.println("3 | Leave a review");
-            System.out.println("4 | Logout");
+            System.out.println("2 | Leave a review");
+            System.out.println("3 | Logout");
             System.out.println("  |");
             System.out.println("0 | Exit");
             resp = scanner.nextLine();
@@ -81,12 +80,9 @@ public class main {
                     hotelSearch();
                     break;
                 case "2":
-                    findDiscounts();
-                    break;
-                case "3":
                     leaveReviews();
                     break;
-                case "4":
+                case "3":
                     //no need for SQL statements here (probably)
                     username = null;
                     userDisplayName = null;
@@ -144,6 +140,7 @@ public class main {
 
     private static void hotelSearch() {
         // TODO: 4/28/2017 Implement (in separate class, for organization?). Fill in SQL statements and test.
+        // TODO: 4/29/2017 Add discounts. Change to allow user to input a room type and date; room numbers behind-the-scenes
         // this method should not make any table changes until the end, when the customer confirms their choices
 
         String country;
@@ -440,14 +437,80 @@ public class main {
 
 
 
-
-    private static void findDiscounts(){
-        // TODO: 4/28/2017 Implement (in separate class, for organization?)
-        return;
-    }
-
     private static void leaveReviews(){
         // TODO: 4/28/2017 Implement (in separate class, for organization?)
+
+        ResultSet rs = sql.runStatement("temp"); //sql statement that gets the list of reservations the user has made
+
+        try {
+            rs.beforeFirst();
+            rs.next();
+            if (rs.wasNull()) {
+                System.out.println("You don't have any reservations to review currently.");
+                System.out.println("Returning to the main menu.\n");
+                return;
+            }
+
+        } catch (java.sql.SQLException e) {
+            System.err.println(e);
+            return;
+        }
+
+        String InvoiceNo;
+        while (true) {
+            System.out.println("Please pick a stay that you would like to review:");
+
+            int i = 1;
+            try {
+                rs.beforeFirst();
+                while (rs.next()) {
+                    System.out.println(Integer.toString(i) + " | " +
+                            rs.getString("State") + ", " +
+                            rs.getString("Country") + " - " +
+                            rs.getString("CheckInDate"));
+                    i++;
+                }
+            } catch (java.sql.SQLException e) {
+                System.err.println(e);
+                continue;
+            }
+
+            resp = scanner.nextLine();
+            if (resp.equalsIgnoreCase("exit")) {
+                return;
+            }
+
+            //try to convert the input into an int
+            int selection;
+            try {
+                selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    throw new NumberFormatException();
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                //make em do it again
+            }
+
+            try {
+                rs.beforeFirst();
+                while (i != 0) {
+                    rs.next();
+                    i--;
+                }
+                InvoiceNo = rs.getString("InvoiceNo");
+            } catch (java.sql.SQLException e) {
+                System.err.println(e);
+                continue;
+                //I don't know what this error would mean
+            }
+            break;
+
+        }
+
+        
+
         return;
     }
 

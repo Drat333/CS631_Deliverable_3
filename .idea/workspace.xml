@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="Completion of reservation function of reservations &amp; reviews app. Testing required">
+    <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
     </list>
@@ -19,7 +19,7 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-37">
+            <state relative-caret-position="527">
               <caret line="31" column="30" lean-forward="true" selection-start-line="31" selection-start-column="30" selection-end-line="31" selection-end-column="30" />
               <folding>
                 <element signature="imports" expanded="true" />
@@ -33,8 +33,8 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="243">
-              <caret line="145" column="109" lean-forward="false" selection-start-line="145" selection-start-column="109" selection-end-line="145" selection-end-column="109" />
+            <state relative-caret-position="776">
+              <caret line="511" column="8" lean-forward="false" selection-start-line="511" selection-start-column="8" selection-end-line="511" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -70,6 +70,7 @@
       <find>i don't kno</find>
       <find>exit</find>
       <find>switch</find>
+      <find>i++</find>
     </findStrings>
     <replaceStrings>
       <replace>System.out</replace>
@@ -511,7 +512,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493156246854</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required">
+      <created>1493509471698</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1493509471698</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -521,7 +529,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3281412" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281412" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -605,7 +613,8 @@
     <MESSAGE value="Added runStatement method to MySQLAccess.java" />
     <MESSAGE value="Progress on reservation function of reservations &amp; reviews app" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing required" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completion of reservation function of reservations &amp; reviews app. Testing required" />
+    <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required" />
+    <option name="LAST_COMMIT_MESSAGE" value="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1027,18 +1036,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-37">
-          <caret line="31" column="30" lean-forward="true" selection-start-line="31" selection-start-column="30" selection-end-line="31" selection-end-column="30" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1493491618933" expanded="false" signature="2423:2433" ph=" { " />
-            <marker date="1493491618933" expanded="false" signature="2502:2508" ph=" }" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_73/src.zip!/java/lang/NumberFormatException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="238">
@@ -1057,10 +1054,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="527">
+          <caret line="31" column="30" lean-forward="true" selection-start-line="31" selection-start-column="30" selection-end-line="31" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1493491618933" expanded="false" signature="2423:2433" ph=" { " />
+            <marker date="1493491618933" expanded="false" signature="2502:2508" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="243">
-          <caret line="145" column="109" lean-forward="false" selection-start-line="145" selection-start-column="109" selection-end-line="145" selection-end-column="109" />
+        <state relative-caret-position="776">
+          <caret line="511" column="8" lean-forward="false" selection-start-line="511" selection-start-column="8" selection-end-line="511" selection-end-column="8" />
           <folding />
         </state>
       </provider>
