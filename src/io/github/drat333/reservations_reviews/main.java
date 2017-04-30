@@ -418,7 +418,7 @@ public class main {
 
             switch(resp.toUpperCase()) {
                 case "Y":
-                    //insert all values into sql tables
+                    rs = sql.runStatement("insert");  //insert all values into sql tables
                     System.out.println("Congratulations! You have successfully reserved your visit.");  //TODO: perhaps add more info here?
                     break;
                 case "N":
@@ -512,29 +512,84 @@ public class main {
 
 
         //pick something to review
-        while (true){
+        int selection;
+        while (true) {
             System.out.println("What would you like to review?");
             System.out.println("1 | Room");
             System.out.println("2 | Breakfast");
             System.out.println("3 | Services");
 
             resp = scanner.nextLine();
-            switch (resp.toUpperCase()){
-                case "1":
-                    //room
-                    break;
-                case "2":
-                    //breakfast
-                    break;
-                case "3":
-                    //services
-                    break;
-                case "exit":
-                    return;
+            if (resp.equalsIgnoreCase("exit")){
+                return;
             }
 
-
+            try {
+                selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > 3) {
+                    throw new NumberFormatException();
+                }
+                break;
+            } catch (NumberFormatException e) {
+                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                //make em do it again
+            }
         }
+
+        String review;
+        int i = 0;
+        // TODO: 4/30/2017 should we cancel the review if the user only types "exit"? very minor detail
+        switch (selection){
+            case 1:
+                //room
+                System.out.println("Write your review of your room (limit 500 characters):");
+                review = scanner.nextLine();
+                rs = sql.runStatement("insert"); //sql statement that inserts review
+                break;
+            case 2:
+                //breakfast - reviews are opt-out (with "skip")
+                try{
+                    rs = sql.runStatement("temp");  //sql statement that gets list of breakfasts ordered
+                    while (rs.next()){
+                        i++;
+                        System.out.println("Write your review for " + rs.getString("BType") + " (limit 500 characters), or type 'skip':");
+                        review = scanner.nextLine();
+                        if (review.equalsIgnoreCase("skip")){
+                            continue;
+                        }
+                        sql.runStatement("insert");  //sql statement that inserts review
+                    }
+                } catch (java.sql.SQLException e){
+                    System.err.println(e);
+                }
+                if (i == 0){
+                    System.out.println("You did not order any breakfasts for this stay.");
+                }
+                break;
+            case 3:
+                //services - reviews are opt-out (with "skip")
+                try{
+                    rs = sql.runStatement("temp");  //sql statement that gets list of services ordered
+                    while (rs.next()){
+                        i++;
+                        System.out.println("Write your review for " + rs.getString("SType") + " (limit 500 characters), or type 'skip':");
+                        review = scanner.nextLine();
+                        if (review.equalsIgnoreCase("skip")){
+                            continue;
+                        }
+                        sql.runStatement("insert");  //sql statement that inserts review
+                    }
+                } catch (java.sql.SQLException e){
+                    System.err.println(e);
+                }
+                if (i == 0){
+                    System.out.println("You did not order any services for this stay.");
+                }
+                break;
+        }
+
+        System.out.println("\n Thank you for your reviews! We greatly appreciate any and all feedback.");
+        
     }
 
     private static void clearConsole(){
