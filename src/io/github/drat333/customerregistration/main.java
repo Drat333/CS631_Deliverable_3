@@ -62,7 +62,7 @@ public class main {
         //clearConsole();
         System.out.print("Enter a user name: ");
         String user = scanner.nextLine();
-        //SQL query checks for existing username
+        //SQL query checks for existing userName
         System.out.print("Enter a password: ");
         String pass = scanner.nextLine();
         System.out.print("Confirm your password: ");
