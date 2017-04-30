@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
+    <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="Started implementing reviews portion of Reservations and Reviews">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
     </list>
@@ -33,8 +33,8 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="776">
-              <caret line="511" column="8" lean-forward="false" selection-start-line="511" selection-start-column="8" selection-end-line="511" selection-end-column="8" />
+            <state relative-caret-position="239">
+              <caret line="532" column="27" lean-forward="true" selection-start-line="532" selection-start-column="27" selection-end-line="532" selection-end-column="27" />
               <folding />
             </state>
           </provider>
@@ -519,7 +519,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493509471698</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Reservation and Reviews app: started work on reviews portion">
+      <created>1493517780401</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1493517780401</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -529,7 +536,7 @@
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281412" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3281412" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -614,7 +621,9 @@
     <MESSAGE value="Progress on reservation function of reservations &amp; reviews app" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing required" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required" />
-    <option name="LAST_COMMIT_MESSAGE" value="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required" />
+    <MESSAGE value="Reservation and Reviews app: started work on reviews portion" />
+    <MESSAGE value="Started implementing reviews portion of Reservations and Reviews" />
+    <option name="LAST_COMMIT_MESSAGE" value="Started implementing reviews portion of Reservations and Reviews" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1068,8 +1077,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="776">
-          <caret line="511" column="8" lean-forward="false" selection-start-line="511" selection-start-column="8" selection-end-line="511" selection-end-column="8" />
+        <state relative-caret-position="239">
+          <caret line="532" column="27" lean-forward="true" selection-start-line="532" selection-start-column="27" selection-end-line="532" selection-end-column="27" />
           <folding />
         </state>
       </provider>

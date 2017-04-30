@@ -456,6 +456,7 @@ public class main {
             return;
         }
 
+        //pick a stay
         String InvoiceNo;
         while (true) {
             System.out.println("Please pick a stay that you would like to review:");
@@ -509,9 +510,31 @@ public class main {
 
         }
 
-        
 
-        return;
+        //pick something to review
+        while (true){
+            System.out.println("What would you like to review?");
+            System.out.println("1 | Room");
+            System.out.println("2 | Breakfast");
+            System.out.println("3 | Services");
+
+            resp = scanner.nextLine();
+            switch (resp.toUpperCase()){
+                case "1":
+                    //room
+                    break;
+                case "2":
+                    //breakfast
+                    break;
+                case "3":
+                    //services
+                    break;
+                case "exit":
+                    return;
+            }
+
+
+        }
     }
 
     private static void clearConsole(){
