@@ -139,7 +139,7 @@ public class main {
 
 
     private static void hotelSearch() {
-        // TODO: 4/28/2017 Implement (in separate class, for organization?). Fill in SQL statements and test.
+        // TODO: 4/28/2017 Fill in SQL statements and test.
         // TODO: 4/29/2017 Add discounts. Change to allow user to input a room type and date; room numbers behind-the-scenes
         // this method should not make any table changes until the end, when the customer confirms their choices
 
@@ -147,6 +147,7 @@ public class main {
         String state;
         String hotelID; //make an int?
         String hotelName;
+        ResultSet rs;
 
 
 
@@ -169,7 +170,7 @@ public class main {
                 return;
             }
 
-            ResultSet rs = sql.runStatement("temp"); //SQL statement to confirm hotels exist in that state
+            rs = sql.runStatement("temp"); //SQL statement to confirm hotels exist in that state
 
             //TODO: check if there are hotels available from input
             while (true) {
@@ -236,26 +237,87 @@ public class main {
                         return;
                     default:
                         System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
-                        continue scanner;
                 }
             }
         }
 
+        //pick a room type
+        rs = sql.runStatement("temp"); // sql statement that gets the room types available
+
+        roomTypes:
+        while (true) {
+            System.out.println("\nWhat type of room would you like to reserve?");
+            int i = 1;
+            try {
+                //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+                rs.beforeFirst();
+                while (rs.next()) {
+                    System.out.println(Integer.toString(i) + " | " + rs.getString("Rtype"));
+                    i++;
+                }
+            } catch (java.sql.SQLException e) {
+                System.err.println(e);
+                continue;
+                //I don't know what this error would mean
+            }
+
+            resp = scanner.nextLine();
+            if (resp.equalsIgnoreCase("exit")) {
+                return;
+            }
+
+            //try to convert the input into an int
+            int selection;
+            try {
+                selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    throw new NumberFormatException();
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                continue;  //make em do it again
+            }
+
+            String Rtype;
+            try {
+                rs.beforeFirst();
+                while (i != 0) {
+                    rs.next();
+                    i--;
+                }
+                Rtype = rs.getString("Rtype");
+            } catch (java.sql.SQLException e) {
+                System.err.println(e);
+                //I don't know what this error would mean
+            }
+            break;
+        }
+
+
+
+
 
         //start making a reservation - pick a room
-        ResultSet rs = sql.runStatement("temp"); //= sql statement that gets all AVAILABLE rooms
-        rooms: while (true) {
+        rs = sql.runStatement("temp"); // sql statement that gets all AVAILABLE rooms, using Rtype
+        rooms:
+        while (true) {
             System.out.println("\nWhich room would you like to reserve?");
             int i = 1;
             try {
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
-                    System.out.println(Integer.toString(i) + " | " +
-                            rs.getString("Rtype") + ": " +
-                            rs.getString("Capacity") + " people, " +
-                            rs.getString("Price") + " per day");
-                    System.out.println("\t" + rs.getString("Description"));
+                    System.out.print(Integer.toString(i) + " | " +
+                            rs.getString("Price") + " per day," +
+                            rs.getString("Capacity") + " people, Floor " +
+                            rs.getString("Floor"));
+                    if (rs.getString("Discount") != null) {
+                        System.out.print("\tDiscounted! " );
+                        int discount = Integer.parseInt(rs.getString("Discounted"));
+                        discount *= 100;
+                        System.out.print(Integer.toString(discount) + "% off");
+                    }
+                    System.out.println("\n\tDescription: " + rs.getString("Description"));
                     i++;
                 }
             } catch (java.sql.SQLException e) {
@@ -299,7 +361,8 @@ public class main {
 
 
         //pick reservation dates
-        dates: while (true) {
+        dates:
+        while (true) {
             System.out.println("Enter your desired start date for your stay: ");
             String startDate = scanner.nextLine();
             if (startDate.equalsIgnoreCase("exit")) {
@@ -326,10 +389,11 @@ public class main {
 
         //pick breakfasts
         rs = sql.runStatement("temp"); //sql statement that gets all breakfasts available
-        ArrayList<String> BType = new ArrayList();
-        ArrayList<Integer> BCount = new ArrayList();
+        ArrayList<String> BType = new ArrayList<>();
+        ArrayList<Integer> BCount = new ArrayList<>();
 
-        breakfasts: while (true) {
+        breakfasts:
+        while (true) {
             try {
                 rs.beforeFirst();
                 rs.next();
@@ -374,7 +438,8 @@ public class main {
         //pick services
         rs = sql.runStatement("temp");   //sql query that gets the services available
         ArrayList<String> SType = new ArrayList();
-        services: while (true) {
+        services:
+        while (true) {
             try {
                 rs.beforeFirst();
                 rs.next();
@@ -411,7 +476,8 @@ public class main {
         int TotalPrice; //TODO: this is probably optional but could be nice to implement. requires sql query
         System.out.println("\nAll aspects of your visit are set!");
 
-        confirmation: while (true) {
+        confirmation:
+        while (true) {
             System.out.println("Would you like to confirm your reservation now? (Y/N)"); //total price ~would~ go here
 
             resp = scanner.nextLine();
@@ -438,8 +504,7 @@ public class main {
 
 
     private static void leaveReviews(){
-        // TODO: 4/28/2017 Implement (in separate class, for organization?)
-
+        // TODO: 4/30/2017 Add in SQL statements and test
         ResultSet rs = sql.runStatement("temp"); //sql statement that gets the list of reservations the user has made
 
         try {
@@ -456,6 +521,7 @@ public class main {
             return;
         }
 
+        System.out.println("======Hulton Review App======");
         //pick a stay
         String InvoiceNo;
         while (true) {
@@ -589,7 +655,7 @@ public class main {
         }
 
         System.out.println("\n Thank you for your reviews! We greatly appreciate any and all feedback.");
-        
+
     }
 
     private static void clearConsole(){
