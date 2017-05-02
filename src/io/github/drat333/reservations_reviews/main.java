@@ -163,40 +163,45 @@ public class main {
 
         // TODO: 5/2/2017 just surround the whole thing in try catch 
 
-        //search for a hotel
-        hotels: while (true) {
-            clearConsole();
-            System.out.println("======Hulton Hotel Search======");
-            System.out.println("Type 'exit' to return to the main menu at any time.");
-
-            System.out.println("\nEnter a country:");
-            country = scanner.nextLine();
-            if (country.equalsIgnoreCase("exit")) {
-                return;
-            }
-            //SQL statement to confirm hotels exist in that country
-
-            System.out.println("Enter a state in " + country + ":");
-            state = scanner.nextLine();
-            if (state.equalsIgnoreCase("exit")) {
-                return;
-            }
-
-
-            query = "SELECT * " +
-                    "FROM HOTEL " +
-                    "WHERE Country='" + country + "' AND State='" + state + "';";
-
-
+        try {
+            //search for a hotel
+            hotels:
             while (true) {
+                clearConsole();
+                System.out.println("======Hulton Hotel Search======");
+                System.out.println("Type 'exit' to return to the main menu at any time.");
 
-                try {
+                System.out.println("\nEnter a country:");
+                country = scanner.nextLine();
+                if (country.equalsIgnoreCase("exit")) {
+                    return;
+                }
+                //SQL statement to confirm hotels exist in that country
+
+                System.out.println("Enter a state in " + country + ":");
+                state = scanner.nextLine();
+                if (state.equalsIgnoreCase("exit")) {
+                    return;
+                }
+
+
+                query = "SELECT * " +
+                        "FROM HOTEL " +
+                        "WHERE Country='" + country + "' AND State='" + state + "';";
+
+
+                while (true) {
+
+                    if (statement != null){
+                        statement.close();
+                    }
+
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
 
                     //see if hotel exists
                     rs.next();
-                    if (rs.isAfterLast()){
+                    if (rs.isAfterLast()) {
                         System.out.println("\nThere are no hotels at that location, please try again.\n");
                         continue;
                     }
@@ -239,104 +244,87 @@ public class main {
                     System.out.println("\nYou have chosen the hotel at " + rs.getString("Street") + " in " + state + ", " + country + ".");
 
 
-                } catch (java.sql.SQLException e) {
-                    System.err.println(e);
-                } finally {
-                    if (statement != null) {
-                        try{
-                            statement.close();
-                        } catch (SQLException ex){
-                            System.err.println("Error in closing SQL query");
-                        }
+
+
+                    break;
+                }
+
+                if (statement != null){
+                    statement.close();
+                }
+
+                //hotel has been chosen at this point
+                while (true) {
+
+                    System.out.println("Would you like to create a reservation? (Y/N)");
+                    resp = scanner.nextLine();
+
+                    switch (resp.toUpperCase()) {
+                        case "Y":
+                            break hotels;
+                        case "N":
+                            continue hotels;
+                        case "EXIT":
+                            return;
+                        default:
+                            System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
                     }
                 }
-
-                break;
             }
 
-            //hotel has been chosen at this point
-            scanner:
+            //pick a room type
+            rs = sql.runStatement("temp"); // sql statement that gets the room types available
+
+            roomTypes:
             while (true) {
-
-                System.out.println("Would you like to create a reservation? (Y/N)");
-                resp = scanner.nextLine();
-
-                switch(resp.toUpperCase()){
-                    case "Y":
-                        break hotels;
-                    case "N":
-                        continue hotels;
-                    case "EXIT":
-                        return;
-                    default:
-                        System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
-                }
-            }
-        }
-
-        //pick a room type
-        rs = sql.runStatement("temp"); // sql statement that gets the room types available
-
-        roomTypes:
-        while (true) {
-            System.out.println("\nWhat type of room would you like to reserve?");
-            int i = 1;
-            try {
+                System.out.println("\nWhat type of room would you like to reserve?");
+                int i = 1;
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
                     System.out.println(Integer.toString(i) + " | " + rs.getString("Rtype"));
                     i++;
                 }
-            } catch (java.sql.SQLException e) {
-                System.err.println(e);
-                continue;
-                //I don't know what this error would mean
-            }
 
-            resp = scanner.nextLine();
-            if (resp.equalsIgnoreCase("exit")) {
-                return;
-            }
 
-            //try to convert the input into an int
-            int selection;
-            try {
-                selection = Integer.parseInt(resp);
-                if (selection < 1 || selection > i) {
-                    throw new NumberFormatException();
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return;
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                continue;  //make em do it again
-            }
 
-            String Rtype;
-            try {
+                //try to convert the input into an int
+                int selection;
+                try {
+                    selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;  //make em do it again
+                }
+
+                String Rtype;
                 rs.beforeFirst();
                 while (i != 0) {
                     rs.next();
                     i--;
                 }
                 Rtype = rs.getString("Rtype");
-            } catch (java.sql.SQLException e) {
-                System.err.println(e);
-                //I don't know what this error would mean
+
+                break;
             }
-            break;
-        }
 
+            if (statement != null){
+                statement.close();
+            }
 
-
-
-
-        //start making a reservation - pick a room
-        rs = sql.runStatement("temp"); // sql statement that gets all AVAILABLE rooms, using Rtype
-        rooms:
-        while (true) {
-            System.out.println("\nWhich room would you like to reserve?");
-            int i = 1;
-            try {
+            //start making a reservation - pick a room
+            rs = sql.runStatement("temp"); // sql statement that gets all AVAILABLE rooms, using Rtype
+            rooms:
+            while (true) {
+                System.out.println("\nWhich room would you like to reserve?");
+                int i = 1;
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
@@ -345,7 +333,7 @@ public class main {
                             rs.getString("Capacity") + " people, Floor " +
                             rs.getString("Floor"));
                     if (rs.getString("Discount") != null) {
-                        System.out.print("\tDiscounted! " );
+                        System.out.print("\tDiscounted! ");
                         int discount = Integer.parseInt(rs.getString("Discounted"));
                         discount *= 100;
                         System.out.print(Integer.toString(discount) + "% off");
@@ -353,84 +341,77 @@ public class main {
                     System.out.println("\n\tDescription: " + rs.getString("Description"));
                     i++;
                 }
-            } catch (java.sql.SQLException e) {
-                System.err.println(e);
-                continue;
-                //I don't know what this error would mean
-            }
 
-            resp = scanner.nextLine();
-            if (resp.equalsIgnoreCase("exit")) {
-                return;
-            }
 
-            //try to convert the input into an int
-            int selection;
-            try {
-                selection = Integer.parseInt(resp);
-                if (selection < 1 || selection > i) {
-                    throw new NumberFormatException();
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return;
                 }
-            } catch (NumberFormatException e) {
-                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                continue;  //make em do it again
-            }
 
-            String roomID;
-            try {
-                rs.beforeFirst();
-                while (i != 0) {
-                    rs.next();
-                    i--;
+                //try to convert the input into an int
+                int selection;
+                try {
+                    selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        throw new NumberFormatException();
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;  //make em do it again
                 }
-                roomID = rs.getString("RoomNo");
-            } catch (java.sql.SQLException e) {
-                System.err.println(e);
-                //I don't know what this error would mean
-            }
-            break;
-        }
 
-
-
-        //pick reservation dates
-        dates:
-        while (true) {
-            System.out.println("Enter your desired start date for your stay: ");
-            String startDate = scanner.nextLine();
-            if (startDate.equalsIgnoreCase("exit")) {
-                return;
-            }
-
-            System.out.println("Enter your desired end date for your stay:");
-            String endDate = scanner.nextLine();
-            if (endDate.equalsIgnoreCase("exit")) {
-                return;
-            }
-
-            //SQL statement checks if date is available
-
-            if (startDate == endDate /*placeholder, dates available*/) {
-                System.out.println("\nCongrats! Those dates are available.");
+                String roomID;
+                    rs.beforeFirst();
+                    while (i != 0) {
+                        rs.next();
+                        i--;
+                    }
+                    roomID = rs.getString("RoomNo");
                 break;
-            } else {
-                System.out.println("We're sorry, those dates are unavailable.");
             }
-        }
 
+            if (statement != null){
+                statement.close();
+            }
 
+            //pick reservation dates
+            dates:
+            while (true) {
+                System.out.println("Enter your desired check-in date for your stay: ");
+                String startDate = scanner.nextLine();
+                if (startDate.equalsIgnoreCase("exit")) {
+                    return;
+                }
 
-        //pick breakfasts
-        rs = sql.runStatement("temp"); //sql statement that gets all breakfasts available
-        ArrayList<String> BType = new ArrayList<>();
-        ArrayList<Integer> BCount = new ArrayList<>();
+                System.out.println("Enter your desired check-out date for your stay:");
+                String endDate = scanner.nextLine();
+                if (endDate.equalsIgnoreCase("exit")) {
+                    return;
+                }
 
-        breakfasts:
-        while (true) {
-            try {
-                rs.beforeFirst();
+                sql.runStatement;//SQL statement checks if date is available
+
+                if (startDate.equals(endDate) /*placeholder, dates available*/) {
+                    System.out.println("\nCongrats! Those dates are available.");
+                    break;
+                } else {
+                    System.out.println("We're sorry, those dates are unavailable.");
+                }
+            }
+
+            if (statement != null){
+                statement.close();
+            }
+
+            //pick breakfasts
+            rs = sql.runStatement("temp"); //sql statement that gets all breakfasts available
+            ArrayList<String> BType = new ArrayList<>();
+            ArrayList<Integer> BCount = new ArrayList<>();
+
+            breakfasts:
+            while (true) {
                 rs.next();
-                if (!rs.wasNull()) {
+                if (!rs.isAfterLast()) {
                     System.out.println("\n\nBreakfasts are available for your reservation.");
                     System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
 
@@ -459,74 +440,84 @@ public class main {
                         BCount.add(selection);
                     }
                 }
-            } catch (java.sql.SQLException e) {
-                System.err.println(e);
+                break;
             }
 
-            break;
-        }
+            if (statement != null){
+                statement.close();
+            }
 
-
-
-        //pick services
-        rs = sql.runStatement("temp");   //sql query that gets the services available
-        ArrayList<String> SType = new ArrayList();
-        services:
-        while (true) {
-            try {
-                rs.beforeFirst();
+            //pick services
+            rs = sql.runStatement("temp");   //sql query that gets the services available
+            ArrayList<String> SType = new ArrayList();
+            services:
+            while (true) {
                 rs.next();
-                if (!rs.wasNull()) {
+                if (!rs.isAfterLast()) {
                     System.out.println("\n\nServices are available for your reservation.");
                     System.out.println("Please indicate (Y/N) for each service.");
 
                     rs.beforeFirst();
                     while (rs.next()) {   //if services are available
-                        System.out.print(rs.getString("SType") + " ($" + rs.getString("SPrice") + "): ");
+                        prompt:
+                        while (true) {
+                            System.out.print(rs.getString("SType") + " ($" + rs.getString("SPrice") + "): ");
 
-                        resp = scanner.nextLine();
-                        switch(resp.toUpperCase()) {
-                            case "Y":
-                                SType.add(rs.getString("SType"));
-                                break;
-                            case "N":
-                                break;
-                            case "EXIT":
-                                return;
-                            default:
-                                System.out.println("\nPlease indicate (Y/N) for if you want the service, or exit to return to the main menu.\n");
-                                break;
+                            resp = scanner.nextLine();
+                            switch (resp.toUpperCase()) {
+                                case "Y":
+                                    SType.add(rs.getString("SType"));
+                                    break prompt;
+                                case "N":
+                                    break prompt;
+                                case "EXIT":
+                                    return;
+                                default:
+                                    System.out.println("\nPlease indicate (Y/N) for if you want the service, or exit to return to the main menu.\n");
+                                    break;
+                            }
                         }
                     }
                 }
-            } catch (java.sql.SQLException e){
-                System.err.println(e);
-                continue services;
+                break;
             }
-            break;
-        }
 
-        int TotalPrice; //TODO: this is probably optional but could be nice to implement. requires sql query
-        System.out.println("\nAll aspects of your visit are set!");
+            if (statement != null){
+                statement.close();
+            }
 
-        confirmation:
-        while (true) {
-            System.out.println("Would you like to confirm your reservation now? (Y/N)"); //total price ~would~ go here
+            int TotalPrice; //TODO: this is probably optional but could be nice to implement. requires sql query
+            System.out.println("\nAll aspects of your visit are set!");
 
-            resp = scanner.nextLine();
+            confirmation:
+            while (true) {
+                System.out.println("Would you like to confirm your reservation now? (Y/N)"); //total price ~would~ go here
 
-            switch(resp.toUpperCase()) {
-                case "Y":
-                    rs = sql.runStatement("insert");  //insert all values into sql tables
-                    System.out.println("Congratulations! You have successfully reserved your visit.");  //TODO: perhaps add more info here?
-                    break;
-                case "N":
-                    break;
-                case "EXIT":
-                    return;
+                resp = scanner.nextLine();
+
+                switch (resp.toUpperCase()) {
+                    case "Y":
+                        rs = sql.runStatement("insert");  //insert all values into sql tables
+                        System.out.println("Congratulations! You have successfully reserved your visit.");  //TODO: perhaps add more info here?
+                        break;
+                    case "N":
+                        break;
+                    case "EXIT":
+                        return;
+                }
+            }
+        } catch (java.sql.SQLException e){
+            System.err.println("SQL Error: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                }
             }
         }
-
     }
 
 
@@ -541,9 +532,8 @@ public class main {
         ResultSet rs = sql.runStatement("temp"); //sql statement that gets the list of reservations the user has made
 
         try {
-            rs.beforeFirst();
             rs.next();
-            if (rs.wasNull()) {
+            if (rs.isAfterLast()) {
                 System.out.println("You don't have any reservations to review currently.");
                 System.out.println("Returning to the main menu.\n");
                 return;
