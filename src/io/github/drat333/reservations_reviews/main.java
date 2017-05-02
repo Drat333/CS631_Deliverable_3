@@ -1,5 +1,6 @@
 package io.github.drat333.reservations_reviews;
 
+import javax.swing.tree.FixedHeightLayoutCache;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -222,7 +223,7 @@ public class main {
                         return;
                     }
 
-                    //try to convert the input into an int
+                    //try to convert the input into an int, to check if it's a valid input
                     int selection;
                     try {
                         selection = Integer.parseInt(resp);
@@ -273,12 +274,16 @@ public class main {
             }
 
             //pick a room type
-            rs = sql.runStatement("temp"); // sql statement that gets the room types available
+            query = null; // sql statement that gets the room types available
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
 
             roomTypes:
             while (true) {
                 System.out.println("\nWhat type of room would you like to reserve?");
                 int i = 1;
+
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
@@ -320,11 +325,16 @@ public class main {
             }
 
             //start making a reservation - pick a room
-            rs = sql.runStatement("temp"); // sql statement that gets all AVAILABLE rooms, using Rtype
+            query = null; // sql statement that gets all AVAILABLE rooms, using Rtype
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
             rooms:
             while (true) {
                 System.out.println("\nWhich room would you like to reserve?");
                 int i = 1;
+
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
@@ -375,6 +385,7 @@ public class main {
             }
 
             //pick reservation dates
+            // TODO: 5/2/2017 put this above room selection
             dates:
             while (true) {
                 System.out.println("Enter your desired check-in date for your stay: ");
@@ -389,7 +400,10 @@ public class main {
                     return;
                 }
 
-                sql.runStatement;//SQL statement checks if date is available
+                query = null;//SQL statement checks if date is available
+
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
 
                 if (startDate.equals(endDate) /*placeholder, dates available*/) {
                     System.out.println("\nCongrats! Those dates are available.");
@@ -403,20 +417,24 @@ public class main {
                 statement.close();
             }
 
+
             //pick breakfasts
-            rs = sql.runStatement("temp"); //sql statement that gets all breakfasts available
+            query = null; //sql statement that gets all breakfasts available
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
             ArrayList<String> BType = new ArrayList<>();
             ArrayList<Integer> BCount = new ArrayList<>();
 
-            breakfasts:
-            while (true) {
-                rs.next();
-                if (!rs.isAfterLast()) {
-                    System.out.println("\n\nBreakfasts are available for your reservation.");
-                    System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
+            rs.next();
+            if (!rs.isAfterLast()) {
+                System.out.println("\n\nBreakfasts are available for your reservation.");
+                System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
 
-                    rs.beforeFirst();
-                    while (rs.next()) {   //if breakfasts are available
+                rs.beforeFirst();
+                while (rs.next()) {   //if breakfasts are available
+                    while (true) {
                         BType.add(rs.getString("BType"));
                         System.out.print(rs.getString("BType") + " ($ " + rs.getString("BPrice") + "/order): ");
 
@@ -434,21 +452,27 @@ public class main {
                             }
                         } catch (NumberFormatException e) {
                             System.out.println("\nPlease enter a valid number (at least 0), or type 'exit' to return to main menu.\n");
-                            break;  //make em do it again
+                            continue;  //make em do it again
                         }
-
                         BCount.add(selection);
+                        break;
                     }
                 }
-                break;
+            } else{
+                System.out.println("\n\nThere are no breakfasts available for this reservation.");
             }
+
 
             if (statement != null){
                 statement.close();
             }
 
             //pick services
-            rs = sql.runStatement("temp");   //sql query that gets the services available
+            query = null;   //sql query that gets the services available
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
             ArrayList<String> SType = new ArrayList();
             services:
             while (true) {
@@ -497,7 +521,10 @@ public class main {
 
                 switch (resp.toUpperCase()) {
                     case "Y":
-                        rs = sql.runStatement("insert");  //insert all values into sql tables
+                        query = null;  //insert all values into sql tables
+
+                        statement = connection.createStatement();
+                        rs = statement.executeQuery(query);
                         System.out.println("Congratulations! You have successfully reserved your visit.");  //TODO: perhaps add more info here?
                         break;
                     case "N":
@@ -529,9 +556,12 @@ public class main {
 
     private static void leaveReviews(){
         // TODO: 4/30/2017 Add in SQL statements and test
-        ResultSet rs = sql.runStatement("temp"); //sql statement that gets the list of reservations the user has made
-
         try {
+            query = null; //sql statement that gets the list of reservations the user has made
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
             rs.next();
             if (rs.isAfterLast()) {
                 System.out.println("You don't have any reservations to review currently.");
@@ -539,19 +569,15 @@ public class main {
                 return;
             }
 
-        } catch (java.sql.SQLException e) {
-            System.err.println(e);
-            return;
-        }
 
-        System.out.println("======Hulton Review App======");
-        //pick a stay
-        String InvoiceNo;
-        while (true) {
-            System.out.println("Please pick a stay that you would like to review:");
+            System.out.println("======Hulton Review App======");
+            //pick a stay
+            String InvoiceNo;
+            while (true) {
+                System.out.println("Please pick a stay that you would like to review:");
 
-            int i = 1;
-            try {
+                int i = 1;
+
                 rs.beforeFirst();
                 while (rs.next()) {
                     System.out.println(Integer.toString(i) + " | " +
@@ -560,123 +586,154 @@ public class main {
                             rs.getString("CheckInDate"));
                     i++;
                 }
-            } catch (java.sql.SQLException e) {
-                System.err.println(e);
-                continue;
-            }
 
-            resp = scanner.nextLine();
-            if (resp.equalsIgnoreCase("exit")) {
-                return;
-            }
 
-            //try to convert the input into an int
-            int selection;
-            try {
-                selection = Integer.parseInt(resp);
-                if (selection < 1 || selection > i) {
-                    throw new NumberFormatException();
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return;
                 }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                //make em do it again
-            }
 
-            try {
+                //try to convert the input into an int
+                int selection;
+                try {
+                    selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        throw new NumberFormatException();
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    //make em do it again
+                }
+
+
                 rs.beforeFirst();
                 while (i != 0) {
                     rs.next();
                     i--;
                 }
                 InvoiceNo = rs.getString("InvoiceNo");
-            } catch (java.sql.SQLException e) {
-                System.err.println(e);
-                continue;
-                //I don't know what this error would mean
-            }
-            break;
 
-        }
+                break;
 
-
-        //pick something to review
-        int selection;
-        while (true) {
-            System.out.println("What would you like to review?");
-            System.out.println("1 | Room");
-            System.out.println("2 | Breakfast");
-            System.out.println("3 | Services");
-
-            resp = scanner.nextLine();
-            if (resp.equalsIgnoreCase("exit")){
-                return;
             }
 
-            try {
-                selection = Integer.parseInt(resp);
-                if (selection < 1 || selection > 3) {
-                    throw new NumberFormatException();
+
+            //pick something to review
+            int selection;
+            while (true) {
+                System.out.println("What would you like to review?");
+                System.out.println("1 | Room");
+                System.out.println("2 | Breakfast");
+                System.out.println("3 | Services");
+
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return;
                 }
-                break;
-            } catch (NumberFormatException e) {
-                System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                //make em do it again
-            }
-        }
 
-        String review;
-        int i = 0;
-        // TODO: 4/30/2017 should we cancel the review if the user only types "exit"? very minor detail
-        switch (selection){
-            case 1:
-                //room
-                System.out.println("Write your review of your room (limit 500 characters):");
-                review = scanner.nextLine();
-                rs = sql.runStatement("insert"); //sql statement that inserts review
-                break;
-            case 2:
-                //breakfast - reviews are opt-out (with "skip")
-                try{
-                    rs = sql.runStatement("temp");  //sql statement that gets list of breakfasts ordered
-                    while (rs.next()){
+                try {
+                    selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > 3) {
+                        throw new NumberFormatException();
+                    }
+                    break;
+                } catch (NumberFormatException e) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    //make em do it again
+                }
+            }
+
+            String review;
+            int i = 0;
+            // TODO: 4/30/2017 should we cancel the review if the user only types "exit"? very minor detail
+            switch (selection) {
+                case 1:
+                    //room
+
+                    System.out.println("Write your review of your room (limit 500 characters):");
+                    review = scanner.nextLine();
+
+                    query = null; //sql statement that inserts review
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+                    break;
+                case 2:
+                    //breakfast - reviews are opt-out (with "skip")
+
+                    query = null;  //sql statement that gets list of breakfasts ordered
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    while (rs.next()) {
                         i++;
                         System.out.println("Write your review for " + rs.getString("BType") + " (limit 500 characters), or type 'skip':");
                         review = scanner.nextLine();
-                        if (review.equalsIgnoreCase("skip")){
+                        if (review.equalsIgnoreCase("skip")) {
                             continue;
                         }
-                        sql.runStatement("insert");  //sql statement that inserts review
+
+                        if (statement != null){
+                            statement.close();
+                        }
+
+                        query = null;  //sql statement that inserts review
+
+                        statement = connection.createStatement();
+                        rs = statement.executeQuery(query);
                     }
-                } catch (java.sql.SQLException e){
-                    System.err.println(e);
-                }
-                if (i == 0){
-                    System.out.println("You did not order any breakfasts for this stay.");
-                }
-                break;
-            case 3:
-                //services - reviews are opt-out (with "skip")
-                try{
-                    rs = sql.runStatement("temp");  //sql statement that gets list of services ordered
-                    while (rs.next()){
+                    if (i == 0) {
+                        // FIXME: 5/2/2017 not how to do this
+                        System.out.println("You did not order any breakfasts for this stay.");
+                    }
+                    break;
+                case 3:
+                    //services - reviews are opt-out (with "skip")
+
+                    query = null;  //sql statement that gets list of services ordered
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    while (rs.next()) {
                         i++;
                         System.out.println("Write your review for " + rs.getString("SType") + " (limit 500 characters), or type 'skip':");
                         review = scanner.nextLine();
-                        if (review.equalsIgnoreCase("skip")){
+                        if (review.equalsIgnoreCase("skip")) {
                             continue;
                         }
-                        sql.runStatement("insert");  //sql statement that inserts review
-                    }
-                } catch (java.sql.SQLException e){
-                    System.err.println(e);
-                }
-                if (i == 0){
-                    System.out.println("You did not order any services for this stay.");
-                }
-                break;
-        }
 
+                        if (statement != null) {
+                            statement.close();
+                        }
+
+                        query = null;  //sql statement that inserts review
+
+                        statement = connection.createStatement();
+                        rs = statement.executeQuery(query);
+
+                    }
+                    if (i == 0) {
+                        // FIXME: 5/2/2017 not how to do this
+                        System.out.println("You did not order any services for this stay.");
+                    }
+                    break;
+            }
+
+        } catch (java.sql.SQLException e){
+            System.err.println("SQL Error: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                }
+            }
+        }
         System.out.println("\n Thank you for your reviews! We greatly appreciate any and all feedback.");
 
     }

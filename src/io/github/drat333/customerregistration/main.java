@@ -113,10 +113,37 @@ public class main {
         String address;
         String phone;
 
-        while (true) {
+        while (true){
             System.out.print("Enter your email: ");
             String user = scanner.nextLine();
-            //SQL query checks for existing email
+
+            try {
+                query = null; //sql query checks if email is in use
+
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
+
+                rs.next();
+                if (!rs.isAfterLast()){
+                    System.out.println("Sorry, that email is already in use. Please try again.\n");
+                    continue;
+                }
+            } catch (java.sql.SQLException e){
+                System.err.println("SQL Error: " + e.getMessage());
+                e.printStackTrace();
+            } finally {
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException ex) {
+                        System.err.println("Error in closing SQL query");
+                    }
+                }
+            }
+            break;
+        }
+
+        while (true) {
             System.out.print("Enter a password: ");
             String pass = scanner.nextLine();
             System.out.print("Confirm your password: ");
@@ -207,7 +234,23 @@ public class main {
         System.out.println("Enter your credit card expiration date:");
         ExpDate = scanner.next();
 
-        //insert all information into db
+        try {
+            query = null; //insert all information into db
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+        } catch (java.sql.SQLException e){
+            System.err.println("SQL Error: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                }
+            }
+        }
     }
 
 
