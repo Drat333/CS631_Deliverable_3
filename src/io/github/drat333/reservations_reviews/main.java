@@ -162,50 +162,137 @@ public class main {
         String hotelName;
         ResultSet rs;
 
-        // TODO: 5/2/2017 just surround the whole thing in try catch 
+
+        clearConsole();
+        System.out.println("======Hulton Hotel Search======");
+        System.out.println("Type 'exit' to return to the main menu at any time.");
 
         try {
             //search for a hotel
-            hotels:
+            pickHotel:
             while (true) {
-                clearConsole();
-                System.out.println("======Hulton Hotel Search======");
-                System.out.println("Type 'exit' to return to the main menu at any time.");
 
-                System.out.println("\nEnter a country:");
-                country = scanner.nextLine();
-                if (country.equalsIgnoreCase("exit")) {
-                    return;
+                country:
+                while (true) {
+
+                    System.out.println("\nPick a country:");
+
+                    query = "SELECT DISTINCT Country " +
+                            "FROM Hotels;"; //get a list of countries with hotels
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    int i = 1;
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        System.out.println(Integer.toString(i) + " | " +
+                                rs.getString("Country"));
+                        i++;
+                    }
+
+
+                    resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
+                        return;
+                    }
+
+                    //try to convert the input into an int, to check if it's a valid input
+                    int selection;
+                    try {
+                        selection = Integer.parseInt(resp);
+                        if (selection < 1 || selection > i) {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;  //make em do it again
+                    }
+
+
+                    rs.beforeFirst();
+                    while (i != 0) {
+                        rs.next();
+                        i--;
+                    }
+
+                    country = rs.getString("Country");
+                    break;
                 }
-                //SQL statement to confirm hotels exist in that country
 
-                System.out.println("Enter a state in " + country + ":");
-                state = scanner.nextLine();
-                if (state.equalsIgnoreCase("exit")) {
-                    return;
+                //country is picked
+                if (statement != null) {
+                    statement.close();
+                }
+
+                state:
+                while (true) {
+
+                    System.out.println("\nPick a state in " + country + ":");
+
+                    query = "SELECT DISTINCT State " +
+                            "FROM Hotels" +
+                            "WHERE Country='" + country + "';"; //get a list of states with hotels in selected country
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    int i = 1;
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        System.out.println(Integer.toString(i) + " | " +
+                                rs.getString("State"));
+                        i++;
+                    }
+
+
+                    resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
+                        return;
+                    }
+
+                    //try to convert the input into an int, to check if it's a valid input
+                    int selection;
+                    try {
+                        selection = Integer.parseInt(resp);
+                        if (selection < 1 || selection > i) {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;  //make em do it again
+                    }
+
+
+                    rs.beforeFirst();
+                    while (i != 0) {
+                        rs.next();
+                        i--;
+                    }
+
+                    state = rs.getString("State");
+                    break;
+                }
+
+                //state is picked
+                if (statement != null) {
+                    statement.close();
                 }
 
 
+                //pick a hotel in state, country
                 query = "SELECT * " +
                         "FROM HOTEL " +
                         "WHERE Country='" + country + "' AND State='" + state + "';";
 
-
                 while (true) {
 
-                    if (statement != null){
+                    if (statement != null) {
                         statement.close();
                     }
 
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
-
-                    //see if hotel exists
-                    rs.next();
-                    if (rs.isAfterLast()) {
-                        System.out.println("\nThere are no hotels at that location, please try again.\n");
-                        continue;
-                    }
 
                     System.out.println("Which hotel in " + state + ", " + country + " would you like to view?");
                     int i = 1;
@@ -244,34 +331,37 @@ public class main {
                     hotelID = rs.getString("HotelID");
                     System.out.println("\nYou have chosen the hotel at " + rs.getString("Street") + " in " + state + ", " + country + ".");
 
-
-
-
                     break;
                 }
+
 
                 if (statement != null){
                     statement.close();
                 }
 
+
+
+
+
                 //hotel has been chosen at this point
-                while (true) {
+                System.out.println("Would you like to create a reservation? (Y/N)");
+                resp = scanner.nextLine();
 
-                    System.out.println("Would you like to create a reservation? (Y/N)");
-                    resp = scanner.nextLine();
-
-                    switch (resp.toUpperCase()) {
-                        case "Y":
-                            break hotels;
-                        case "N":
-                            continue hotels;
-                        case "EXIT":
-                            return;
-                        default:
-                            System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
-                    }
+                switch (resp.toUpperCase()) {
+                    case "Y":
+                        break pickHotel;
+                    case "N":
+                        continue pickHotel;
+                    case "EXIT":
+                        return;
+                    default:
+                        System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
                 }
+
             }
+
+
+
 
             //pick a room type
             query = null; // sql statement that gets the room types available

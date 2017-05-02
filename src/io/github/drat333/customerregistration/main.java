@@ -62,7 +62,6 @@ public class main {
 
     private static void login(Scanner scanner){
         clearConsole();
-        scanner.reset();
         System.out.println("Email: ");
         email = scanner.nextLine();
         System.out.println("Password: ");
@@ -75,8 +74,6 @@ public class main {
         statement = null;
         rs = null;
 
-        //if (query.isEmpty()){ return rs; }
-
         try {
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
@@ -84,7 +81,6 @@ public class main {
             rs.next();
             if (rs.isAfterLast()){
                 System.out.println("Access denied. Do you need to register an account?");
-                return;
             }
             else {
                 displayName = rs.getString("Name");
