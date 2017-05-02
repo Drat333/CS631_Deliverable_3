@@ -1,5 +1,6 @@
 package io.github.drat333.reservations_statistics;
 
+import java.sql.*;
 import java.util.Scanner;
 
 /**
@@ -8,25 +9,31 @@ import java.util.Scanner;
  */
 public class main {
 
-    public static MySQLAccess sql;
-
     //user variables
     public static boolean loggedIn;
-    public static String userName;
-    public static String userDisplayName;
+    public static String email;
+    public static String displayName;
 
     //variables for Scanner
     public static Scanner scanner;
     public static String resp;      //user response
+
+    //SQL
+    private static Connection connection;
+    private static ResultSet rs;
+    private static String query;
 
 
 
 
     public static void main(String[] args) throws Exception {
 
-        MySQLAccess sql = new MySQLAccess();    //initialize connection to MySQL server
+        if (!connect()){            //initialize connection to MySQL server
+            return;
+        }
+
         clearConsole();
-        if(login()){    //returns true, then exit
+        if(!login()){    //returns true, then exit
             goodbye();
             return;
         }
@@ -46,6 +53,8 @@ public class main {
             System.out.print("End year:"); endYear = scanner.nextLine();
 
             // TODO: 4/30/2017 check/sanitize input
+                // TODO: 5/2/2017 I don't really care anymore
+
             // TODO: 4/30/2017 computed highest rated room type per hotel
             // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
             // TODO: 4/30/2017 compute highest rated breakfast type across all hotels
@@ -77,15 +86,15 @@ public class main {
                     case "1":
                         break;
                     case "0":
-                        return true;    //quit application
+                        return false;    //quit application
                     default:
                         System.out.println("Invalid response!");
                 }
             } else{
-                userDisplayName = "admin";  //SQL statement: get user's real name
-                userName = "admin";
+                displayName = "admin";  //SQL statement: get user's real name
+                main.email = "admin";
                 loggedIn = true;
-                return false;
+                return true;
             }
         }
     }
@@ -94,6 +103,23 @@ public class main {
     private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
+
+    private static boolean connect(){
+        String url = "jdbc:mysql://sql2.njit.edu:3306/az62";
+        String DBUsername = "az62";
+        String DBpassword = "8wlgKd19A";
+        String dbName = "az62";
+        //Connect to database
+        System.out.println("Connecting to MySQL server...");
+        try {
+            connection = DriverManager.getConnection(url, DBUsername, DBpassword);
+        } catch (java.sql.SQLException e){
+            System.err.println("MySQL server access denied, check your credentials.");
+            return false;
+        }
+        return true;
+    }
+
 
     private static void goodbye() {
         clearConsole();

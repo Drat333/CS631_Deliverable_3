@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
+    <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="Started removing references to MySQLAccess and adding SQL statements properly">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -16,26 +18,30 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3791">
-              <caret line="225" column="5" lean-forward="true" selection-start-line="225" selection-start-column="5" selection-end-line="225" selection-end-column="5" />
+            <state relative-caret-position="476">
+              <caret line="103" column="13" lean-forward="true" selection-start-line="97" selection-start-column="12" selection-end-line="103" selection-end-column="13" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-                <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+                <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+                <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="306">
+              <caret line="163" column="68" lean-forward="false" selection-start-line="163" selection-start-column="68" selection-end-line="163" selection-end-column="68" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#24202#24203#0" expanded="true" />
+                <element signature="e#24286#24287#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -43,9 +49,11 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="-17">
+              <caret line="23" column="32" lean-forward="false" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+              <folding>
+                <element signature="imports" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -81,19 +89,29 @@
       <find>i++</find>
       <find>runStatement</find>
       <find>RType</find>
-      <find>login</find>
       <find>CNumber</find>
+      <find>mysqlaccess</find>
+      <find>login</find>
+      <find>public</find>
+      <find>statement</find>
+      <find>query</find>
     </findStrings>
     <replaceStrings>
       <replace>System.out</replace>
       <replace>scanner.nextLine</replace>
       <replace>eqals</replace>
-      <replace>equals</replace>
       <replace>CCode</replace>
+      <replace>equals</replace>
+      <replace>private</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="Rm_SQL_Class" />
+      </map>
+    </option>
   </component>
   <component name="GradleLocalSettings">
     <option name="externalProjectsViewState">
@@ -104,11 +122,11 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/Review.java" />
-        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
-        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
         <option value="$PROJECT_DIR$/lib/mysql-connector-java-5.1.41-bin.jar!/com/mysql/jdbc/ResultSetImpl.class" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/customerregistration/MySQLAccess.java" />
+        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java" />
+        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
       </list>
     </option>
   </component>
@@ -569,7 +587,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493596760331</updated>
     </task>
-    <option name="localTasksCounter" value="10" />
+    <task id="LOCAL-00010" summary="Added promts for register portion of registration app. Moved MySQLAccess.class functionality back into the main file as it was not possible to read results as a class.">
+      <created>1493702042903</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1493702042903</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TodoView">
@@ -594,14 +619,14 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29698858" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29698858" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18230277" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -678,7 +703,8 @@
     <MESSAGE value="Reservation and Reviews review portion mostly completed. Needs SQL statements and testing." />
     <MESSAGE value="Added discounts and room type choosing to hotelSearch" />
     <MESSAGE value="Started work on statistics app" />
-    <option name="LAST_COMMIT_MESSAGE" value="Started work on statistics app" />
+    <MESSAGE value="Added promts for register portion of registration app. Moved MySQLAccess.class functionality back into the main file as it was not possible to read results as a class." />
+    <option name="LAST_COMMIT_MESSAGE" value="Added promts for register portion of registration app. Moved MySQLAccess.class functionality back into the main file as it was not possible to read results as a class." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -700,8 +726,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -712,8 +738,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -734,8 +760,8 @@
           <caret line="24" column="9" lean-forward="true" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -746,28 +772,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/MySQLAccess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -786,8 +792,28 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/MySQLAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -798,8 +824,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -812,8 +838,8 @@
           <caret line="9" column="87" lean-forward="false" selection-start-line="9" selection-start-column="87" selection-end-line="9" selection-end-column="87" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -832,8 +858,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -852,8 +878,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -872,8 +898,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -884,8 +910,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -906,8 +932,8 @@
           <caret line="24" column="9" lean-forward="false" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -918,8 +944,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -930,8 +956,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -952,8 +978,8 @@
           <caret line="24" column="9" lean-forward="true" selection-start-line="24" selection-start-column="9" selection-end-line="24" selection-end-column="9" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -964,28 +990,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/MySQLAccess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="17">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1004,8 +1010,28 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/MySQLAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="17">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1016,8 +1042,8 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
           </folding>
         </state>
       </provider>
@@ -1036,22 +1062,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="153">
           <caret line="9" column="0" lean-forward="false" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="58" column="0" lean-forward="true" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1110,14 +1120,36 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3791">
-          <caret line="225" column="5" lean-forward="true" selection-start-line="225" selection-start-column="5" selection-end-line="225" selection-end-column="5" />
+        <state relative-caret-position="-17">
+          <caret line="23" column="32" lean-forward="false" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493701956939" expanded="false" signature="6475:6485" ph=" { " />
-            <marker date="1493701956939" expanded="false" signature="6554:6560" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="476">
+          <caret line="103" column="13" lean-forward="true" selection-start-line="97" selection-start-column="12" selection-end-line="103" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1493702968207" expanded="false" signature="6563:6573" ph=" { " />
+            <marker date="1493702968207" expanded="false" signature="6642:6648" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="163" column="68" lean-forward="false" selection-start-line="163" selection-start-column="68" selection-end-line="163" selection-end-column="68" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#24202#24203#0" expanded="true" />
+            <element signature="e#24286#24287#0" expanded="true" />
           </folding>
         </state>
       </provider>

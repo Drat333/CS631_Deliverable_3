@@ -1,39 +1,36 @@
 package io.github.drat333.reservations_reviews;
 
-import java.sql.Array;
-import java.sql.ResultSet;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-/**
- * Created by Adrian on 4/28/2017.
- * NOTES: methods like login() return booleans; true = exit, false = continue operations
- */
 public class main {
 
-    public static MySQLAccess sql;
-
     //user variables
-    public static boolean loggedIn;
-    public static String username;
-    public static String userDisplayName;
+    private static boolean loggedIn;
+    private static String email;
+    private static String displayName;
 
     //variables for Scanner
-    public static Scanner scanner;
-    public static String resp;      //user response
+    private static Scanner scanner;
+    private static String resp;      //user response
 
+    //SQL
+    private static Connection connection;
+    private static ResultSet rs;
+    private static Statement statement;
 
-
+    private static String query;
 
 
 
 
     public static void main(String[] args) {
 
-        sql = new MySQLAccess();    //initialize connection to MySQL server
-        if (!sql.connected()){
+        if (!connect()){            //initialize connection to MySQL server
             return;
         }
+
         clearConsole();
 
         ///////////////////////
@@ -67,7 +64,7 @@ public class main {
         }
 
         while(true) {
-            System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation and Reviews app, " + userDisplayName + "!");
+            System.out.println("\n\n\n\n\nWelcome to the Hulton Reservation and Reviews app, " + displayName + "!");
             System.out.println("1 | Search hotels and make a reservation");
             System.out.println("2 | Leave a review");
             System.out.println("3 | Logout");
@@ -84,8 +81,8 @@ public class main {
                     break;
                 case "3":
                     //no need for SQL statements here (probably)
-                    username = null;
-                    userDisplayName = null;
+                    email = null;
+                    displayName = null;
                     loggedIn = false;
                     main(null);     //log out then return to main menu
                 case "0":
@@ -98,6 +95,21 @@ public class main {
 
 
 
+    private static boolean connect(){
+        String url = "jdbc:mysql://sql2.njit.edu:3306/az62";
+        String DBUsername = "az62";
+        String DBpassword = "8wlgKd19A";
+        String dbName = "az62";
+        //Connect to database
+        System.out.println("Connecting to MySQL server...");
+        try {
+            connection = DriverManager.getConnection(url, DBUsername, DBpassword);
+        } catch (java.sql.SQLException e){
+            System.err.println("MySQL server access denied, check your credentials.");
+            return false;
+        }
+        return true;
+    }
 
 
 
@@ -124,7 +136,7 @@ public class main {
                         System.out.println("Invalid response!");
                 }
             } else{
-                userDisplayName = "admin";  //SQL statement: get user's real name
+                displayName = "admin";  //SQL statement: get user's real name
                 loggedIn = true;
                 return false;
             }
@@ -149,7 +161,7 @@ public class main {
         String hotelName;
         ResultSet rs;
 
-
+        // TODO: 5/2/2017 just surround the whole thing in try catch 
 
         //search for a hotel
         hotels: while (true) {
@@ -170,42 +182,54 @@ public class main {
                 return;
             }
 
-            rs = sql.runStatement("temp"); //SQL statement to confirm hotels exist in that state
 
-            //TODO: check if there are hotels available from input
+            query = "SELECT * " +
+                    "FROM HOTEL " +
+                    "WHERE Country='" + country + "' AND State='" + state + "';";
+
+
             while (true) {
-                System.out.println("Which hotel in " + state + ", " + country + " would you like to view?");
-                int i = 1;
+
                 try {
-                    //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    //see if hotel exists
+                    rs.next();
+                    if (rs.isAfterLast()){
+                        System.out.println("\nThere are no hotels at that location, please try again.\n");
+                        continue;
+                    }
+
+                    System.out.println("Which hotel in " + state + ", " + country + " would you like to view?");
+                    int i = 1;
+
                     rs.beforeFirst();
                     while (rs.next()) {
                         System.out.println(Integer.toString(i) + " | " +
                                 rs.getString("Street"));
                         i++;
                     }
-                } catch (java.sql.SQLException e) {
-                    System.err.println(e);
-                }
 
-                resp = scanner.nextLine();
-                if (resp.equalsIgnoreCase("exit")) {
-                    return;
-                }
 
-                //try to convert the input into an int
-                int selection;
-                try {
-                    selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > i) {
-                        throw new NumberFormatException();
+                    resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
+                        return;
                     }
-                } catch (NumberFormatException e) {
-                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    continue;  //make em do it again
-                }
 
-                try {
+                    //try to convert the input into an int
+                    int selection;
+                    try {
+                        selection = Integer.parseInt(resp);
+                        if (selection < 1 || selection > i) {
+                            throw new NumberFormatException();
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;  //make em do it again
+                    }
+
+
                     rs.beforeFirst();
                     while (i != 0) {
                         rs.next();
@@ -213,11 +237,20 @@ public class main {
                     }
                     hotelID = rs.getString("HotelID");
                     System.out.println("\nYou have chosen the hotel at " + rs.getString("Street") + " in " + state + ", " + country + ".");
+
+
                 } catch (java.sql.SQLException e) {
                     System.err.println(e);
-                    continue;
-                    //I don't know what this error would mean
+                } finally {
+                    if (statement != null) {
+                        try{
+                            statement.close();
+                        } catch (SQLException ex){
+                            System.err.println("Error in closing SQL query");
+                        }
+                    }
                 }
+
                 break;
             }
 

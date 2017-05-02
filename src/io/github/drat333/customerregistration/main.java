@@ -14,10 +14,15 @@ public class main {
     //sql
     private static Connection connection;
     private static ResultSet rs;
+    private static Statement statement;
+    private static String query;
 
     public static void main(String[] args) throws Exception {
 
-        connect();    //initialize connection to MySQL server
+        if (!connect()){            //initialize connection to MySQL server
+            return;
+        }
+
         scanner = new Scanner(System.in);
         scanner.reset();
         ///////////////////////
@@ -64,11 +69,11 @@ public class main {
         pass = scanner.nextLine();
 
         //SQL statement to check user credentials
-        String query = ("SELECT Name, Email, Password " +
+        query = ("SELECT Name, Email, Password " +
                 "FROM CUSTOMER " +
                 "WHERE Email='" + email + "' AND Password='" + pass + "'");
-        Statement statement = null;
-        ResultSet rs = null;
+        statement = null;
+        rs = null;
 
         //if (query.isEmpty()){ return rs; }
 
@@ -111,7 +116,7 @@ public class main {
         while (true) {
             System.out.print("Enter your email: ");
             String user = scanner.nextLine();
-            //SQL query checks for existing userName
+            //SQL query checks for existing email
             System.out.print("Enter a password: ");
             String pass = scanner.nextLine();
             System.out.print("Confirm your password: ");
@@ -210,7 +215,7 @@ public class main {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 
-    private static void connect(){
+    private static boolean connect(){
         String url = "jdbc:mysql://sql2.njit.edu:3306/az62";
         String DBUsername = "az62";
         String DBpassword = "8wlgKd19A";
@@ -221,7 +226,8 @@ public class main {
             connection = DriverManager.getConnection(url, DBUsername, DBpassword);
         } catch (java.sql.SQLException e){
             System.err.println("MySQL server access denied, check your credentials.");
-            return;
+            return false;
         }
+        return true;
     }
 }
