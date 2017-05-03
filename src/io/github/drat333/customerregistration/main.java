@@ -1,7 +1,13 @@
 package io.github.drat333.customerregistration;
 
 import java.sql.*;
-import java.util.Scanner;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.util.*;
 
 public class main {
 
@@ -109,18 +115,21 @@ public class main {
         String address;
         String phone;
 
+        // TODO: 5/3/2017 allow exiting at any time 
+
         while (true){
             System.out.print("Enter your email: ");
-            String user = scanner.nextLine();
+            email = scanner.nextLine();
 
             try {
-                query = null; //sql query checks if email is in use
+                query = "SELECT Email " +
+                        "FROM CUSTOMER " +
+                        "WHERE Email='" + email + "';"; //sql query checks if email is in use
 
                 statement = connection.createStatement();
                 rs = statement.executeQuery(query);
 
-                rs.next();
-                if (!rs.isAfterLast()){
+                if (rs.isBeforeFirst()){
                     System.out.println("Sorry, that email is already in use. Please try again.\n");
                     continue;
                 }
@@ -141,7 +150,7 @@ public class main {
 
         while (true) {
             System.out.print("Enter a password: ");
-            String pass = scanner.nextLine();
+            pass = scanner.nextLine();
             System.out.print("Confirm your password: ");
             confirmPass = scanner.nextLine();
 
@@ -153,30 +162,31 @@ public class main {
         }
 
         //basic account setup
-        System.out.println("\n\nEnter your full name:");
-        displayName = scanner.next();
+        System.out.print("\n\nEnter your full name: ");
+        displayName = scanner.nextLine();
 
-        System.out.println("Enter your address:");
-        address = scanner.next();
+        System.out.print("Enter your address: ");
+        address = scanner.nextLine();
 
         while (true) {
-            System.out.println("Enter your phone number:");
-            phone = scanner.next();
+            System.out.print("Enter your phone number: ");
+            phone = scanner.nextLine();
 
             //check for valid phone number
-            try{
-                if (phone.length() == 0 || phone.length() == 10){
-                    Integer.parseInt(phone);
-                } else{
-                    throw new NumberFormatException();
+            if (phone.length() == 10) {
+                if (isNumeric(phone)) {
+                    break;
                 }
+            } else if (phone.length() == 0) {
                 break;
-            } catch (NumberFormatException e){
+            } else {
+                System.out.println(phone.length());
                 System.out.println("Please enter a valid phone number, or leave the phone number blank.");
+                continue;
             }
         }
 
-        System.out.println("\n\n\n");
+        System.out.println("\n");
         //credit card info
         String CNumber;
         String Ctype;
@@ -187,54 +197,70 @@ public class main {
 
         while (true) {
             System.out.println("Enter your credit card number:");
-            CNumber = scanner.next();
+            CNumber = scanner.nextLine();
 
             if (CNumber.equalsIgnoreCase("exit")){
                 return;
             }
             //check for valid phone number
-            try{
-                Integer.parseInt(CNumber);
+            if (CNumber.length() == 16 && isNumeric(CNumber)){
                 break;
-            } catch (NumberFormatException e){
-                System.out.println("Please enter a valid credit card number, or type 'exit' to cancel registration.");
+            } else{
+                System.out.println("Please enter a credit card number, or leave the phone number blank.");
             }
         }
 
         
         System.out.println("Enter your credit card type:");
-        Ctype = scanner.next();
+        Ctype = scanner.nextLine();
 
         System.out.println("Enter the name on your credit card:");
-        CName = scanner.next();
+        CName = scanner.nextLine();
 
         System.out.println("Enter your billing address:");
-        Baddress = scanner.next();
+        Baddress = scanner.nextLine();
 
         while (true) {
             System.out.println("Enter your credit card security code:");
-            CCode = scanner.next();
+            CCode = scanner.nextLine();
 
             if (CCode.equalsIgnoreCase("exit")){
                 return;
             }
-            //check for valid phone number
-            try{
-                Integer.parseInt(CCode);
+            //check for valid credit card security code
+            if (CNumber.length() == 16 && isNumeric(CNumber)){
                 break;
-            } catch (NumberFormatException e){
-                System.out.println("Please enter a valid credit card code, or type 'exit' to cancel registration.");
+            } else{
+                System.out.println("Please enter a valid credit card security code, or leave the phone number blank.");
             }
         }
 
-        System.out.println("Enter your credit card expiration date:");
-        ExpDate = scanner.next();
+        while (true) {
+
+            System.out.println("Enter your credit card expiration year:");
+            ExpDate = scanner.nextLine();
+            if (isNumeric(ExpDate) && ExpDate.length() == 4){
+                break;
+            }
+            System.out.println("\nInvalid year format.");
+        }
 
         try {
-            query = null; //insert all information into db
-
+            // FIXME: 5/3/2017 Not the right query
             statement = connection.createStatement();
-            rs = statement.executeQuery(query);
+            query = "INSERT INTO CUSTOMER " +
+                    "(Name,Address,Phone_No,Email,Password) " +
+                    "VALUES " +
+                    "('" + displayName + "','" + address + "','" + phone + "','" + email + "','" + pass + "');"; //insert user info
+            statement.executeUpdate(query);
+            System.out.println(query);
+
+            query = "INSERT INTO CREDIT_CARD " +
+                    "VALUES " +
+                    "('" + CNumber + "','" + Ctype + "','" + Baddress + "','" + CCode + "','" + ExpDate + "','" + CName + "');"; //insert user CC info
+            statement.executeUpdate(query);
+
+
         } catch (java.sql.SQLException e){
             System.err.println("SQL Error: " + e.getMessage());
             e.printStackTrace();
@@ -247,6 +273,8 @@ public class main {
                 }
             }
         }
+
+        System.out.println("\nSuccess! You are now registered to make reservation at Hulton Hotels.\n");
     }
 
 
@@ -265,6 +293,16 @@ public class main {
             connection = DriverManager.getConnection(url, DBUsername, DBpassword);
         } catch (java.sql.SQLException e){
             System.err.println("MySQL server access denied, check your credentials.");
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean isNumeric(String str)
+    {
+        try {
+            double d = Double.parseDouble(str);
+        } catch(NumberFormatException nfe) {
             return false;
         }
         return true;
