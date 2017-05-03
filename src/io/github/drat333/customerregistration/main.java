@@ -7,9 +7,11 @@ public class main {
 
     //user
     private static String email;
-    private static String pass;
     private static String displayName;
+    private static int customerID;
+
     private static Scanner scanner;
+    private static String resp;
 
     //sql
     private static Connection connection;
@@ -28,18 +30,17 @@ public class main {
 
         scanner = new Scanner(System.in);
         ///////////////////////
-        //Customer login prompt
+        //Customer manageAccount prompt
         ///////////////////////
+        System.out.println("\n\n\n");
         while (true) {
-            String resp;    //user response
             scanner = new Scanner(System.in);
 
             email = null;
-            pass = null;
             displayName = null;
 
-            System.out.println("\n\n\n\n\nWelcome to the Hulton Customer Registration app!");
-            System.out.println("1 | Login to existing account");
+            System.out.println("\n\nWelcome to the Hulton Account Management and Registration app!");
+            System.out.println("1 | Manage an existing account");
             System.out.println("2 | Register a new account");
             System.out.println("3 | Exit");
             resp = scanner.nextLine();
@@ -47,7 +48,7 @@ public class main {
             switch (resp) {
                 case "1":
                     System.out.println(resp);
-                    login(scanner);
+                    manageAccount();
                     break;
                 case "2":
                     System.out.println(resp);
@@ -62,15 +63,17 @@ public class main {
         }
     }
 
-    private static void login(Scanner scanner){
+    private static void manageAccount(){
+
+        //login
         clearConsole();
         System.out.println("Email: ");
         email = scanner.nextLine();
         System.out.println("Password: ");
-        pass = scanner.nextLine();
+        String pass = scanner.nextLine();
 
         //SQL statement to check user credentials
-        query = ("SELECT Name, Email, Password " +
+        query = ("SELECT CID, Name, Email, Password " +
                 "FROM CUSTOMER " +
                 "WHERE Email='" + email + "' AND Password='" + pass + "'");
 
@@ -78,14 +81,159 @@ public class main {
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
 
-            rs.next();
-            if (rs.isAfterLast()){
-                System.out.println("Access denied. Do you need to register an account?");
+            if (rs.next()){
+                displayName = rs.getString("Name");
+                customerID = rs.getInt("CID");
             }
             else {
-                displayName = rs.getString("Name");
-                System.out.println("Welcome to account management, " + displayName + "! Taking you back to main menu I guess");
+                System.out.println("\n\n\nAccess denied. Do you need to register an account?");
+                if (statement != null) {
+                    statement.close();
+                }
+                return;
             }
+
+            if (statement != null) {
+                statement.close();
+            }
+
+
+
+            //account management
+            clearConsole();
+            while (true) {
+                String attribute;
+                String value;
+                System.out.println("\n\n\n\nWelcome to account management, " + displayName + "!");
+                System.out.println("1 | Change email address");
+                System.out.println("2 | Change password");
+                System.out.println("3 | Update your name");
+                System.out.println("4 | Update phone number");
+                System.out.println("5 | Update home address");
+                System.out.println("  | ");
+                System.out.println("0 | Logout");
+
+                resp = scanner.nextLine();
+
+                switch (resp) {
+                    case "1":
+                        attribute = "Email";
+
+                        System.out.println("\n");
+                        while (true) {
+                            System.out.println("\nEnter a new email:");
+                            value = scanner.nextLine();
+                            if (value.equalsIgnoreCase("exit")) {
+                                return;
+                            }
+
+                            query = "SELECT Email " +
+                                    "FROM CUSTOMER " +
+                                    "WHERE Email='" + value + "';"; //sql query checks if email is in use
+
+                            statement = connection.createStatement();
+                            rs = statement.executeQuery(query);
+
+                            if (rs.next()) {
+                                System.out.println("\n\nThat email is already in use, please try again.");
+                                if (statement != null) {
+                                    statement.close();
+                                }
+                                continue;
+                            }
+
+                            if (statement != null) {
+                                statement.close();
+                            }
+                            break;
+                        }
+                        break;
+                    case "2":
+                        attribute = "Password";
+
+                        System.out.println("\n");
+                        while (true) {
+                            System.out.println("\nEnter a new password:");
+                            value = scanner.nextLine();
+                            if (value.equalsIgnoreCase("exit")) {
+                                return;
+                            }
+                            System.out.println("Confirm your new password:");
+                            String confirmPass = scanner.nextLine();
+
+                            if (!value.equals(confirmPass)) {
+                                System.out.println("\n\nPasswords didn't match! Please try again.");
+                                continue;
+                            }
+                            break;
+                        }
+                        break;
+
+                    case "3":
+                        attribute = "Name";
+                        System.out.println("\n\nEnter your new name:");
+                        value = scanner.nextLine();
+                        displayName = value;
+                        break;
+                    case "4":
+                        attribute = "Phone_No";
+
+                        System.out.println("\n");
+                        while (true) {
+                            System.out.println("\nEnter your new phone number:");
+                            value = scanner.nextLine();
+                            if (value.equalsIgnoreCase("exit")) {
+                                return;
+                            }
+
+                            if (value.length() == 0){
+                                break;
+                            } else if(value.length() == 10) {
+                                if (isNumeric(value)) {
+                                    break;
+                                }
+                            } else {
+                                System.out.println("\n\nPlease enter a valid phone number, or leave the phone number blank.");
+                            }
+                        }
+                        break;
+                    case "5":
+                        attribute = "Address";
+                        System.out.println("\n\nEnter your new address:");
+                        value = scanner.nextLine();
+                        break;
+                    case "0":
+                        email = null;
+                        displayName = null;
+                        customerID = -1;
+                        return;
+                    default:
+                        System.out.println("\nInvalid response!\n");
+                        continue;
+                }
+
+                if (statement != null) {
+                    statement.close();
+                }
+
+                if (value.equalsIgnoreCase("exit")) {
+                    return;
+                }
+
+                query = "UPDATE CUSTOMER " +
+                        "SET " + attribute + "='" + value + "'" +
+                        "WHERE CID='" + customerID + "';";
+
+                statement = connection.createStatement();
+                statement.executeUpdate(query);
+
+                System.out.println("\n\n\nAccount updated!");
+
+                if (statement != null) {
+                    statement.close();
+                }
+            }
+
 
         } catch (SQLException e) {
             System.err.print("Error in SQL query. ");
@@ -99,17 +247,14 @@ public class main {
                 }
             }
         }
-
-        //TODO: account management
     }
 
     private static void register(Scanner scanner){
         clearConsole();
+        String pass;
         String confirmPass;
         String address;
         String phone;
-
-        // TODO: 5/3/2017 allow exiting at any time
 
         while (true){
             System.out.print("Enter your email: ");
@@ -174,9 +319,7 @@ public class main {
             } else if (phone.length() == 0) {
                 break;
             } else {
-                System.out.println(phone.length());
                 System.out.println("Please enter a valid phone number, or leave the phone number blank.");
-                continue;
             }
         }
 

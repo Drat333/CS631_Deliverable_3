@@ -107,6 +107,8 @@ public class main {
                 case "0":
                     goodbye();
                     return;
+                default:
+                    System.out.println("\nInvalid response!\n");
             }
         }
 
@@ -549,6 +551,7 @@ public class main {
                 // TODO: 5/3/2017 unskip
                 break;
                 /*
+                //TODO: error checking of date input
                 DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MM/dd/yyyy").toFormatter();
                 LocalDate localDate;
 
