@@ -1,12 +1,12 @@
 package io.github.drat333.reservations_statistics;
 
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
-/**
- * Created by Adrian on 4/28/2017.
- *
- */
 public class main {
 
     //user variables
@@ -21,81 +21,141 @@ public class main {
     //SQL
     private static Connection connection;
     private static ResultSet rs;
+    private static Statement statement;
     private static String query;
-
-
 
 
     public static void main(String[] args) throws Exception {
 
-        if (!connect()){            //initialize connection to MySQL server
+        if (!connect()) {            //initialize connection to MySQL server
             return;
+        }
+
+        scanner = new Scanner(System.in);
+        clearConsole();
+
+        while (true) {
+            System.out.println("\n\n\nWelcome to the Hulton Hotels Statistics app!");
+            System.out.println("1 | Login");
+            System.out.println("0 | Exit");
+            resp = scanner.nextLine();
+
+            switch (resp) {
+                case "1":
+                    System.out.println(resp);
+                    if (!login()) {
+                        continue;
+                    }
+                    break;
+                case "0":
+                    goodbye();
+                    return;
+                default:
+                    System.out.println("\nInvalid response!\n");
+            }
+            if (loggedIn) {
+                break;
+            }
         }
 
         clearConsole();
-        if(!login()){    //returns true, then exit
-            goodbye();
-            return;
+    }
+
+    private static boolean login() {
+        //clearConsole();
+        clearConsole();
+        System.out.println("Email: ");
+        email = scanner.nextLine();
+        System.out.println("Password: ");
+        String pass = scanner.nextLine();
+
+        //SQL statement to check user credentials
+        query = ("SELECT Name, Email, Password " +
+                "FROM CUSTOMER " +
+                "WHERE Email='" + email + "' AND Password='" + pass + "'");
+
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            if (!rs.next()) {
+                System.out.println("Access denied. Do you need to register an account?");
+            } else {
+                displayName = rs.getString("Name");
+                loggedIn = true;
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.err.print("Error in SQL query. ");
+            System.err.println(e.getMessage());
+            return false;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                    return false;
+                }
+            }
         }
 
+        return false;
+    }
+
+
+    private static void statistics() {
         //compute statistics
-        //date ranges are month/year - month/year, ignoring days
-        String startMonth;
-        String startYear;
-        String endMonth;
-        String endYear;
+        Date startDate;
+        Date endDate;
 
+        System.out.println("Welcome to the Hulton Hotels Statistics app, " + displayName + "!");
         while (true) {
-            System.out.println("====Enter a start date====");
-            System.out.print("Start month:"); startMonth = scanner.nextLine();
-            System.out.print("Start year:"); startYear = scanner.nextLine();
-            System.out.print("End month:"); endMonth = scanner.nextLine();
-            System.out.print("End year:"); endYear = scanner.nextLine();
+            try {
 
-            // TODO: 4/30/2017 check/sanitize input
-                // TODO: 5/2/2017 I don't really care anymore
+                DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MM/dd/yyyy").toFormatter();
+                LocalDate localDate;
 
+                System.out.println("\n\n====Enter a date range, or type 'exit'====");
+
+                System.out.println("Start date (MM/dd/yyyy):");
+                resp = scanner.nextLine();
+
+                if (resp.equalsIgnoreCase("exit")) {
+                    loggedIn = false;
+                    displayName = null;
+                    email = null;
+                    return;
+                }
+
+                localDate = LocalDate.parse(resp, formatter);
+                startDate = Date.valueOf(localDate);
+
+                System.out.println("\nEnd date (MM/dd/yyyy):");
+                resp = scanner.nextLine();
+
+                if (resp.equalsIgnoreCase("exit")) {
+                    loggedIn = false;
+                    displayName = null;
+                    email = null;
+                    return;
+                }
+
+                localDate = LocalDate.parse(resp, formatter);
+                endDate = Date.valueOf(localDate);
+
+            } catch (DateTimeParseException e) {
+                System.out.println("\nInvalid date format! Please use the format MM/dd/yyyy, ex. 05/22/1997\n");
+                continue;
+            }
+
+            System.out.println("\nmuh stats\n");
             // TODO: 4/30/2017 computed highest rated room type per hotel
             // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
             // TODO: 4/30/2017 compute highest rated breakfast type across all hotels
             // TODO: 4/30/2017 compute highest rated service type across all hotels
 
-        }
-
-
-    }
-
-
-    private static boolean login(){
-        //clearConsole();
-        while (true) {
-            System.out.println("\n\n\nWelcome to the Hulton Reservation Statistics app!");
-
-            System.out.println("\n\nEmail: ");
-            String email = scanner.nextLine();
-            System.out.println("Password: ");
-            String pass = scanner.nextLine();
-
-            if (email.equals("admin") || pass.equals("admin")) {        //SQL statement to check user credentials
-                System.out.println("Invalid credentials.");
-                System.out.println("1 | Login again");
-                System.out.println("0 | Exit");
-                resp = scanner.nextLine();
-
-                switch (resp){
-                    case "1":
-                        break;
-                    case "0":
-                        return false;    //quit application
-                    default:
-                        System.out.println("Invalid response!");
-                }
-            } else{
-                displayName = "admin";  //SQL statement: get user's real name
-                main.email = "admin";
-                loggedIn = true;
-                return true;
-            }
         }
     }
 

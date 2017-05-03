@@ -21,8 +21,8 @@ public class main {
     private static Connection connection;
     private static ResultSet rs;
     private static Statement statement;
-
     private static String query;
+
 
 
     // FIXME: 5/3/2017 assign to null at some point?
