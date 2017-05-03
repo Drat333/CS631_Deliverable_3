@@ -206,7 +206,7 @@ public class main {
                 case "Y":
                     break;
                 case "N":
-                    // TODO: 5/3/2017 call hotelSearch() again?
+                    hotelSearch();
                     return;
                 case "EXIT":
                     return;
@@ -225,13 +225,36 @@ public class main {
             statement = connection.createStatement();
 
             query = null;  //insert credit card values
-            rs = statement.executeQuery(query);
+            //rs = statement.executeQuery(query);   FIXME: uncomment
 
-            // TODO: 5/3/2017 loop for more room reservations
             query = null;  //insert hotel values
-            rs = statement.executeQuery(query);
+            //rs = statement.executeQuery(query);   FIXME: uncomment
 
+            System.out.println("\n\n\nCongratulations! You have successfully created your Hulton Hotels reservation.");
+            while (true){
+                System.out.println("\nWould you like to add another room to this reservation? (Y/N)");
+                System.out.println("(Note: This will add another reservation to your " + Ctype + "-**" + CNumber.substring(CNumber.length() - 4) + ")");
+                resp = scanner.nextLine();
 
+                switch (resp.toUpperCase()) {
+                    case "Y":
+                        if (!pickHotel()) return;
+                        if (!pickRoom()) return;
+                        if (!pickBreakfasts()) return;
+                        if (!pickServices()) return;
+
+                        System.out.println("\n\n\nCongratulations! You have successfully created your Hulton Hotels reservation.");
+                        continue;
+                    case "N":
+                        break;
+                    case "EXIT":
+                        break;
+                    default:
+                        System.out.println("Please indicate if you would like to add another room to your reservation (Y/N)");
+                        continue;
+                }
+                break;
+            }
 
         } catch (java.sql.SQLException e){
             System.err.println("SQL Error: " + e.getMessage());
@@ -429,18 +452,20 @@ public class main {
 
 
                 //hotel has been chosen at this point
-                System.out.println("Would you like to create a reservation? (Y/N)");
-                resp = scanner.nextLine();
+                while (true) {
+                    System.out.println("Would you like to create a reservation? (Y/N)");
+                    resp = scanner.nextLine();
 
-                switch (resp.toUpperCase()) {
-                    case "Y":
-                        break pickHotel;
-                    case "N":
-                        continue pickHotel;
-                    case "EXIT":
-                        return false;
-                    default:
-                        System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
+                    switch (resp.toUpperCase()) {
+                        case "Y":
+                            break pickHotel;
+                        case "N":
+                            continue pickHotel;
+                        case "EXIT":
+                            return false;
+                        default:
+                            System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
+                    }
                 }
             }
         } catch (java.sql.SQLException e){
@@ -572,10 +597,11 @@ public class main {
 
             //start making a reservation - pick a room
 
-            query = "SELECT * " +
-                    "FROM ROOM " +
-                    "WHERE HotelID='" + hotelID +"';";    // FIXME: 5/3/2017 temp query
+            query = "SELECT ROOM.*, Discount " +
+                    "FROM ROOM LEFT JOIN DISCOUNTED_ROOM ON ROOM.HotelID=DISCOUNTED_ROOM.HotelID AND ROOM.RoomNo=DISCOUNTED_ROOM.RoomNo " +
+                    "WHERE ROOM.HotelID='" + hotelID +"';";    // FIXME: 5/3/2017 temp query
 
+//select ROOM.*, Discount from ROOM left join DISCOUNTED_ROOM on ROOM.HotelID=DISCOUNTED_ROOM.HotelID AND ROOM.RoomNo=DISCOUNTED_ROOM.RoomNo where ROOM.HotelID='14012';
 
 
             statement = connection.createStatement();
@@ -589,15 +615,16 @@ public class main {
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
-                    System.out.print(Integer.toString(i) + " | " +
-                            rs.getString("Price") + " per day," +
+                    System.out.print(Integer.toString(i) + " | $" +
+                            rs.getString("Price") + " per day, " +
                             rs.getString("Capacity") + " people, Floor " +
-                            rs.getString("Floor"));
+                            rs.getString("Floor") + " Room " +
+                            rs.getString("RoomNo"));
                     if (rs.getString("Discount") != null) {
-                        System.out.print("\tDiscounted! ");
-                        int discount = Integer.parseInt(rs.getString("Discounted"));
+                        System.out.print("\t\t\t***Discounted!*** ");
+                        double discount = Double.parseDouble(rs.getString("Discount"));
                         discount *= 100;
-                        System.out.print(Integer.toString(discount) + "% off");
+                        System.out.print(Double.toString(discount) + "% off");
                     }
                     System.out.println("\n\tDescription: " + rs.getString("Description"));
                     i++;
@@ -656,7 +683,9 @@ public class main {
     private static boolean pickBreakfasts() {
         try{
             //pick breakfasts
-            query = null; //sql statement that gets all breakfasts available
+            query = "SELECT * " +
+                    "FROM BREAKFAST " +
+                    "WHERE HotelID='" + hotelID + "';"; //sql statement that gets all breakfasts available
 
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
@@ -665,14 +694,14 @@ public class main {
             ArrayList<Integer> BCount = new ArrayList<>();
 
             if (rs.next()) {
-                System.out.println("\n\nBreakfasts are available for your reservation.");
-                System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
+                System.out.println("\n\n\nBreakfasts are available for your reservation.");
+                System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person)\n");
 
                 rs.beforeFirst();
                 while (rs.next()) {   //if breakfasts are available
                     while (true) {
                         BType.add(rs.getString("BType"));
-                        System.out.print(rs.getString("BType") + " ($ " + rs.getString("BPrice") + "/order): ");
+                        System.out.print(rs.getString("BType") + " ($" + rs.getString("BPrice") + "/order): ");
 
                         resp = scanner.nextLine();
                         if (resp.equalsIgnoreCase("exit")) {
@@ -694,7 +723,7 @@ public class main {
                     }
                 }
             } else{
-                System.out.println("\n\nThere are no breakfasts available for this reservation.");
+                System.out.println("\n\n\nThere are no breakfasts available for this reservation.");
             }
 
 
@@ -724,7 +753,9 @@ public class main {
     private static boolean pickServices() {
         try{
             //pick services
-            query = null;   //sql query that gets the services available
+            query = "SELECT * " +
+                    "FROM SERVICE " +
+                    "WHERE HotelID='" + hotelID + "';";   //sql query that gets the services available
 
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
@@ -734,7 +765,7 @@ public class main {
             while (true) {
 
                 if (rs.next()) {
-                    System.out.println("\n\nServices are available for your reservation.");
+                    System.out.println("\n\n\nServices are available for your reservation.");
                     System.out.println("Please indicate (Y/N) for each service.");
 
                     rs.beforeFirst();
@@ -758,6 +789,8 @@ public class main {
                             }
                         }
                     }
+                } else{
+                    System.out.println("\n\n\nThere are no services available for this reservation.");
                 }
                 break;
             }
