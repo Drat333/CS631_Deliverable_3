@@ -24,6 +24,9 @@ public class main {
     private static String query;
 
 
+    //hotelSearch values
+
+    private static String hotelID; //make an int?
 
 
     public static void main(String[] args) {
@@ -32,13 +35,13 @@ public class main {
             return;
         }
 
+        scanner = new Scanner(System.in);
         clearConsole();
 
         ///////////////////////
         //Customer login prompt
         ///////////////////////
         while (true) {
-            scanner = new Scanner(System.in);
 
             System.out.println("\n\n\nWelcome to the Hulton Reservation and Reviews app!");
             System.out.println("1 | Login");
@@ -48,16 +51,15 @@ public class main {
             switch (resp) {
                 case "1":
                     System.out.println(resp);
-                    if (login()){
-                        goodbye();
-                        return;
+                    if (!login()){
+                        continue;
                     }
                     break;
                 case "0":
                     goodbye();
                     return;
                 default:
-                    System.out.println("Invalid response!");
+                    System.out.println("\nInvalid response!\n");
             }
             if (loggedIn){
                 break;
@@ -114,36 +116,46 @@ public class main {
 
 
 
-    private static boolean login(){
-        //clearConsole();
-        while (true) {
-            System.out.println("\n\nEmail: ");
-            String email = scanner.nextLine();
-            System.out.println("Password: ");
-            String pass = scanner.nextLine();
+    private static boolean login() {
+        clearConsole();
+        System.out.println("Email: ");
+        email = scanner.nextLine();
+        System.out.println("Password: ");
+        String pass = scanner.nextLine();
 
-            if (email.equals("admin") || pass.equals("admin")) {        //SQL statement to check user credentials
-                System.out.println("Invalid credentials.");
-                System.out.println("1 | Login again");
-                System.out.println("0 | Exit");
-                resp = scanner.nextLine();
+        //SQL statement to check user credentials
+        query = ("SELECT Name, Email, Password " +
+                "FROM CUSTOMER " +
+                "WHERE Email='" + email + "' AND Password='" + pass + "'");
 
-                switch (resp){
-                    case "1":
-                        break;
-                    case "0":
-                        return true;    //quit application
-                    default:
-                        System.out.println("Invalid response!");
-                }
-            } else{
-                displayName = "admin";  //SQL statement: get user's real name
+        try {
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            if (!rs.next()) {
+                System.out.println("Access denied. Do you need to register an account?");
+            } else {
+                displayName = rs.getString("Name");
                 loggedIn = true;
-                return false;
+                return true;
+            }
+
+        } catch (SQLException e) {
+            System.err.print("Error in SQL query. ");
+            System.err.println(e.getMessage());
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                    return false;
+                }
             }
         }
-    }
 
+        return false;
+    }
 
 
 
@@ -153,14 +165,11 @@ public class main {
 
     private static void hotelSearch() {
         // TODO: 4/28/2017 Fill in SQL statements and test.
-        // TODO: 4/29/2017 Add discounts. Change to allow user to input a room type and date; room numbers behind-the-scenes
         // this method should not make any table changes until the end, when the customer confirms their choices
 
         String country;
         String state;
-        String hotelID; //make an int?
         String hotelName;
-        ResultSet rs;
 
 
         clearConsole();
@@ -178,7 +187,7 @@ public class main {
                     System.out.println("\nPick a country:");
 
                     query = "SELECT DISTINCT Country " +
-                            "FROM Hotels;"; //get a list of countries with hotels
+                            "FROM HOTEL;"; //get a list of countries with hotels
 
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
@@ -197,23 +206,21 @@ public class main {
                         return;
                     }
 
-                    //try to convert the input into an int, to check if it's a valid input
-                    int selection;
-                    try {
-                        selection = Integer.parseInt(resp);
-                        if (selection < 1 || selection > i) {
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
+                    if (!isNumeric(resp)){
                         System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;  //make em do it again
+                        continue;
                     }
 
+                    int selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
 
                     rs.beforeFirst();
-                    while (i != 0) {
+                    while (selection != 0) {
                         rs.next();
-                        i--;
+                        selection--;
                     }
 
                     country = rs.getString("Country");
@@ -231,9 +238,10 @@ public class main {
                     System.out.println("\nPick a state in " + country + ":");
 
                     query = "SELECT DISTINCT State " +
-                            "FROM Hotels" +
+                            "FROM HOTEL " +
                             "WHERE Country='" + country + "';"; //get a list of states with hotels in selected country
 
+                    System.out.println(query);
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
 
@@ -251,23 +259,22 @@ public class main {
                         return;
                     }
 
-                    //try to convert the input into an int, to check if it's a valid input
-                    int selection;
-                    try {
-                        selection = Integer.parseInt(resp);
-                        if (selection < 1 || selection > i) {
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
+                    if (!isNumeric(resp)){
                         System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;  //make em do it again
+                        continue;
+                    }
+
+                    int selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
                     }
 
 
                     rs.beforeFirst();
-                    while (i != 0) {
+                    while (selection != 0) {
                         rs.next();
-                        i--;
+                        selection--;
                     }
 
                     state = rs.getString("State");
@@ -310,23 +317,22 @@ public class main {
                         return;
                     }
 
-                    //try to convert the input into an int, to check if it's a valid input
-                    int selection;
-                    try {
-                        selection = Integer.parseInt(resp);
-                        if (selection < 1 || selection > i) {
-                            throw new NumberFormatException();
-                        }
-                    } catch (NumberFormatException e) {
+                    if (!isNumeric(resp)){
                         System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;  //make em do it again
+                        continue;
+                    }
+
+                    int selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
                     }
 
 
                     rs.beforeFirst();
-                    while (i != 0) {
+                    while (selection != 0) {
                         rs.next();
-                        i--;
+                        selection--;
                     }
                     hotelID = rs.getString("HotelID");
                     System.out.println("\nYou have chosen the hotel at " + rs.getString("Street") + " in " + state + ", " + country + ".");
@@ -387,23 +393,22 @@ public class main {
                     return;
                 }
 
-                //try to convert the input into an int
-                int selection;
-                try {
-                    selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > i) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException e) {
+                if (!isNumeric(resp)){
                     System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    continue;  //make em do it again
+                    continue;
+                }
+
+                int selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
                 }
 
                 String Rtype;
                 rs.beforeFirst();
-                while (i != 0) {
+                while (selection != 0) {
                     rs.next();
-                    i--;
+                    selection--;
                 }
                 Rtype = rs.getString("Rtype");
 
@@ -448,23 +453,22 @@ public class main {
                     return;
                 }
 
-                //try to convert the input into an int
-                int selection;
-                try {
-                    selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > i) {
-                        throw new NumberFormatException();
-                    }
-                } catch (NumberFormatException e) {
+                if (!isNumeric(resp)){
                     System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    continue;  //make em do it again
+                    continue;
+                }
+
+                int selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
                 }
 
                 String roomID;
                     rs.beforeFirst();
-                    while (i != 0) {
+                    while (selection != 0) {
                         rs.next();
-                        i--;
+                        selection--;
                     }
                     roomID = rs.getString("RoomNo");
                 break;
@@ -517,8 +521,7 @@ public class main {
             ArrayList<String> BType = new ArrayList<>();
             ArrayList<Integer> BCount = new ArrayList<>();
 
-            rs.next();
-            if (!rs.isAfterLast()) {
+            if (rs.next()) {
                 System.out.println("\n\nBreakfasts are available for your reservation.");
                 System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
 
@@ -533,16 +536,15 @@ public class main {
                             return;
                         }
 
-                        //try to convert the input into an int
-                        int selection;
-                        try {
-                            selection = Integer.parseInt(resp);
-                            if (selection < 0) {
-                                throw new NumberFormatException();
-                            }
-                        } catch (NumberFormatException e) {
-                            System.out.println("\nPlease enter a valid number (at least 0), or type 'exit' to return to main menu.\n");
-                            continue;  //make em do it again
+                        if (!isNumeric(resp)){
+                            System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                            continue;
+                        }
+
+                        int selection = Integer.parseInt(resp);
+                        if (selection < 0) {
+                            System.out.println("\nPlease enter a valid number of at least 0, or type 'exit' to return to main menu.\n");
+                            continue;
                         }
                         BCount.add(selection);
                         break;
@@ -566,8 +568,8 @@ public class main {
             ArrayList<String> SType = new ArrayList();
             services:
             while (true) {
-                rs.next();
-                if (!rs.isAfterLast()) {
+
+                if (rs.next()) {
                     System.out.println("\n\nServices are available for your reservation.");
                     System.out.println("Please indicate (Y/N) for each service.");
 
@@ -603,7 +605,6 @@ public class main {
             int TotalPrice; //TODO: this is probably optional but could be nice to implement. requires sql query
             System.out.println("\nAll aspects of your visit are set!");
 
-            confirmation:
             while (true) {
                 System.out.println("Would you like to confirm your reservation now? (Y/N)"); //total price ~would~ go here
 
@@ -611,18 +612,87 @@ public class main {
 
                 switch (resp.toUpperCase()) {
                     case "Y":
-                        query = null;  //insert all values into sql tables
-
-                        statement = connection.createStatement();
-                        rs = statement.executeQuery(query);
-                        System.out.println("Congratulations! You have successfully reserved your visit.");  //TODO: perhaps add more info here?
                         break;
                     case "N":
-                        break;
+                        // TODO: 5/3/2017 call hotelSearch() again?
+                        return;
                     case "EXIT":
                         return;
+                    default:
+                        System.out.println("Please indicate whether you would like to reserve this room (Y/N), or type 'exit' to return to the main menu.");
+                        continue;
+                }
+                break;
+            }
+
+
+            System.out.println("\nIn order to reserve your room, we require that you enter a credit card.");
+
+            //credit card info
+            String CNumber;
+            String Ctype;
+            String Baddress;
+            String CCode;
+            String ExpDate;
+            String CName;
+
+            while (true) {
+                System.out.println("Enter your credit card number:");
+                CNumber = scanner.nextLine();
+
+                if (CNumber.equalsIgnoreCase("exit")){
+                    return;
+                }
+                //check for valid phone number
+                if (CNumber.length() == 16 && isNumeric(CNumber)){
+                    break;
+                } else{
+                    System.out.println("Please enter a credit card number, or leave the phone number blank.");
                 }
             }
+
+
+            System.out.println("Enter your credit card type:");
+            Ctype = scanner.nextLine();
+
+            System.out.println("Enter the name on your credit card:");
+            CName = scanner.nextLine();
+
+            System.out.println("Enter your billing address:");
+            Baddress = scanner.nextLine();
+
+            while (true) {
+                System.out.println("Enter your credit card security code:");
+                CCode = scanner.nextLine();
+
+                if (CCode.equalsIgnoreCase("exit")){
+                    return;
+                }
+                //check for valid credit card security code
+                if (CNumber.length() == 16 && isNumeric(CNumber)){
+                    break;
+                } else{
+                    System.out.println("Please enter a valid credit card security code, or leave the phone number blank.");
+                }
+            }
+
+            while (true) {
+
+                System.out.println("Enter your credit card expiration year:");
+                ExpDate = scanner.nextLine();
+                if (isNumeric(ExpDate) && ExpDate.length() == 4){
+                    break;
+                }
+                System.out.println("\nInvalid year format.");
+            }
+
+
+            query = null;  //insert all values into sql tables
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+
         } catch (java.sql.SQLException e){
             System.err.println("SQL Error: " + e.getMessage());
             e.printStackTrace();
@@ -652,8 +722,7 @@ public class main {
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
 
-            rs.next();
-            if (rs.isAfterLast()) {
+            if (!rs.next()) {
                 System.out.println("You don't have any reservations to review currently.");
                 System.out.println("Returning to the main menu.\n");
                 return;
@@ -683,24 +752,22 @@ public class main {
                     return;
                 }
 
-                //try to convert the input into an int
-                int selection;
-                try {
-                    selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > i) {
-                        throw new NumberFormatException();
-                    }
-                    break;
-                } catch (NumberFormatException e) {
+                if (!isNumeric(resp)){
                     System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    //make em do it again
+                    continue;
+                }
+
+                int selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
                 }
 
 
                 rs.beforeFirst();
-                while (i != 0) {
+                while (selection != 0) {
                     rs.next();
-                    i--;
+                    selection--;
                 }
                 InvoiceNo = rs.getString("InvoiceNo");
 
@@ -722,16 +789,17 @@ public class main {
                     return;
                 }
 
-                try {
-                    selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > 3) {
-                        throw new NumberFormatException();
-                    }
-                    break;
-                } catch (NumberFormatException e) {
+                if (!isNumeric(resp)){
                     System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    //make em do it again
+                    continue;
                 }
+
+                selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > 3) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
+                }
+                break;
             }
 
             String review;
@@ -832,9 +900,19 @@ public class main {
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
 
+    private static boolean isNumeric(String str)
+    {
+        try {
+            double d = Double.parseDouble(str);
+        } catch(NumberFormatException nfe) {
+            return false;
+        }
+        return true;
+    }
+
     private static void goodbye() {
-        clearConsole();
-        System.out.println("Thank you for using the Hulton Reservation and Review app.");
+        //clearConsole();
+        System.out.println("\n\n\n\n\nThank you for using the Hulton Reservation and Review app.");
         System.out.println("Goodbye!");
     }
 }

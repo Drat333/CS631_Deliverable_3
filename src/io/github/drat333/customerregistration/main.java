@@ -1,12 +1,6 @@
 package io.github.drat333.customerregistration;
 
 import java.sql.*;
-import java.sql.Date;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.*;
 
 public class main {
@@ -23,6 +17,9 @@ public class main {
     private static Statement statement;
     private static String query;
 
+
+
+
     public static void main(String[] args) throws Exception {
 
         if (!connect()){            //initialize connection to MySQL server
@@ -30,7 +27,6 @@ public class main {
         }
 
         scanner = new Scanner(System.in);
-        scanner.reset();
         ///////////////////////
         //Customer login prompt
         ///////////////////////
@@ -77,8 +73,6 @@ public class main {
         query = ("SELECT Name, Email, Password " +
                 "FROM CUSTOMER " +
                 "WHERE Email='" + email + "' AND Password='" + pass + "'");
-        statement = null;
-        rs = null;
 
         try {
             statement = connection.createStatement();
@@ -106,7 +100,7 @@ public class main {
             }
         }
 
-        //account management
+        //TODO: account management
     }
 
     private static void register(Scanner scanner){
@@ -115,7 +109,7 @@ public class main {
         String address;
         String phone;
 
-        // TODO: 5/3/2017 allow exiting at any time 
+        // TODO: 5/3/2017 allow exiting at any time
 
         while (true){
             System.out.print("Enter your email: ");
@@ -186,80 +180,13 @@ public class main {
             }
         }
 
-        System.out.println("\n");
-        //credit card info
-        String CNumber;
-        String Ctype;
-        String Baddress;
-        String CCode;
-        String ExpDate;
-        String CName;
-
-        while (true) {
-            System.out.println("Enter your credit card number:");
-            CNumber = scanner.nextLine();
-
-            if (CNumber.equalsIgnoreCase("exit")){
-                return;
-            }
-            //check for valid phone number
-            if (CNumber.length() == 16 && isNumeric(CNumber)){
-                break;
-            } else{
-                System.out.println("Please enter a credit card number, or leave the phone number blank.");
-            }
-        }
-
-        
-        System.out.println("Enter your credit card type:");
-        Ctype = scanner.nextLine();
-
-        System.out.println("Enter the name on your credit card:");
-        CName = scanner.nextLine();
-
-        System.out.println("Enter your billing address:");
-        Baddress = scanner.nextLine();
-
-        while (true) {
-            System.out.println("Enter your credit card security code:");
-            CCode = scanner.nextLine();
-
-            if (CCode.equalsIgnoreCase("exit")){
-                return;
-            }
-            //check for valid credit card security code
-            if (CNumber.length() == 16 && isNumeric(CNumber)){
-                break;
-            } else{
-                System.out.println("Please enter a valid credit card security code, or leave the phone number blank.");
-            }
-        }
-
-        while (true) {
-
-            System.out.println("Enter your credit card expiration year:");
-            ExpDate = scanner.nextLine();
-            if (isNumeric(ExpDate) && ExpDate.length() == 4){
-                break;
-            }
-            System.out.println("\nInvalid year format.");
-        }
-
         try {
-            // FIXME: 5/3/2017 Not the right query
             statement = connection.createStatement();
             query = "INSERT INTO CUSTOMER " +
                     "(Name,Address,Phone_No,Email,Password) " +
                     "VALUES " +
                     "('" + displayName + "','" + address + "','" + phone + "','" + email + "','" + pass + "');"; //insert user info
             statement.executeUpdate(query);
-            System.out.println(query);
-
-            query = "INSERT INTO CREDIT_CARD " +
-                    "VALUES " +
-                    "('" + CNumber + "','" + Ctype + "','" + Baddress + "','" + CCode + "','" + ExpDate + "','" + CName + "');"; //insert user CC info
-            statement.executeUpdate(query);
-
 
         } catch (java.sql.SQLException e){
             System.err.println("SQL Error: " + e.getMessage());
@@ -298,7 +225,7 @@ public class main {
         return true;
     }
 
-    public static boolean isNumeric(String str)
+    private static boolean isNumeric(String str)
     {
         try {
             double d = Double.parseDouble(str);
