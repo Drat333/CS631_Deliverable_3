@@ -2,8 +2,6 @@ package io.github.drat333.reservations_reviews;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -13,6 +11,7 @@ public class main {
     private static boolean loggedIn;
     private static String email;
     private static String displayName;
+    private static String customerID;
 
     //variables for Scanner
     private static Scanner scanner;
@@ -26,12 +25,14 @@ public class main {
     private static String query;
 
 
+    // FIXME: 5/3/2017 assign to null at some point?
     //hotelSearch values
-    private static int hotelID; //make an int?
+    private static int hotelID;
     private static Date checkinDate;
     private static Date checkoutDate;
     private static String Rtype;
-    private static int roomID;
+    private static int roomNo;
+    private static Date reserveDate;
 
 
     //credit card info
@@ -101,6 +102,7 @@ public class main {
                     email = null;
                     displayName = null;
                     loggedIn = false;
+                    customerID = null;
                     main(null);     //log out then return to main menu
                 case "0":
                     goodbye();
@@ -151,6 +153,7 @@ public class main {
             } else {
                 displayName = rs.getString("Name");
                 loggedIn = true;
+                customerID = rs.getString("CID");
                 return true;
             }
 
@@ -174,10 +177,6 @@ public class main {
 
 
 
-
-
-
-
     private static void hotelSearch() {
         // TODO: 4/28/2017 Fill in SQL statements and test.
         // this method should not make any table changes until the end, when the customer confirms their choices
@@ -195,7 +194,7 @@ public class main {
 
 
         int TotalPrice; //TODO: this is probably optional but could be nice to implement. requires sql query
-        System.out.println("\nAll aspects of your visit are set!");
+        System.out.println("\n\n\nAll aspects of your visit are set!");
 
         while (true) {
             System.out.println("Would you like to confirm your reservation now? (Y/N)"); //total price ~would~ go here
@@ -224,6 +223,9 @@ public class main {
         try {
             statement = connection.createStatement();
 
+            LocalDate localDate = LocalDate.now();
+            reserveDate = Date.valueOf(localDate);
+
             query = null;  //insert credit card values
             //rs = statement.executeQuery(query);   FIXME: uncomment
 
@@ -232,7 +234,7 @@ public class main {
 
             System.out.println("\n\n\nCongratulations! You have successfully created your Hulton Hotels reservation.");
             while (true){
-                System.out.println("\nWould you like to add another room to this reservation? (Y/N)");
+                System.out.println("\nWould you like to add another room to this reservation?          (Y/N)");
                 System.out.println("(Note: This will add another reservation to your " + Ctype + "-**" + CNumber.substring(CNumber.length() - 4) + ")");
                 resp = scanner.nextLine();
 
@@ -652,7 +654,7 @@ public class main {
                     rs.next();
                     selection--;
                 }
-                roomID = rs.getInt("RoomNo");
+                roomNo = rs.getInt("RoomNo");
                 break;
             }
 
@@ -898,7 +900,9 @@ public class main {
     private static void leaveReviews(){
         // TODO: 4/30/2017 Add in SQL statements and test
         try {
-            query = null; //sql statement that gets the list of reservations the user has made
+            query = "SELECT * " +
+                    "FROM RESERVATION AS R, CREDIT_CARD AS C" +
+                    "WHERE R.Cnumber=C.Cnumber AND R.CID='" + customerID + "';"; //sql statement that gets the list of reservations the user has made
 
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
@@ -911,19 +915,22 @@ public class main {
 
 
             System.out.println("======Hulton Review App======");
-            //pick a stay
+
+
+            //pick a reservation
             String InvoiceNo;
             while (true) {
-                System.out.println("Please pick a stay that you would like to review:");
+                System.out.println("Please pick a reservation that you would like to review:");
 
                 int i = 1;
 
                 rs.beforeFirst();
                 while (rs.next()) {
-                    System.out.println(Integer.toString(i) + " | " +
-                            rs.getString("State") + ", " +
-                            rs.getString("Country") + " - " +
-                            rs.getString("CheckInDate"));
+                    System.out.println(Integer.toString(i) + " | Invoice: " +
+                            rs.getString("InvoiceNo") + ",\tCard: " +
+                            rs.getString("Ctype") + "-**" +
+                            rs.getString("Cnumber").substring(CNumber.length() - 4) + ",\t Reserve Date: " +
+                            rs.getString("Date"));
                     i++;
                 }
 
@@ -953,7 +960,60 @@ public class main {
                 InvoiceNo = rs.getString("InvoiceNo");
 
                 break;
+            }
 
+
+
+
+
+            //pick a room reservation
+
+            query = null; //sql statement that gets the list of reservations the user has made
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+
+            while (true) {
+                System.out.println("Please pick a room reservation that you would like to review:");
+
+                int i = 1;
+
+                rs.beforeFirst();
+                while (rs.next()) {
+                    System.out.println(Integer.toString(i) + " | " +
+                            rs.getString("State") + ", " +
+                            rs.getString("Country") + " - " +
+                            rs.getString("Rtype") + ", Room #" +
+                            rs.getString("RoomNo"));
+                    i++;
+                }
+
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return;
+                }
+
+                if (!isNumeric(resp)){
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
+                }
+
+                int selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
+                }
+
+
+                rs.beforeFirst();
+                while (selection != 0) {
+                    rs.next();
+                    selection--;
+                }
+                hotelID = rs.getInt("HotelID");
+                roomNo = rs.getInt("RoomNo");
+                break;
             }
 
 
@@ -984,9 +1044,6 @@ public class main {
             }
 
             String review;
-            int i = 0;
-            // TODO: 4/30/2017 should we cancel the review if the user only types "exit"? very minor detail
-            // TODO: 5/3/2017 account for multiple room_reserves per reserve
             switch (selection) {
                 case 1:
                     //room
@@ -1010,7 +1067,6 @@ public class main {
                     if (rs.next()){
                         rs.beforeFirst();
                         while (rs.next()) {
-                            i++;
                             System.out.println("Write your review for " + rs.getString("BType") + " (limit 500 characters), or type 'skip':");
                             review = scanner.nextLine();
                             if (review.equalsIgnoreCase("skip")) {
@@ -1027,7 +1083,6 @@ public class main {
                             rs = statement.executeQuery(query);
                         }
                     } else {
-                        // FIXME: 5/2/2017 not how to do this
                         System.out.println("You did not order any breakfasts for this stay.");
                     }
                     break;
@@ -1039,26 +1094,26 @@ public class main {
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
 
-                    while (rs.next()) {
-                        i++;
-                        System.out.println("Write your review for " + rs.getString("SType") + " (limit 500 characters), or type 'skip':");
-                        review = scanner.nextLine();
-                        if (review.equalsIgnoreCase("skip")) {
-                            continue;
+                    if (rs.next()) {
+                        rs.beforeFirst();
+                        while (rs.next()) {
+                            System.out.println("Write your review for " + rs.getString("SType") + " (limit 500 characters), or type 'skip':");
+                            review = scanner.nextLine();
+                            if (review.equalsIgnoreCase("skip")) {
+                                continue;
+                            }
+
+                            if (statement != null) {
+                                statement.close();
+                            }
+
+                            query = null;  //sql statement that inserts review
+
+                            statement = connection.createStatement();
+                            rs = statement.executeQuery(query);
+
                         }
-
-                        if (statement != null) {
-                            statement.close();
-                        }
-
-                        query = null;  //sql statement that inserts review
-
-                        statement = connection.createStatement();
-                        rs = statement.executeQuery(query);
-
-                    }
-                    if (i == 0) {
-                        // FIXME: 5/2/2017 not how to do this
+                    } else{
                         System.out.println("You did not order any services for this stay.");
                     }
                     break;
