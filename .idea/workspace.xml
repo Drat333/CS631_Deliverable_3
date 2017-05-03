@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -37,10 +36,12 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="171" column="25" lean-forward="false" selection-start-line="171" selection-start-column="25" selection-end-line="171" selection-end-column="25" />
+            <state relative-caret-position="470">
+              <caret line="222" column="62" lean-forward="false" selection-start-line="222" selection-start-column="62" selection-end-line="222" selection-end-column="62" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <marker date="1493831336176" expanded="false" signature="33898:33908" ph=" { " />
+                <marker date="1493831336176" expanded="false" signature="33977:33983" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -94,6 +95,7 @@
       <find>numberforma</find>
       <find>if (rs.</find>
       <find>rs.isaft</find>
+      <find>finall</find>
     </findStrings>
     <replaceStrings>
       <replace>System.out</replace>
@@ -630,7 +632,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493792135162</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Fixing of SQL logic">
+      <created>1493830068056</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1493830068056</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TodoView">
@@ -721,7 +730,8 @@
     <MESSAGE value="Added promts for register portion of registration app. Moved MySQLAccess.class functionality back into the main file as it was not possible to read results as a class." />
     <MESSAGE value="Started removing references to MySQLAccess and adding SQL statements properly" />
     <MESSAGE value="Registration is tested working." />
-    <option name="LAST_COMMIT_MESSAGE" value="Registration is tested working." />
+    <MESSAGE value="Fixing of SQL logic" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixing of SQL logic" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1102,10 +1112,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="171" column="25" lean-forward="false" selection-start-line="171" selection-start-column="25" selection-end-line="171" selection-end-column="25" />
+        <state relative-caret-position="470">
+          <caret line="222" column="62" lean-forward="false" selection-start-line="222" selection-start-column="62" selection-end-line="222" selection-end-column="62" />
           <folding>
             <element signature="imports" expanded="true" />
+            <marker date="1493831336176" expanded="false" signature="33898:33908" ph=" { " />
+            <marker date="1493831336176" expanded="false" signature="33977:33983" ph=" }" />
           </folding>
         </state>
       </provider>
