@@ -1,7 +1,9 @@
 package io.github.drat333.reservations_reviews;
 
-import javax.swing.tree.FixedHeightLayoutCache;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -25,7 +27,11 @@ public class main {
 
 
     //hotelSearch values
-    private static String hotelID; //make an int?
+    private static int hotelID; //make an int?
+    private static Date checkinDate;
+    private static Date checkoutDate;
+    private static String Rtype;
+    private static int roomID;
 
 
     //credit card info
@@ -151,6 +157,7 @@ public class main {
         } catch (SQLException e) {
             System.err.print("Error in SQL query. ");
             System.err.println(e.getMessage());
+            return false;
         } finally {
             if (statement != null) {
                 try {
@@ -243,8 +250,616 @@ public class main {
 
 
 
+    private static boolean pickHotel(){
+        //search for a hotel
+
+        String country;
+        String state;
+
+        try {
+            pickHotel:
+            while (true) {
+
+                //pick a country
+                // TODO: 5/3/2017 call hotelSearch instead of looping?
+                while (true) {
+
+                    System.out.println("\nPick a country:");
+
+                    query = "SELECT DISTINCT Country " +
+                            "FROM HOTEL;"; //get a list of countries with hotels
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    int i = 1;
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        System.out.println(Integer.toString(i) + " | " +
+                                rs.getString("Country"));
+                        i++;
+                    }
 
 
+                    resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
+                        return false;
+                    }
+
+                    if (!isNumeric(resp)) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
+
+                    int selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
+
+                    rs.beforeFirst();
+                    while (selection != 0) {
+                        rs.next();
+                        selection--;
+                    }
+
+                    country = rs.getString("Country");
+                    break;
+                }
+
+                //country is picked
+                if (statement != null) {
+                    statement.close();
+                }
+
+
+
+                //pick a state
+                while (true) {
+
+                    System.out.println("\nPick a state in " + country + ":");
+
+                    query = "SELECT DISTINCT State " +
+                            "FROM HOTEL " +
+                            "WHERE Country='" + country + "';"; //get a list of states with hotels in selected country
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    int i = 1;
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        System.out.println(Integer.toString(i) + " | " +
+                                rs.getString("State"));
+                        i++;
+                    }
+
+
+                    resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
+                        return false;
+                    }
+
+                    if (!isNumeric(resp)) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
+
+                    int selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
+
+
+                    rs.beforeFirst();
+                    while (selection != 0) {
+                        rs.next();
+                        selection--;
+                    }
+
+                    state = rs.getString("State");
+                    break;
+                }
+
+                //state is picked
+                if (statement != null) {
+                    statement.close();
+                }
+
+
+
+                //pick a hotel in state, country
+                query = "SELECT * " +
+                        "FROM HOTEL " +
+                        "WHERE Country='" + country + "' AND State='" + state + "';";
+
+                while (true) {
+
+                    if (statement != null) {
+                        statement.close();
+                    }
+
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    System.out.println("Which hotel in " + state + ", " + country + " would you like to view?");
+                    int i = 1;
+
+                    rs.beforeFirst();
+                    while (rs.next()) {
+                        System.out.println(Integer.toString(i) + " | " +
+                                rs.getString("Street"));
+                        i++;
+                    }
+
+
+                    resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
+                        return false;
+                    }
+
+                    if (!isNumeric(resp)) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
+
+                    int selection = Integer.parseInt(resp);
+                    if (selection < 1 || selection > i) {
+                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                        continue;
+                    }
+
+
+                    rs.beforeFirst();
+                    while (selection != 0) {
+                        rs.next();
+                        selection--;
+                    }
+                    hotelID = rs.getInt("HotelID");
+                    System.out.println("\nYou have chosen the hotel at " + rs.getString("Street") + " in " + state + ", " + country + ".");
+
+                    break;
+                }
+
+
+                if (statement != null) {
+                    statement.close();
+                }
+
+
+                //hotel has been chosen at this point
+                System.out.println("Would you like to create a reservation? (Y/N)");
+                resp = scanner.nextLine();
+
+                switch (resp.toUpperCase()) {
+                    case "Y":
+                        break pickHotel;
+                    case "N":
+                        continue pickHotel;
+                    case "EXIT":
+                        return false;
+                    default:
+                        System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
+                }
+            }
+        } catch (java.sql.SQLException e){
+            System.err.println("SQL Error: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
+    private static boolean pickRoom(){
+        try {
+            //pick a room type
+            query = "SELECT Rtype " +
+                    "FROM ROOM " +
+                    "WHERE HotelID='"+ hotelID + "';"; // sql statement that gets the room types available
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            roomTypes:
+            while (true) {
+                System.out.println("\nWhat type of room would you like to reserve?");
+                int i = 1;
+
+                //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+                rs.beforeFirst();
+                while (rs.next()) {
+                    System.out.println(Integer.toString(i) + " | " + rs.getString("Rtype"));
+                    i++;
+                }
+
+
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return false;
+                }
+
+                if (!isNumeric(resp)){
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
+                }
+
+                int selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
+                }
+
+                rs.beforeFirst();
+                while (selection != 0) {
+                    rs.next();
+                    selection--;
+                }
+                Rtype = rs.getString("Rtype");
+
+                break;
+            }
+
+            if (statement != null){
+                statement.close();
+            }
+
+
+
+            //pick reservation dates
+            dates:
+            while (true) {
+                // TODO: 5/3/2017 unskip
+                break;
+                /*
+                DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MM/dd/yyyy").toFormatter();
+                LocalDate localDate;
+
+                System.out.println("Enter your desired check-in date for your stay (MM/dd/yyyy): ");
+                String resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return false;
+                }
+
+                localDate = LocalDate.parse(resp,formatter);
+                checkinDate = Date.valueOf(localDate);
+
+                System.out.println("Enter your desired check-out date for your stay (MM/dd/yyyy):");
+                String endDate = scanner.nextLine();
+                if (endDate.equalsIgnoreCase("exit")) {
+                    return false;
+                }
+
+                localDate = LocalDate.parse(resp,formatter);
+                checkoutDate = Date.valueOf(localDate);
+                query = "SELECT * " +
+                        "FROM ROOM, ROOM_RESERVATION " +
+                        "WHERE (ROOM.HotelID != ROOM_RESERVATION.HotelID AND " +
+                                "ROOM.RoomNo != ROOM_RESERVATION.RoomNo AND " +
+                                "ROOM.HotelID=" + hotelID + " AND " +
+                                "Rtype='" + Rtype + "' AND " +
+                                "CheckInDate!='" + checkinDate + "' AND " +
+                                "CheckOutDate!='" + checkoutDate + "');";//SQL statement checks if date is available
+
+                System.out.println(query);
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
+
+                if (rs.next()) {
+                    System.out.println("\nCongrats! Those dates are available.");
+                    break;
+                } else {
+                    System.out.println("We're sorry, those dates are unavailable.");
+                }*/
+
+            }
+
+            if (statement != null){
+                statement.close();  // FIXME: 5/3/2017 can we get rid of this?
+            }
+
+
+
+            //start making a reservation - pick a room
+
+            query = "SELECT * " +
+                    "FROM ROOM " +
+                    "WHERE HotelID='" + hotelID +"';";    // FIXME: 5/3/2017 temp query
+
+
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query); //query probably doesn't have to change here
+
+            rooms:
+            while (true) {
+                System.out.println("\nWhich room would you like to reserve?");
+                int i = 1;
+
+                //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
+                rs.beforeFirst();
+                while (rs.next()) {
+                    System.out.print(Integer.toString(i) + " | " +
+                            rs.getString("Price") + " per day," +
+                            rs.getString("Capacity") + " people, Floor " +
+                            rs.getString("Floor"));
+                    if (rs.getString("Discount") != null) {
+                        System.out.print("\tDiscounted! ");
+                        int discount = Integer.parseInt(rs.getString("Discounted"));
+                        discount *= 100;
+                        System.out.print(Integer.toString(discount) + "% off");
+                    }
+                    System.out.println("\n\tDescription: " + rs.getString("Description"));
+                    i++;
+                }
+
+
+                resp = scanner.nextLine();
+                if (resp.equalsIgnoreCase("exit")) {
+                    return false;
+                }
+
+                if (!isNumeric(resp)){
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
+                }
+
+                int selection = Integer.parseInt(resp);
+                if (selection < 1 || selection > i) {
+                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                    continue;
+                }
+
+                rs.beforeFirst();
+                while (selection != 0) {
+                    rs.next();
+                    selection--;
+                }
+                roomID = rs.getInt("RoomNo");
+                break;
+            }
+
+            if (statement != null){
+                statement.close();
+            }
+
+        } catch (SQLException e) {
+            System.err.print("Error in SQL query. ");
+            System.err.println(e.getMessage());
+            return false;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+
+    private static boolean pickBreakfasts() {
+        try{
+            //pick breakfasts
+            query = null; //sql statement that gets all breakfasts available
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            ArrayList<String> BType = new ArrayList<>();
+            ArrayList<Integer> BCount = new ArrayList<>();
+
+            if (rs.next()) {
+                System.out.println("\n\nBreakfasts are available for your reservation.");
+                System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
+
+                rs.beforeFirst();
+                while (rs.next()) {   //if breakfasts are available
+                    while (true) {
+                        BType.add(rs.getString("BType"));
+                        System.out.print(rs.getString("BType") + " ($ " + rs.getString("BPrice") + "/order): ");
+
+                        resp = scanner.nextLine();
+                        if (resp.equalsIgnoreCase("exit")) {
+                            return false;
+                        }
+
+                        if (!isNumeric(resp)){
+                            System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
+                            continue;
+                        }
+
+                        int selection = Integer.parseInt(resp);
+                        if (selection < 0) {
+                            System.out.println("\nPlease enter a valid number of at least 0, or type 'exit' to return to main menu.\n");
+                            continue;
+                        }
+                        BCount.add(selection);
+                        break;
+                    }
+                }
+            } else{
+                System.out.println("\n\nThere are no breakfasts available for this reservation.");
+            }
+
+
+            if (statement != null){
+                statement.close();
+            }
+
+        } catch (SQLException e) {
+            System.err.print("Error in SQL query. ");
+            System.err.println(e.getMessage());
+            return false;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    private static boolean pickServices() {
+        try{
+            //pick services
+            query = null;   //sql query that gets the services available
+
+            statement = connection.createStatement();
+            rs = statement.executeQuery(query);
+
+            ArrayList<String> SType = new ArrayList();
+            services:
+            while (true) {
+
+                if (rs.next()) {
+                    System.out.println("\n\nServices are available for your reservation.");
+                    System.out.println("Please indicate (Y/N) for each service.");
+
+                    rs.beforeFirst();
+                    while (rs.next()) {   //if services are available
+                        prompt:
+                        while (true) {
+                            System.out.print(rs.getString("SType") + " ($" + rs.getString("SPrice") + "): ");
+
+                            resp = scanner.nextLine();
+                            switch (resp.toUpperCase()) {
+                                case "Y":
+                                    SType.add(rs.getString("SType"));
+                                    break prompt;
+                                case "N":
+                                    break prompt;
+                                case "EXIT":
+                                    return false;
+                                default:
+                                    System.out.println("\nPlease indicate (Y/N) for if you want the service, or exit to return to the main menu.\n");
+                                    break;
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+
+            if (statement != null){
+                statement.close();
+            }
+        } catch (SQLException e) {
+            System.err.print("Error in SQL query. ");
+            System.err.println(e.getMessage());
+            return false;
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException ex) {
+                    System.err.println("Error in closing SQL query");
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+
+    private static boolean enterCardInfo(){
+        System.out.println("\nIn order to reserve your room, we require that you enter a credit card.");
+
+        //credit card info
+        CNumber = null;
+        Ctype = null;
+        Baddress = null;
+        CCode = null;
+        ExpDate = null;
+        CName = null;
+
+        while (true) {
+            System.out.println("Enter your credit card number:");
+            CNumber = scanner.nextLine();
+
+            if (CNumber.equalsIgnoreCase("exit")){
+                return false;
+            }
+            //check for valid phone number
+            if (CNumber.length() == 16 && isNumeric(CNumber)){
+                break;
+            } else{
+                System.out.println("Please enter a credit card number, or leave the phone number blank.");
+            }
+        }
+
+
+        System.out.println("Enter your credit card type:");
+        Ctype = scanner.nextLine();
+        if (Ctype.equalsIgnoreCase("exit")){
+            return false;
+        }
+
+        System.out.println("Enter the name on your credit card:");
+        CName = scanner.nextLine();
+        if (CName.equalsIgnoreCase("exit")){
+            return false;
+        }
+
+        // TODO: 5/3/2017 check for length
+        System.out.println("Enter your billing address:");
+        Baddress = scanner.nextLine();
+        if (Baddress.equalsIgnoreCase("exit")){
+            return false;
+        }
+
+        while (true) {
+            System.out.println("Enter your credit card security code:");
+            CCode = scanner.nextLine();
+
+            if (CCode.equalsIgnoreCase("exit")){
+                return false;
+            }
+            //check for valid credit card security code
+            if (CNumber.length() == 16 && isNumeric(CNumber)){
+                break;
+            } else{
+                System.out.println("Please enter a valid credit card security code, or leave the phone number blank.");
+            }
+        }
+
+        while (true) {
+
+            System.out.println("Enter your credit card expiration year:");
+            ExpDate = scanner.nextLine();
+            if (ExpDate.equalsIgnoreCase("exit")){
+                return false;
+            }
+            if (isNumeric(ExpDate) && ExpDate.length() == 4){
+                break;
+            }
+            System.out.println("\nInvalid year format.");
+        }
+
+        return true;
+    }
 
 
     private static void leaveReviews(){
@@ -338,6 +953,7 @@ public class main {
             String review;
             int i = 0;
             // TODO: 4/30/2017 should we cancel the review if the user only types "exit"? very minor detail
+            // TODO: 5/3/2017 account for multiple room_reserves per reserve
             switch (selection) {
                 case 1:
                     //room
@@ -358,24 +974,26 @@ public class main {
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
 
-                    while (rs.next()) {
-                        i++;
-                        System.out.println("Write your review for " + rs.getString("BType") + " (limit 500 characters), or type 'skip':");
-                        review = scanner.nextLine();
-                        if (review.equalsIgnoreCase("skip")) {
-                            continue;
+                    if (rs.next()){
+                        rs.beforeFirst();
+                        while (rs.next()) {
+                            i++;
+                            System.out.println("Write your review for " + rs.getString("BType") + " (limit 500 characters), or type 'skip':");
+                            review = scanner.nextLine();
+                            if (review.equalsIgnoreCase("skip")) {
+                                continue;
+                            }
+
+                            if (statement != null) {
+                                statement.close();
+                            }
+
+                            query = null;  //sql statement that inserts review
+
+                            statement = connection.createStatement();
+                            rs = statement.executeQuery(query);
                         }
-
-                        if (statement != null){
-                            statement.close();
-                        }
-
-                        query = null;  //sql statement that inserts review
-
-                        statement = connection.createStatement();
-                        rs = statement.executeQuery(query);
-                    }
-                    if (i == 0) {
+                    } else {
                         // FIXME: 5/2/2017 not how to do this
                         System.out.println("You did not order any breakfasts for this stay.");
                     }
@@ -429,597 +1047,16 @@ public class main {
 
     }
 
-    
-    
-    private static boolean pickHotel(){
-        //search for a hotel
-        
-        String country;
-        String state;
-        
-        try {
-            pickHotel:
-            while (true) {
 
-                //pick a country
-                while (true) {
 
-                    System.out.println("\nPick a country:");
 
-                    query = "SELECT DISTINCT Country " +
-                            "FROM HOTEL;"; //get a list of countries with hotels
 
-                    statement = connection.createStatement();
-                    rs = statement.executeQuery(query);
 
-                    int i = 1;
-                    rs.beforeFirst();
-                    while (rs.next()) {
-                        System.out.println(Integer.toString(i) + " | " +
-                                rs.getString("Country"));
-                        i++;
-                    }
 
 
-                    resp = scanner.nextLine();
-                    if (resp.equalsIgnoreCase("exit")) {
-                        return false;
-                    }
 
-                    if (!isNumeric(resp)) {
-                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;
-                    }
 
-                    int selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > i) {
-                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;
-                    }
 
-                    rs.beforeFirst();
-                    while (selection != 0) {
-                        rs.next();
-                        selection--;
-                    }
-
-                    country = rs.getString("Country");
-                    break;
-                }
-
-                //country is picked
-                if (statement != null) {
-                    statement.close();
-                }
-
-                
-                
-                //pick a state
-                while (true) {
-
-                    System.out.println("\nPick a state in " + country + ":");
-
-                    query = "SELECT DISTINCT State " +
-                            "FROM HOTEL " +
-                            "WHERE Country='" + country + "';"; //get a list of states with hotels in selected country
-
-                    System.out.println(query);
-                    statement = connection.createStatement();
-                    rs = statement.executeQuery(query);
-
-                    int i = 1;
-                    rs.beforeFirst();
-                    while (rs.next()) {
-                        System.out.println(Integer.toString(i) + " | " +
-                                rs.getString("State"));
-                        i++;
-                    }
-
-
-                    resp = scanner.nextLine();
-                    if (resp.equalsIgnoreCase("exit")) {
-                        return false;
-                    }
-
-                    if (!isNumeric(resp)) {
-                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;
-                    }
-
-                    int selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > i) {
-                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;
-                    }
-
-
-                    rs.beforeFirst();
-                    while (selection != 0) {
-                        rs.next();
-                        selection--;
-                    }
-
-                    state = rs.getString("State");
-                    break;
-                }
-
-                //state is picked
-                if (statement != null) {
-                    statement.close();
-                }
-
-
-                
-                //pick a hotel in state, country
-                query = "SELECT * " +
-                        "FROM HOTEL " +
-                        "WHERE Country='" + country + "' AND State='" + state + "';";
-
-                while (true) {
-
-                    if (statement != null) {
-                        statement.close();
-                    }
-
-                    statement = connection.createStatement();
-                    rs = statement.executeQuery(query);
-
-                    System.out.println("Which hotel in " + state + ", " + country + " would you like to view?");
-                    int i = 1;
-
-                    rs.beforeFirst();
-                    while (rs.next()) {
-                        System.out.println(Integer.toString(i) + " | " +
-                                rs.getString("Street"));
-                        i++;
-                    }
-
-
-                    resp = scanner.nextLine();
-                    if (resp.equalsIgnoreCase("exit")) {
-                        return false;
-                    }
-
-                    if (!isNumeric(resp)) {
-                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;
-                    }
-
-                    int selection = Integer.parseInt(resp);
-                    if (selection < 1 || selection > i) {
-                        System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                        continue;
-                    }
-
-
-                    rs.beforeFirst();
-                    while (selection != 0) {
-                        rs.next();
-                        selection--;
-                    }
-                    hotelID = rs.getString("HotelID");
-                    System.out.println("\nYou have chosen the hotel at " + rs.getString("Street") + " in " + state + ", " + country + ".");
-
-                    break;
-                }
-
-
-                if (statement != null) {
-                    statement.close();
-                }
-
-
-                //hotel has been chosen at this point
-                System.out.println("Would you like to create a reservation? (Y/N)");
-                resp = scanner.nextLine();
-
-                switch (resp.toUpperCase()) {
-                    case "Y":
-                        break pickHotel;
-                    case "N":
-                        continue pickHotel;
-                    case "EXIT":
-                        return true;
-                    default:
-                        System.out.println("\nPlease enter Y or N to create a reservation, or 'exit' to return to the main menu.\n");
-                }
-            }
-        } catch (java.sql.SQLException e){
-            System.err.println("SQL Error: " + e.getMessage());
-            e.printStackTrace();
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    System.err.println("Error in closing SQL query");
-                }
-            }
-        }
-        
-        return true;
-    }
-    
-    
-    
-    private static boolean pickRoom(){
-        try {
-            //pick a room type
-            query = null; // sql statement that gets the room types available
-
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-
-            roomTypes:
-            while (true) {
-                System.out.println("\nWhat type of room would you like to reserve?");
-                int i = 1;
-
-                //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
-                rs.beforeFirst();
-                while (rs.next()) {
-                    System.out.println(Integer.toString(i) + " | " + rs.getString("Rtype"));
-                    i++;
-                }
-
-
-                resp = scanner.nextLine();
-                if (resp.equalsIgnoreCase("exit")) {
-                    return false;
-                }
-
-                if (!isNumeric(resp)){
-                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    continue;
-                }
-
-                int selection = Integer.parseInt(resp);
-                if (selection < 1 || selection > i) {
-                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    continue;
-                }
-
-                String Rtype;
-                rs.beforeFirst();
-                while (selection != 0) {
-                    rs.next();
-                    selection--;
-                }
-                Rtype = rs.getString("Rtype");
-
-                break;
-            }
-
-            if (statement != null){
-                statement.close();
-            }
-
-            //start making a reservation - pick a room
-            query = null; // sql statement that gets all AVAILABLE rooms, using Rtype
-
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-
-            rooms:
-            while (true) {
-                System.out.println("\nWhich room would you like to reserve?");
-                int i = 1;
-
-                //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
-                rs.beforeFirst();
-                while (rs.next()) {
-                    System.out.print(Integer.toString(i) + " | " +
-                            rs.getString("Price") + " per day," +
-                            rs.getString("Capacity") + " people, Floor " +
-                            rs.getString("Floor"));
-                    if (rs.getString("Discount") != null) {
-                        System.out.print("\tDiscounted! ");
-                        int discount = Integer.parseInt(rs.getString("Discounted"));
-                        discount *= 100;
-                        System.out.print(Integer.toString(discount) + "% off");
-                    }
-                    System.out.println("\n\tDescription: " + rs.getString("Description"));
-                    i++;
-                }
-
-
-                resp = scanner.nextLine();
-                if (resp.equalsIgnoreCase("exit")) {
-                    return false;
-                }
-
-                if (!isNumeric(resp)){
-                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    continue;
-                }
-
-                int selection = Integer.parseInt(resp);
-                if (selection < 1 || selection > i) {
-                    System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                    continue;
-                }
-
-                String roomID;
-                rs.beforeFirst();
-                while (selection != 0) {
-                    rs.next();
-                    selection--;
-                }
-                roomID = rs.getString("RoomNo");
-                break;
-            }
-
-            if (statement != null){
-                statement.close();
-            }
-
-            //pick reservation dates
-            // TODO: 5/2/2017 put this above room selection
-            dates:
-            while (true) {
-                System.out.println("Enter your desired check-in date for your stay: ");
-                String startDate = scanner.nextLine();
-                if (startDate.equalsIgnoreCase("exit")) {
-                    return false;
-                }
-
-                System.out.println("Enter your desired check-out date for your stay:");
-                String endDate = scanner.nextLine();
-                if (endDate.equalsIgnoreCase("exit")) {
-                    return false;
-                }
-
-                query = null;//SQL statement checks if date is available
-
-                statement = connection.createStatement();
-                rs = statement.executeQuery(query);
-
-                if (startDate.equals(endDate) /*placeholder, dates available*/) {
-                    System.out.println("\nCongrats! Those dates are available.");
-                    break;
-                } else {
-                    System.out.println("We're sorry, those dates are unavailable.");
-                }
-            }
-
-            if (statement != null){
-                statement.close();
-            }
-
-        } catch (SQLException e) {
-            System.err.print("Error in SQL query. ");
-            System.err.println(e.getMessage());
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    System.err.println("Error in closing SQL query");
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-
-    private static boolean pickBreakfasts() {
-        try{
-            //pick breakfasts
-            query = null; //sql statement that gets all breakfasts available
-
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-
-            ArrayList<String> BType = new ArrayList<>();
-            ArrayList<Integer> BCount = new ArrayList<>();
-
-            if (rs.next()) {
-                System.out.println("\n\nBreakfasts are available for your reservation.");
-                System.out.println("Please indicate how many of each breakfast you would like (1 per day, per person).");
-
-                rs.beforeFirst();
-                while (rs.next()) {   //if breakfasts are available
-                    while (true) {
-                        BType.add(rs.getString("BType"));
-                        System.out.print(rs.getString("BType") + " ($ " + rs.getString("BPrice") + "/order): ");
-
-                        resp = scanner.nextLine();
-                        if (resp.equalsIgnoreCase("exit")) {
-                            return false;
-                        }
-
-                        if (!isNumeric(resp)){
-                            System.out.println("\nPlease enter a valid number, or type 'exit' to return to main menu.\n");
-                            continue;
-                        }
-
-                        int selection = Integer.parseInt(resp);
-                        if (selection < 0) {
-                            System.out.println("\nPlease enter a valid number of at least 0, or type 'exit' to return to main menu.\n");
-                            continue;
-                        }
-                        BCount.add(selection);
-                        break;
-                    }
-                }
-            } else{
-                System.out.println("\n\nThere are no breakfasts available for this reservation.");
-            }
-
-
-            if (statement != null){
-                statement.close();
-            }
-
-        } catch (SQLException e) {
-            System.err.print("Error in SQL query. ");
-            System.err.println(e.getMessage());
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    System.err.println("Error in closing SQL query");
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-
-    private static boolean pickServices() {
-        try{
-            //pick services
-            query = null;   //sql query that gets the services available
-
-            statement = connection.createStatement();
-            rs = statement.executeQuery(query);
-
-            ArrayList<String> SType = new ArrayList();
-            services:
-            while (true) {
-
-                if (rs.next()) {
-                    System.out.println("\n\nServices are available for your reservation.");
-                    System.out.println("Please indicate (Y/N) for each service.");
-
-                    rs.beforeFirst();
-                    while (rs.next()) {   //if services are available
-                        prompt:
-                        while (true) {
-                            System.out.print(rs.getString("SType") + " ($" + rs.getString("SPrice") + "): ");
-
-                            resp = scanner.nextLine();
-                            switch (resp.toUpperCase()) {
-                                case "Y":
-                                    SType.add(rs.getString("SType"));
-                                    break prompt;
-                                case "N":
-                                    break prompt;
-                                case "EXIT":
-                                    return false;
-                                default:
-                                    System.out.println("\nPlease indicate (Y/N) for if you want the service, or exit to return to the main menu.\n");
-                                    break;
-                            }
-                        }
-                    }
-                }
-                break;
-            }
-
-            if (statement != null){
-                statement.close();
-            }
-        } catch (SQLException e) {
-            System.err.print("Error in SQL query. ");
-            System.err.println(e.getMessage());
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException ex) {
-                    System.err.println("Error in closing SQL query");
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-
-    private static boolean enterCardInfo(){
-        System.out.println("\nIn order to reserve your room, we require that you enter a credit card.");
-
-        //credit card info
-        CNumber = null;
-        Ctype = null;
-        Baddress = null;
-        CCode = null;
-        ExpDate = null;
-        CName = null;
-
-        while (true) {
-            System.out.println("Enter your credit card number:");
-            CNumber = scanner.nextLine();
-
-            if (CNumber.equalsIgnoreCase("exit")){
-                return false;
-            }
-            //check for valid phone number
-            if (CNumber.length() == 16 && isNumeric(CNumber)){
-                break;
-            } else{
-                System.out.println("Please enter a credit card number, or leave the phone number blank.");
-            }
-        }
-
-
-        System.out.println("Enter your credit card type:");
-        Ctype = scanner.nextLine();
-        if (Ctype.equalsIgnoreCase("exit")){
-            return false;
-        }
-
-        System.out.println("Enter the name on your credit card:");
-        CName = scanner.nextLine();
-        if (CName.equalsIgnoreCase("exit")){
-            return false;
-        }
-
-        // TODO: 5/3/2017 check for length
-        System.out.println("Enter your billing address:");
-        Baddress = scanner.nextLine();
-        if (Baddress.equalsIgnoreCase("exit")){
-            return false;
-        }
-
-        while (true) {
-            System.out.println("Enter your credit card security code:");
-            CCode = scanner.nextLine();
-
-            if (CCode.equalsIgnoreCase("exit")){
-                return false;
-            }
-            //check for valid credit card security code
-            if (CNumber.length() == 16 && isNumeric(CNumber)){
-                break;
-            } else{
-                System.out.println("Please enter a valid credit card security code, or leave the phone number blank.");
-            }
-        }
-
-        while (true) {
-
-            System.out.println("Enter your credit card expiration year:");
-            ExpDate = scanner.nextLine();
-            if (ExpDate.equalsIgnoreCase("exit")){
-                return false;
-            }
-            if (isNumeric(ExpDate) && ExpDate.length() == 4){
-                break;
-            }
-            System.out.println("\nInvalid year format.");
-        }
-
-        return true;
-    }
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     private static void clearConsole(){
         System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
     }
