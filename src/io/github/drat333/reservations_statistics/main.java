@@ -178,17 +178,20 @@ public class main {
                 if (statement != null) {
                     statement.close();
                 }
-/*
+
+
+
                 // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
 
-                query = "SELECT RType " +
-                        "FROM(SELECT RType, SUM(RATING) AS totalscore " +
-                        "FROM ROOM,ROOM_REVIEW " +
-                        "WHERE ROOM.HotelID=ROOM_REVIEW.HotelID AND " +
-                        "ROOM.RoomNo=ROOM_REVIEW.RoomNo " +
-                        "GROUP BY RType) as totalscore " +
-                        "HAVING MAX(totalscore);";
-
+                query = "SELECT Name,totalcost " +
+                        "FROM (SELECT Name, SUM(TotalCost) AS totalcost " +
+                        "      FROM CUSTOMER,RESERVATION\n" +
+                        "      WHERE RDATE BETWEEN '" + startDate + "' AND '" + endDate + "' AND " +
+                        "      CUSTOMER.CID=RESERVATION.CID " +
+                        "      GROUP BY RESERVATION.CID) AS tc " +
+                        "ORDER BY totalcost DESC " +
+                        "LIMIT 5;";
+                System.out.println(query);
                 statement = connection.createStatement();
                 rs = statement.executeQuery(query);
 
@@ -206,7 +209,7 @@ public class main {
                     statement.close();
                 }
 
-                */
+
 
                 // TODO: 4/30/2017 compute highest rated breakfast type across all hotels
 

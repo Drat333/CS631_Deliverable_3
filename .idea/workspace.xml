@@ -56,12 +56,12 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="355">
-              <caret line="161" column="34" lean-forward="true" selection-start-line="161" selection-start-column="34" selection-end-line="161" selection-end-column="34" />
+            <state relative-caret-position="204">
+              <caret line="188" column="92" lean-forward="false" selection-start-line="188" selection-start-column="92" selection-end-line="188" selection-end-column="92" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#10384#10385#0" expanded="true" />
-                <element signature="e#10468#10469#0" expanded="true" />
+                <element signature="e#10509#10510#0" expanded="true" />
+                <element signature="e#10593#10594#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -773,7 +773,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493886506256</updated>
     </task>
-    <option name="localTasksCounter" value="28" />
+    <task id="LOCAL-00028" summary="Three stat functions working correctly.">
+      <created>1493887241050</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1493887241050</updated>
+    </task>
+    <option name="localTasksCounter" value="29" />
     <servers />
   </component>
   <component name="TodoView">
@@ -849,7 +856,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Progress on reservation function of reservations &amp; reviews app" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing required" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required" />
     <MESSAGE value="Reservation and Reviews app: started work on reviews portion" />
@@ -874,7 +880,8 @@
     <MESSAGE value="Working reviews." />
     <MESSAGE value="Fix for using apostrophes in review text. Not fixing: quotes in review text." />
     <MESSAGE value="Two stat functions working correctly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Two stat functions working correctly." />
+    <MESSAGE value="Three stat functions working correctly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Three stat functions working correctly." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1317,12 +1324,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="355">
-          <caret line="161" column="34" lean-forward="true" selection-start-line="161" selection-start-column="34" selection-end-line="161" selection-end-column="34" />
+        <state relative-caret-position="204">
+          <caret line="188" column="92" lean-forward="false" selection-start-line="188" selection-start-column="92" selection-end-line="188" selection-end-column="92" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#10384#10385#0" expanded="true" />
-            <element signature="e#10468#10469#0" expanded="true" />
+            <element signature="e#10509#10510#0" expanded="true" />
+            <element signature="e#10593#10594#0" expanded="true" />
           </folding>
         </state>
       </provider>
