@@ -36,6 +36,8 @@ public class main {
     private static String Rtype;
     private static int roomNo;
     private static Date reserveDate;
+    private static int totalCost;
+    private static int updateCost;
     private static ArrayList<String> BType;
     private static ArrayList<Integer> BCount;
     private static ArrayList<String> SType;
@@ -186,22 +188,20 @@ public class main {
 
 
     private static void hotelSearch() {
-        // TODO: 4/28/2017 Fill in SQL statements and test.
         // this method should not make any table changes until the end, when the customer confirms their choices
-        
         
         clearConsole();
         System.out.println("======Hulton Hotel Search======");
         System.out.println("Type 'exit' to return to the main menu at any time.");
 
-        
+        totalCost = 0;
+        updateCost = 0;
+
         if (!pickHotel()) return;
         if (!pickRoom()) return;
         if (!pickBreakfasts()) return;
         if (!pickServices()) return;
 
-
-        int TotalPrice; //TODO: this is probably optional but could be nice to implement. requires sql query
         System.out.println("\n\n\nAll aspects of your visit are set!");
 
         while (true) {
@@ -227,6 +227,8 @@ public class main {
 
         if (!enterCardInfo()) return;
 
+        totalCost += updateCost;
+        updateCost = 0;
 
         try {
             int invoiceNo;
@@ -261,9 +263,9 @@ public class main {
 
             //insert into RESERVATION
             query = "INSERT INTO RESERVATION " +
-                    "(CID, Cnumber, RDate) " +
+                    "(CID, Cnumber, RDate, TotalCost) " +
                     "VALUES " +
-                    "(" + customerID + ",'" + CNumber + "','" + reserveDate + "');";
+                    "(" + customerID + ",'" + CNumber + "','" + reserveDate + "','" + totalCost + "');";
             statement = connection.createStatement();
             invoiceNo = statement.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
 
@@ -332,6 +334,10 @@ public class main {
                         if (!pickBreakfasts()) return;
                         if (!pickServices()) return;
 
+                        totalCost += updateCost;
+                        updateCost = 0;
+
+                        //insert into ROOM_RESERVATION
                         statement = connection.createStatement();
                         query = "INSERT INTO ROOM_RESERVATION " +
                                 "VALUES " +
@@ -340,6 +346,39 @@ public class main {
 
                         if (statement != null) {
                             statement.close();
+                        }
+
+
+                        //insert into RRESV_BREAKFAST
+                        for (int i = 0; i < BType.size(); i++) {
+                            String btype = BType.get(i);
+                            String bcount = Integer.toString(BCount.get(i));
+
+                            query = "INSERT INTO RRESV_BREAKFAST " +
+                                    "VALUES " +
+                                    "('" + btype + "'," + hotelID + ",'" + roomNo + "','" + checkinDate + "','" + bcount + "')";
+                            statement = connection.createStatement();
+                            statement.executeUpdate(query);
+
+                            if (statement != null) {
+                                statement.close();
+                            }
+                        }
+
+
+                        //insert into RRESV_SERVICE
+                        for (String stype:
+                                SType) {
+
+                            query = "INSERT INTO RRESV_SERVICE " +
+                                    "VALUES " +
+                                    "('" + stype + "'," + hotelID + ",'" + roomNo + "','" + checkinDate + "')";
+                            statement = connection.createStatement();
+                            statement.executeUpdate(query);
+
+                            if (statement != null) {
+                                statement.close();
+                            }
                         }
 
                         System.out.println("\n\n\nCongratulations! You have successfully created your Hulton Hotels reservation.");
@@ -383,7 +422,6 @@ public class main {
             while (true) {
 
                 //pick a country
-                // TODO: 5/3/2017 call hotelSearch instead of looping?
                 while (true) {
 
                     System.out.println("\nPick a country:");
@@ -759,6 +797,7 @@ public class main {
                     selection--;
                 }
                 roomNo = rs.getInt("RoomNo");
+                updateCost += rs.getInt("Price");
                 break;
             }
 
@@ -828,6 +867,7 @@ public class main {
                             continue;
                         }
                         BCount.add(selection);
+                        updateCost += rs.getInt("BPrice") * selection;
                         break;
                     }
                 }
@@ -887,6 +927,7 @@ public class main {
                             switch (resp.toUpperCase()) {
                                 case "Y":
                                     SType.add(rs.getString("SType"));
+                                    updateCost += rs.getInt("SPrice");
                                     break prompt;
                                 case "N":
                                     break prompt;
@@ -965,7 +1006,6 @@ public class main {
             return false;
         }
 
-        // TODO: 5/3/2017 check for length
         System.out.println("Enter your billing address:");
         Baddress = scanner.nextLine();
         if (Baddress.equalsIgnoreCase("exit")){

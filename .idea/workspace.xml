@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" line="646" />
+    <bookmark url="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" line="684" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
@@ -39,12 +39,12 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="46">
-              <caret line="861" column="27" lean-forward="false" selection-start-line="861" selection-start-column="27" selection-end-line="861" selection-end-column="27" />
+            <state relative-caret-position="98">
+              <caret line="265" column="52" lean-forward="false" selection-start-line="265" selection-start-column="52" selection-end-line="265" selection-end-column="52" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1493874954154" expanded="false" signature="43660:43670" ph=" { " />
-                <marker date="1493874954154" expanded="false" signature="43739:43745" ph=" }" />
+                <marker date="1493878228187" expanded="false" signature="45350:45360" ph=" { " />
+                <marker date="1493878228187" expanded="false" signature="45429:45435" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -75,7 +75,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>runStatement</find>
       <find>RType</find>
       <find>CNumber</find>
       <find>mysqlaccess</find>
@@ -105,6 +104,7 @@
       <find>i = 1;</find>
       <find>,</find>
       <find>string resp</find>
+      <find>updateCost</find>
     </findStrings>
     <replaceStrings>
       <replace>System.out</replace>
@@ -727,7 +727,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493868846477</updated>
     </task>
-    <option name="localTasksCounter" value="22" />
+    <task id="LOCAL-00022" summary="Reservation &amp; Review: Reservations portion completed and working.">
+      <created>1493875416561</created>
+      <option name="number" value="00022" />
+      <option name="presentableId" value="LOCAL-00022" />
+      <option name="project" value="LOCAL" />
+      <updated>1493875416561</updated>
+    </task>
+    <option name="localTasksCounter" value="23" />
     <servers />
   </component>
   <component name="TodoView">
@@ -752,7 +759,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29595014" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29595014" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296146" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -764,7 +771,7 @@
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Theme Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.39875388" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39875388" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -827,19 +834,53 @@
     <MESSAGE value="Logic of statistics app should work. Need SQL statements to complete." />
     <MESSAGE value="Fixed early exit of statistics app." />
     <MESSAGE value="Added reservation insert sql statements. Need testing." />
-    <option name="LAST_COMMIT_MESSAGE" value="Added reservation insert sql statements. Need testing." />
+    <MESSAGE value="Reservation &amp; Review: Reservations portion completed and working." />
+    <option name="LAST_COMMIT_MESSAGE" value="Reservation &amp; Review: Reservations portion completed and working." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
+          <line>869</line>
+          <properties />
+          <option name="timeStamp" value="48" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
+          <line>336</line>
+          <properties />
+          <option name="timeStamp" value="50" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
+          <line>800</line>
+          <properties />
+          <option name="timeStamp" value="51" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
+          <line>870</line>
+          <properties />
+          <option name="timeStamp" value="52" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
+          <line>930</line>
+          <properties />
+          <option name="timeStamp" value="53" />
+        </line-breakpoint>
+      </breakpoints>
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="47" />
+      <option name="time" value="54" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="Application">
         <watch expression="checkoutDate" language="JAVA" />
         <watch expression="checkinDate" language="JAVA" />
+        <watch expression="updateCost" language="JAVA" />
       </configuration>
     </watches-manager>
   </component>
@@ -1183,17 +1224,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.41-bin.jar!/com/mysql/jdbc/ResultSetImpl.class">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="418" column="0" lean-forward="false" selection-start-line="418" selection-start-column="0" selection-end-line="418" selection-end-column="0" />
-          <folding>
-            <element signature="e#109879#109880#0" expanded="true" />
-            <element signature="e#109920#109921#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.41-bin.jar!/com/mysql/jdbc/ConnectionImpl.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="201">
@@ -1238,14 +1268,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.41-bin.jar!/com/mysql/jdbc/ResultSetImpl.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="167">
+          <caret line="359" column="0" lean-forward="false" selection-start-line="359" selection-start-column="0" selection-end-line="359" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="46">
-          <caret line="861" column="27" lean-forward="false" selection-start-line="861" selection-start-column="27" selection-end-line="861" selection-end-column="27" />
+        <state relative-caret-position="98">
+          <caret line="265" column="52" lean-forward="false" selection-start-line="265" selection-start-column="52" selection-end-line="265" selection-end-column="52" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493874954154" expanded="false" signature="43660:43670" ph=" { " />
-            <marker date="1493874954154" expanded="false" signature="43739:43745" ph=" }" />
+            <marker date="1493878228187" expanded="false" signature="45350:45360" ph=" { " />
+            <marker date="1493878228187" expanded="false" signature="45429:45435" ph=" }" />
           </folding>
         </state>
       </provider>
