@@ -1051,7 +1051,6 @@ public class main {
             query = "SELECT * " +
                     "FROM RESERVATION AS R, CREDIT_CARD AS C " +
                     "WHERE R.Cnumber=C.Cnumber and R.CID=" + customerID + ";";  //sql statement that gets the list of reservations the user has made
-
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
 
@@ -1070,7 +1069,6 @@ public class main {
             while (true) {
                 System.out.println("Please pick a reservation that you would like to review:");
 
-
                 int i = 0;
                 rs.beforeFirst();
                 while (rs.next()) {
@@ -1078,8 +1076,8 @@ public class main {
                     System.out.println(Integer.toString(i) + " | Invoice: " +
                             rs.getString("InvoiceNo") + ",\tCard: " +
                             rs.getString("Ctype") + "-**" +
-                            rs.getString("Cnumber").substring(CNumber.length() - 4) + ",\t Reserve Date: " +
-                            rs.getString("Date"));
+                            rs.getString("Cnumber").substring(rs.getString("Cnumber").length() - 4) + ",\t Reserve Date: " +
+                            rs.getString("RDate"));
                 }
 
 
@@ -1116,8 +1114,10 @@ public class main {
 
             //pick a room reservation
 
-            query = null; //sql statement that gets the list of room reservations the user has made
-
+            query = "SELECT * " +
+                    "FROM RESERVATION AS R, ROOM_RESERVATION AS M, ROOM AS O, HOTEL AS H " +
+                    "WHERE R.InvoiceNo=M.InvoiceNo AND M.InvoiceNo='" + InvoiceNo + "' " +
+                    "AND M.HotelID=O.HotelID AND M.RoomNo=O.RoomNo AND M.HotelID=H.HotelID;"; //sql statement that gets the list of room reservations the user has made
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
 
@@ -1161,6 +1161,7 @@ public class main {
                 }
                 hotelID = rs.getInt("HotelID");
                 roomNo = rs.getInt("RoomNo");
+                checkinDate = rs.getDate("CheckInDate");
                 break;
             }
 
@@ -1192,22 +1193,51 @@ public class main {
             }
 
             String review;
+            int rating;
+            Statement insertStatement;
             switch (selection) {
                 case 1:
                     //room
+                    while (true) {
+                        System.out.println("On a scale of 1-10, how would you rate your room?");
+                        resp = scanner.nextLine();
+
+                        if (!isNumeric(resp)) {
+                            System.out.println("\n\nPlease enter a rating between 1 and 10.\n");
+                            continue;
+                        }
+
+                        rating = Integer.parseInt(resp);
+
+                        if (rating < 1 || rating > 10) {
+                            System.out.println("\n\nPlease enter a rating between 1 and 10.\n");
+                            continue;
+                        }
+                        break;
+                    }
 
                     System.out.println("Write your review of your room (limit 500 characters):");
                     review = scanner.nextLine();
 
-                    query = null; //sql statement that inserts review
+                    query = "INSERT INTO ROOM_REVIEW " +
+                            "(Rating,Text,CID,HotelID,RoomNo) " +
+                            "VALUES " +
+                            "('" + rating + "','" + review + "','" + customerID + "','" + hotelID + "','" + roomNo + "');"; //sql statement that inserts review
 
-                    statement = connection.createStatement();
-                    rs = statement.executeQuery(query);
+                    insertStatement = connection.createStatement();
+                    insertStatement.executeUpdate(query);
+                    resp = null;
+                    if (insertStatement != null) {
+                        insertStatement.close();
+                    }
                     break;
                 case 2:
                     //breakfast - reviews are opt-out (with "skip")
 
-                    query = null;  //sql statement that gets list of breakfasts ordered
+                    query = "SELECT * " +
+                            "FROM BREAKFAST AS B, RRESV_BREAKFAST AS R " +
+                            "WHERE B.HotelID=R.HotelID AND B.BType=R.BType AND " +
+                            "R.HotelID='" + hotelID + "' AND R.RoomNo='" + roomNo + "' AND R.CheckInDate='" + checkinDate + "';";  //sql statement that gets list of breakfasts ordered
 
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
@@ -1215,20 +1245,42 @@ public class main {
                     if (rs.next()){
                         rs.beforeFirst();
                         while (rs.next()) {
+                            while (true) {
+                                System.out.println("On a scale of 1-10, how would you rate the " + rs.getString("BType") + " breakfast?");
+                                resp = scanner.nextLine();
+
+                                if (!isNumeric(resp)) {
+                                    System.out.println("\n\nPlease enter a rating between 1 and 10.\n");
+                                    continue;
+                                }
+
+                                rating = Integer.parseInt(resp);
+
+                                if (rating < 1 || rating > 10) {
+                                    System.out.println("\n\nPlease enter a rating between 1 and 10.\n");
+                                    continue;
+                                }
+                                break;
+                            }
+
                             System.out.println("Write your review for " + rs.getString("BType") + " (limit 500 characters), or type 'skip':");
                             review = scanner.nextLine();
                             if (review.equalsIgnoreCase("skip")) {
                                 continue;
                             }
 
-                            if (statement != null) {
-                                statement.close();
+
+                            query = "INSERT INTO BREAKFAST_REVIEW " +
+                                    "(Rating,Text,CID,HotelID,BType) " +
+                                    "VALUES " +
+                                    "('" + rating + "','" + review + "','" + customerID + "','" + hotelID + "','" + rs.getString("BType") + "');";  //sql statement that inserts review
+
+                            insertStatement = connection.createStatement();
+                            insertStatement.executeUpdate(query);
+                            resp = null;
+                            if (insertStatement != null) {
+                                insertStatement.close();
                             }
-
-                            query = null;  //sql statement that inserts review
-
-                            statement = connection.createStatement();
-                            rs = statement.executeQuery(query);
                         }
                     } else {
                         System.out.println("You did not order any breakfasts for this stay.");
@@ -1237,7 +1289,10 @@ public class main {
                 case 3:
                     //services - reviews are opt-out (with "skip")
 
-                    query = null;  //sql statement that gets list of services ordered
+                    query = "SELECT * " +
+                            "FROM SERVICE AS S, RRESV_SERVICE AS R " +
+                            "WHERE S.HotelID=R.HotelID AND S.SType=R.SType AND " +
+                            "R.HotelID='" + hotelID + "' AND R.RoomNo='" + roomNo + "' AND R.CheckInDate='" + checkinDate + "';";  //sql statement that gets list of services ordered
 
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
@@ -1245,24 +1300,51 @@ public class main {
                     if (rs.next()) {
                         rs.beforeFirst();
                         while (rs.next()) {
+                            while (true) {
+                                System.out.println("On a scale of 1-10, how would you rate the " + rs.getString("SType") + " service?");
+                                resp = scanner.nextLine();
+
+                                if (!isNumeric(resp)) {
+                                    System.out.println("\n\nPlease enter a rating between 1 and 10.\n");
+                                    continue;
+                                }
+
+                                rating = Integer.parseInt(resp);
+
+                                if (rating < 1 || rating > 10) {
+                                    System.out.println("\n\nPlease enter a rating between 1 and 10.\n");
+                                    continue;
+                                }
+                                break;
+                            }
                             System.out.println("Write your review for " + rs.getString("SType") + " (limit 500 characters), or type 'skip':");
                             review = scanner.nextLine();
                             if (review.equalsIgnoreCase("skip")) {
                                 continue;
                             }
 
-                            if (statement != null) {
-                                statement.close();
+
+                            query = "INSERT INTO SERVICE_REVIEW " +
+                                    "(Rating,Text,CID,HotelID,SType) " +
+                                    "VALUES " +
+                                    "('" + rating + "','" + review + "','" + customerID + "','" + hotelID + "','" + rs.getString("SType") + "');";  //sql statement that inserts review
+
+                            insertStatement = connection.createStatement();
+                            insertStatement.executeUpdate(query);
+                            resp = null;
+                            if (insertStatement != null) {
+                                insertStatement.close();
                             }
-
-                            query = null;  //sql statement that inserts review
-
-                            statement = connection.createStatement();
-                            rs = statement.executeQuery(query);
 
                         }
                     } else{
                         System.out.println("You did not order any services for this stay.");
+                        if (statement != null) {
+                            statement.close();
+                        }
+                    }
+                    if (statement != null) {
+                        statement.close();
                     }
                     break;
             }
@@ -1279,7 +1361,7 @@ public class main {
                 }
             }
         }
-        System.out.println("\n Thank you for your reviews! We greatly appreciate any and all feedback.");
+        System.out.println("\nThank you for your reviews! We greatly appreciate any and all feedback.");
 
     }
 

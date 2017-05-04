@@ -39,12 +39,12 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-668">
-              <caret line="283" column="0" lean-forward="false" selection-start-line="283" selection-start-column="0" selection-end-line="283" selection-end-column="0" />
+            <state relative-caret-position="227">
+              <caret line="1120" column="12" lean-forward="false" selection-start-line="1120" selection-start-column="12" selection-end-line="1120" selection-end-column="12" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1493878773906" expanded="false" signature="45389:45399" ph=" { " />
-                <marker date="1493878773906" expanded="false" signature="45468:45474" ph=" }" />
+                <marker date="1493883021479" expanded="false" signature="50216:50226" ph=" { " />
+                <marker date="1493883021479" expanded="false" signature="50295:50301" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -75,8 +75,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>RType</find>
-      <find>CNumber</find>
       <find>mysqlaccess</find>
       <find>public</find>
       <find>statement</find>
@@ -105,6 +103,8 @@
       <find>,</find>
       <find>string resp</find>
       <find>updateCost</find>
+      <find>insertStatement.executeQuery</find>
+      <find>println(query)</find>
     </findStrings>
     <replaceStrings>
       <replace>System.out</replace>
@@ -115,6 +115,7 @@
       <replace>private</replace>
       <replace>scanner.nextLine()</replace>
       <replace>AND</replace>
+      <replace>insertStatement.executeUpdate</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -741,7 +742,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493878291251</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="Fixes to Reservation portion.">
+      <created>1493879405746</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1493879405746</updated>
+    </task>
+    <option name="localTasksCounter" value="25" />
     <servers />
   </component>
   <component name="TodoView">
@@ -1286,12 +1294,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-668">
-          <caret line="283" column="0" lean-forward="false" selection-start-line="283" selection-start-column="0" selection-end-line="283" selection-end-column="0" />
+        <state relative-caret-position="227">
+          <caret line="1120" column="12" lean-forward="false" selection-start-line="1120" selection-start-column="12" selection-end-line="1120" selection-end-column="12" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493878773906" expanded="false" signature="45389:45399" ph=" { " />
-            <marker date="1493878773906" expanded="false" signature="45468:45474" ph=" }" />
+            <marker date="1493883021479" expanded="false" signature="50216:50226" ph=" { " />
+            <marker date="1493883021479" expanded="false" signature="50295:50301" ph=" }" />
           </folding>
         </state>
       </provider>
