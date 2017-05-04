@@ -36,6 +36,9 @@ public class main {
     private static String Rtype;
     private static int roomNo;
     private static Date reserveDate;
+    private static ArrayList<String> BType;
+    private static ArrayList<Integer> BCount;
+    private static ArrayList<String> SType;
 
 
     //credit card info
@@ -230,16 +233,31 @@ public class main {
             LocalDate localDate = LocalDate.now();
             reserveDate = Date.valueOf(localDate);
 
-            //insert into CREDIT_CARD
-            query = "INSERT INTO CREDIT_CARD " +
-                    "VALUES " +
-                    "('" + CNumber + "', '" + Ctype + "', '" + Baddress + "', '" + CCode + "', '" + ExpDate + "', '" + CName + "');";
+
+            //see if card already exists
+            query = "SELECT * " +
+                    "FROM CREDIT_CARD " +
+                    "WHERE CNumber='" + CNumber + "' AND Ctype='" + Ctype + "' AND Baddress='" + Baddress + "' AND Code='" + CCode + "' AND ExpDate='" + ExpDate + "' AND Name='" + CName + "';";
             statement = connection.createStatement();
-            statement.executeUpdate(query);
+            rs = statement.executeQuery(query);
+
+            if (!rs.next()){    //insert into CREDIT_CARD
+                if (statement != null) {
+                    statement.close();
+                }
+
+                query = "INSERT INTO CREDIT_CARD " +
+                        "VALUES " +
+                        "('" + CNumber + "', '" + Ctype + "', '" + Baddress + "', '" + CCode + "', '" + ExpDate + "', '" + CName + "');";
+                statement = connection.createStatement();
+                statement.executeUpdate(query);
+            }
 
             if (statement != null) {
                 statement.close();
             }
+
+
 
             //insert into RESERVATION
             query = "INSERT INTO RESERVATION " +
@@ -254,11 +272,52 @@ public class main {
             }
 
 
+
             //insert into ROOM_RESERVATION
             query = "INSERT INTO ROOM_RESERVATION " +
                     "VALUES " +
                     "(" + invoiceNo + "," + hotelID + "," + roomNo + ",'" + checkinDate + "','" + checkoutDate + "');";
+            statement = connection.createStatement();
             statement.executeUpdate(query);
+
+            if (statement != null) {
+                statement.close();
+            }
+
+
+            //insert into RRESV_BREAKFAST
+            for (int i = 0; i < BType.size(); i++) {
+                String btype = BType.get(i);
+                String bcount = Integer.toString(BCount.get(i));
+
+                query = "INSERT INTO RRESV_BREAKFAST " +
+                        "VALUES " +
+                        "('" + btype + "'," + hotelID + ",'" + roomNo + "','" + checkinDate + "','" + bcount + "')";
+                statement = connection.createStatement();
+                statement.executeUpdate(query);
+
+                if (statement != null) {
+                    statement.close();
+                }
+            }
+
+
+
+            //insert into RRESV_SERVICE
+            for (String stype:
+                 SType) {
+
+                query = "INSERT INTO RRESV_SERVICE " +
+                        "VALUES " +
+                        "('" + stype + "'," + hotelID + ",'" + roomNo + "','" + checkinDate + "')";
+                statement = connection.createStatement();
+                statement.executeUpdate(query);
+
+                if (statement != null) {
+                    statement.close();
+                }
+            }
+
 
             System.out.println("\n\n\nCongratulations! You have successfully created your Hulton Hotels reservation.");
             while (true){
@@ -586,14 +645,13 @@ public class main {
             //pick reservation dates
             dates:
             while (true) {
-                // TODO: 5/3/2017 unskip
 
                 try {
                     DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MM/dd/yyyy").toFormatter();
                     LocalDate localDate;
 
                     System.out.println("Enter your desired check-in date for your stay (MM/dd/yyyy): ");
-                    String resp = scanner.nextLine();
+                    resp = scanner.nextLine();
                     if (resp.equalsIgnoreCase("exit")) {
                         return false;
                     }
@@ -602,23 +660,21 @@ public class main {
                     checkinDate = Date.valueOf(localDate);
 
                     System.out.println("Enter your desired check-out date for your stay (MM/dd/yyyy):");
-                    String endDate = scanner.nextLine();
-                    if (endDate.equalsIgnoreCase("exit")) {
+                    resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
                         return false;
                     }
 
                     localDate = LocalDate.parse(resp, formatter);
                     checkoutDate = Date.valueOf(localDate);
-                    query = "SELECT * " +
-                            "FROM ROOM, ROOM_RESERVATION " +
-                            "WHERE (ROOM.HotelID != ROOM_RESERVATION.HotelID AND " +
-                                    "ROOM.RoomNo != ROOM_RESERVATION.RoomNo AND " +
-                                    "ROOM.HotelID=" + hotelID + " AND " +
-                                    "Rtype='" + Rtype + "' AND " +
-                                    "CheckInDate!='" + checkinDate + "' AND " +
-                                    "CheckOutDate!='" + checkoutDate + "');";//SQL statement checks if date is available
 
-                    System.out.println(query);
+                    query = "SELECT * " +
+                            "FROM ROOM " +
+                            "WHERE NOT EXISTS(SELECT HotelID, RoomNo " +
+                            "             FROM ROOM_RESERVATION " +
+                            "             WHERE HotelID='" + hotelID + "' AND ('" + checkinDate + "' BETWEEN CheckInDate AND CheckOutDate) AND " +
+                            "             ('" + checkoutDate + "' BETWEEN CheckInDate AND CheckOutDate));";//SQL statement checks if date is available
+
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
 
@@ -626,6 +682,9 @@ public class main {
                         System.out.println("\nCongrats! Those dates are available.");
                         break;
                     } else {
+                        if (statement != null){
+                            statement.close();
+                        }
                         System.out.println("We're sorry, those dates are unavailable.");
                     }
                 } catch (DateTimeParseException e) {
@@ -633,24 +692,26 @@ public class main {
                 }
             }
 
+
             if (statement != null){
                 statement.close();
             }
 
 
-
-
             //start making a reservation - pick a room
-
-            query = "SELECT ROOM.*, Discount " +
-                    "FROM ROOM LEFT JOIN DISCOUNTED_ROOM ON ROOM.HotelID=DISCOUNTED_ROOM.HotelID AND ROOM.RoomNo=DISCOUNTED_ROOM.RoomNo " +
-                    "WHERE ROOM.HotelID='" + hotelID +"';";    // FIXME: 5/3/2017 temp query
-
-//select ROOM.*, Discount from ROOM left join DISCOUNTED_ROOM on ROOM.HotelID=DISCOUNTED_ROOM.HotelID AND ROOM.RoomNo=DISCOUNTED_ROOM.RoomNo where ROOM.HotelID='14012';
-
+            query = "SELECT R.*, Discount\n" +
+                    "FROM  (\n" +
+                    "    SELECT * \n" +
+                    "    FROM ROOM  \n" +
+                    "    WHERE NOT EXISTS(SELECT HotelID, RoomNo \n" +
+                    "                                FROM ROOM_RESERVATION \n" +
+                    "                                WHERE HotelID='14012' AND \n" +
+                    "                                ('" + checkinDate + "' BETWEEN CheckInDate AND CheckOutDate) AND \n" +
+                    "                                ('" + checkoutDate + "' BETWEEN CheckInDate AND CheckOutDate))) AS R\n" +
+                    "LEFT JOIN DISCOUNTED_ROOM AS D ON R.HotelID=D.HotelID AND R.RoomNo=D.RoomNo;";
 
             statement = connection.createStatement();
-            rs = statement.executeQuery(query); //query probably doesn't have to change here
+            rs = statement.executeQuery(query);
 
             rooms:
             while (true) {
@@ -735,8 +796,8 @@ public class main {
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
 
-            ArrayList<String> BType = new ArrayList<>();
-            ArrayList<Integer> BCount = new ArrayList<>();
+            BType = new ArrayList<>();
+            BCount = new ArrayList<>();
 
             if (rs.next()) {
                 System.out.println("\n\n\nBreakfasts are available for your reservation.");
@@ -808,7 +869,7 @@ public class main {
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
 
-            ArrayList<String> SType = new ArrayList();
+            SType = new ArrayList();
             services:
             while (true) {
 
@@ -1014,7 +1075,7 @@ public class main {
 
             //pick a room reservation
 
-            query = null; //sql statement that gets the list of reservations the user has made
+            query = null; //sql statement that gets the list of room reservations the user has made
 
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
