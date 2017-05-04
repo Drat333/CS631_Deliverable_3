@@ -7,6 +7,7 @@
     <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -39,12 +40,12 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="1120" column="12" lean-forward="false" selection-start-line="1120" selection-start-column="12" selection-end-line="1120" selection-end-column="12" />
+            <state relative-caret-position="423">
+              <caret line="1329" column="73" lean-forward="false" selection-start-line="1329" selection-start-column="73" selection-end-line="1329" selection-end-column="73" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1493883021479" expanded="false" signature="50216:50226" ph=" { " />
-                <marker date="1493883021479" expanded="false" signature="50295:50301" ph=" }" />
+                <marker date="1493884579038" expanded="false" signature="50222:50232" ph=" { " />
+                <marker date="1493884579038" expanded="false" signature="50301:50307" ph=" }" />
               </folding>
             </state>
           </provider>
@@ -53,12 +54,12 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="686">
-              <caret line="91" column="0" lean-forward="false" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
+            <state relative-caret-position="865">
+              <caret line="245" column="94" lean-forward="false" selection-start-line="245" selection-start-column="94" selection-end-line="245" selection-end-column="94" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#6349#6350#0" expanded="true" />
-                <element signature="e#6433#6434#0" expanded="true" />
+                <element signature="e#9417#9418#0" expanded="true" />
+                <element signature="e#9501#9502#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -289,7 +290,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Application.main (1)">
+  <component name="RunManager" selected="Application.main (2)">
     <configuration default="false" name="main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea">
         <pattern>
@@ -561,9 +562,9 @@
     </list>
     <recent_temporary>
       <list size="3">
-        <item index="0" class="java.lang.String" itemvalue="Application.main (1)" />
-        <item index="1" class="java.lang.String" itemvalue="Application.main" />
-        <item index="2" class="java.lang.String" itemvalue="Application.main (2)" />
+        <item index="0" class="java.lang.String" itemvalue="Application.main (2)" />
+        <item index="1" class="java.lang.String" itemvalue="Application.main (1)" />
+        <item index="2" class="java.lang.String" itemvalue="Application.main" />
       </list>
     </recent_temporary>
   </component>
@@ -749,7 +750,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493879405746</updated>
     </task>
-    <option name="localTasksCounter" value="25" />
+    <task id="LOCAL-00025" summary="Working reviews.">
+      <created>1493883032709</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1493883032709</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TodoView">
@@ -826,7 +834,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fixed non-existent exception" />
     <MESSAGE value="Moved JDBC (SQL) code to MySQLAccess.java" />
     <MESSAGE value="Added runStatement method to MySQLAccess.java" />
     <MESSAGE value="Progress on reservation function of reservations &amp; reviews app" />
@@ -851,7 +858,8 @@
     <MESSAGE value="Added reservation insert sql statements. Need testing." />
     <MESSAGE value="Reservation &amp; Review: Reservations portion completed and working." />
     <MESSAGE value="Fixes to Reservation portion." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixes to Reservation portion." />
+    <MESSAGE value="Working reviews." />
+    <option name="LAST_COMMIT_MESSAGE" value="Working reviews." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1272,18 +1280,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="686">
-          <caret line="91" column="0" lean-forward="false" selection-start-line="91" selection-start-column="0" selection-end-line="91" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#6349#6350#0" expanded="true" />
-            <element signature="e#6433#6434#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$PROJECT_DIR$/lib/mysql-connector-java-5.1.41-bin.jar!/com/mysql/jdbc/ResultSetImpl.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="167">
@@ -1292,14 +1288,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="1120" column="12" lean-forward="false" selection-start-line="1120" selection-start-column="12" selection-end-line="1120" selection-end-column="12" />
+        <state relative-caret-position="865">
+          <caret line="245" column="94" lean-forward="false" selection-start-line="245" selection-start-column="94" selection-end-line="245" selection-end-column="94" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493883021479" expanded="false" signature="50216:50226" ph=" { " />
-            <marker date="1493883021479" expanded="false" signature="50295:50301" ph=" }" />
+            <element signature="e#9417#9418#0" expanded="true" />
+            <element signature="e#9501#9502#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="423">
+          <caret line="1329" column="73" lean-forward="false" selection-start-line="1329" selection-start-column="73" selection-end-line="1329" selection-end-column="73" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1493884579038" expanded="false" signature="50222:50232" ph=" { " />
+            <marker date="1493884579038" expanded="false" signature="50301:50307" ph=" }" />
           </folding>
         </state>
       </provider>

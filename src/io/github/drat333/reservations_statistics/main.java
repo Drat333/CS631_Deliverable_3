@@ -153,24 +153,99 @@ public class main {
                 // TODO: 4/30/2017 computed highest rated room type per hotel
 
                 query = "SELECT RType " +
-                        "FROM ROOM, ROOM_REVIEW " +
-                        "WHERE (CheckInDate BETWEEN startdatevar AND enddatevar) AND " +
-                        "EXISTS(SELECT RID, MAX(TOTAL_RRATING) " +
-                                "FROM (SELECT SUM(RATING) " +
-                                        "FROM ROOM_REVIEW " +
-                                        "GROUP BY RID AS RTYPE_TOTAL(TOTAL_RRATING) " +
-                                "WHERE CheckInDate BETWEEN startdatevar AND enddatevar);";
+                        "FROM(SELECT RType, SUM(RATING) AS totalscore " +
+                        "FROM ROOM,ROOM_REVIEW " +
+                        "WHERE ROOM.HotelID=ROOM_REVIEW.HotelID AND " +
+                        "ROOM.RoomNo=ROOM_REVIEW.RoomNo " +
+                        "GROUP BY RType) as totalscore " +
+                        "HAVING MAX(totalscore);";
 
                 statement = connection.createStatement();
                 rs = statement.executeQuery(query);
 
-                rs.next();
-                System.out.println("Highest rated room type per hotel");
+                if (rs.next()) {
+                    System.out.println("Highest rated room type per hotel:");
+                    rs.beforeFirst();
+                    System.out.println("HotelID\t\t\tRoom");
+                    System.out.println("----------------------");
+                    while (rs.next()){
+                        System.out.println(rs.getString("HotelID") + "\t|\t" + rs.getString("RType"));
+                    }
+                }
+
 
 
                 // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
+
+                query = "SELECT RType " +
+                        "FROM(SELECT RType, SUM(RATING) AS totalscore " +
+                        "FROM ROOM,ROOM_REVIEW " +
+                        "WHERE ROOM.HotelID=ROOM_REVIEW.HotelID AND " +
+                        "ROOM.RoomNo=ROOM_REVIEW.RoomNo " +
+                        "GROUP BY RType) as totalscore " +
+                        "HAVING MAX(totalscore);";
+
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
+
+                if (rs.next()) {
+                    System.out.println("Top 5 Customers (in terms of money spent):");
+                    rs.beforeFirst();
+                    System.out.println("Customer Name");
+                    System.out.println("--------------");
+                    while (rs.next()){
+                        System.out.println(rs.getString("Name"));
+                    }
+                }
+
+
+
                 // TODO: 4/30/2017 compute highest rated breakfast type across all hotels
+
+                query = "SELECT RType " +
+                        "FROM(SELECT RType, SUM(RATING) AS totalscore " +
+                        "FROM ROOM,ROOM_REVIEW " +
+                        "WHERE ROOM.HotelID=ROOM_REVIEW.HotelID AND " +
+                        "ROOM.RoomNo=ROOM_REVIEW.RoomNo " +
+                        "GROUP BY RType) as totalscore " +
+                        "HAVING MAX(totalscore);";
+
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
+
+                if (rs.next()) {
+                    System.out.println("Highest rated breakfast across all hotels:");
+                    rs.beforeFirst();
+                    System.out.println("HotelID\t\t\tBreakfast");
+                    System.out.println("--------------");
+                    while (rs.next()){
+                        System.out.println(rs.getString("HotelID") + "\t|\t" + rs.getString("BType"));
+                    }
+                }
+
+
+
                 // TODO: 4/30/2017 compute highest rated service type across all hotels
+
+                query = "SELECT RType " +
+                        "FROM(SELECT RType, SUM(RATING) AS totalscore " +
+                        "FROM ROOM,ROOM_REVIEW " +
+                        "WHERE ROOM.HotelID=ROOM_REVIEW.HotelID AND " +
+                        "ROOM.RoomNo=ROOM_REVIEW.RoomNo " +
+                        "GROUP BY RType) as totalscore " +
+                        "HAVING MAX(totalscore);";
+
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
+
+                if (rs.next()) {
+                    System.out.println("Highest rated service across all hotels:");
+                    rs.beforeFirst();
+                    System.out.println("HotelID\t\t\tService");
+                    while (rs.next()){
+                        System.out.println(rs.getString("HotelID") + "\t|\t" + rs.getString("sType"));
+                    }
+                }
             } catch (SQLException e) {
                 System.err.print("Error in SQL query. ");
                 System.err.println(e.getMessage());

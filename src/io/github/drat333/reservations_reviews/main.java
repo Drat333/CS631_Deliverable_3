@@ -1222,7 +1222,7 @@ public class main {
                     query = "INSERT INTO ROOM_REVIEW " +
                             "(Rating,Text,CID,HotelID,RoomNo) " +
                             "VALUES " +
-                            "('" + rating + "','" + review + "','" + customerID + "','" + hotelID + "','" + roomNo + "');"; //sql statement that inserts review
+                            "('" + rating + "',\"" + review + "\",'" + customerID + "','" + hotelID + "','" + roomNo + "');"; //sql statement that inserts review
 
                     insertStatement = connection.createStatement();
                     insertStatement.executeUpdate(query);
@@ -1273,7 +1273,7 @@ public class main {
                             query = "INSERT INTO BREAKFAST_REVIEW " +
                                     "(Rating,Text,CID,HotelID,BType) " +
                                     "VALUES " +
-                                    "('" + rating + "','" + review + "','" + customerID + "','" + hotelID + "','" + rs.getString("BType") + "');";  //sql statement that inserts review
+                                    "('" + rating + "',\"" + review + "\",'" + customerID + "','" + hotelID + "','" + rs.getString("BType") + "');";  //sql statement that inserts review
 
                             insertStatement = connection.createStatement();
                             insertStatement.executeUpdate(query);
@@ -1327,7 +1327,7 @@ public class main {
                             query = "INSERT INTO SERVICE_REVIEW " +
                                     "(Rating,Text,CID,HotelID,SType) " +
                                     "VALUES " +
-                                    "('" + rating + "','" + review + "','" + customerID + "','" + hotelID + "','" + rs.getString("SType") + "');";  //sql statement that inserts review
+                                    "('" + rating + "',\"" + review + "\",'" + customerID + "','" + hotelID + "','" + rs.getString("SType") + "');";  //sql statement that inserts review
 
                             insertStatement = connection.createStatement();
                             insertStatement.executeUpdate(query);
