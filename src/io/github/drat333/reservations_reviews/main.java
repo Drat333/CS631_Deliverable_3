@@ -279,6 +279,7 @@ public class main {
             query = "INSERT INTO ROOM_RESERVATION " +
                     "VALUES " +
                     "(" + invoiceNo + "," + hotelID + "," + roomNo + ",'" + checkinDate + "','" + checkoutDate + "');";
+            System.out.println(query);
             statement = connection.createStatement();
             statement.executeUpdate(query);
 
