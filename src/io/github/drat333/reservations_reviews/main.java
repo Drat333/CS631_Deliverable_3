@@ -2,6 +2,9 @@ package io.github.drat333.reservations_reviews;
 
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -549,54 +552,56 @@ public class main {
             dates:
             while (true) {
                 // TODO: 5/3/2017 unskip
-                break;
-                /*
-                //TODO: error checking of date input
-                DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MM/dd/yyyy").toFormatter();
-                LocalDate localDate;
 
-                System.out.println("Enter your desired check-in date for your stay (MM/dd/yyyy): ");
-                String resp = scanner.nextLine();
-                if (resp.equalsIgnoreCase("exit")) {
-                    return false;
+                try {
+                    DateTimeFormatter formatter = new DateTimeFormatterBuilder().appendPattern("MM/dd/yyyy").toFormatter();
+                    LocalDate localDate;
+
+                    System.out.println("Enter your desired check-in date for your stay (MM/dd/yyyy): ");
+                    String resp = scanner.nextLine();
+                    if (resp.equalsIgnoreCase("exit")) {
+                        return false;
+                    }
+
+                    localDate = LocalDate.parse(resp, formatter);
+                    checkinDate = Date.valueOf(localDate);
+
+                    System.out.println("Enter your desired check-out date for your stay (MM/dd/yyyy):");
+                    String endDate = scanner.nextLine();
+                    if (endDate.equalsIgnoreCase("exit")) {
+                        return false;
+                    }
+
+                    localDate = LocalDate.parse(resp, formatter);
+                    checkoutDate = Date.valueOf(localDate);
+                    query = "SELECT * " +
+                            "FROM ROOM, ROOM_RESERVATION " +
+                            "WHERE (ROOM.HotelID != ROOM_RESERVATION.HotelID AND " +
+                                    "ROOM.RoomNo != ROOM_RESERVATION.RoomNo AND " +
+                                    "ROOM.HotelID=" + hotelID + " AND " +
+                                    "Rtype='" + Rtype + "' AND " +
+                                    "CheckInDate!='" + checkinDate + "' AND " +
+                                    "CheckOutDate!='" + checkoutDate + "');";//SQL statement checks if date is available
+
+                    System.out.println(query);
+                    statement = connection.createStatement();
+                    rs = statement.executeQuery(query);
+
+                    if (rs.next()) {
+                        System.out.println("\nCongrats! Those dates are available.");
+                        break;
+                    } else {
+                        System.out.println("We're sorry, those dates are unavailable.");
+                    }
+                } catch (DateTimeParseException e) {
+                    System.out.println("\nInvalid date format! Please use the format MM/dd/yyyy, ex. 05/22/1997\n");
                 }
-
-                localDate = LocalDate.parse(resp,formatter);
-                checkinDate = Date.valueOf(localDate);
-
-                System.out.println("Enter your desired check-out date for your stay (MM/dd/yyyy):");
-                String endDate = scanner.nextLine();
-                if (endDate.equalsIgnoreCase("exit")) {
-                    return false;
-                }
-
-                localDate = LocalDate.parse(resp,formatter);
-                checkoutDate = Date.valueOf(localDate);
-                query = "SELECT * " +
-                        "FROM ROOM, ROOM_RESERVATION " +
-                        "WHERE (ROOM.HotelID != ROOM_RESERVATION.HotelID AND " +
-                                "ROOM.RoomNo != ROOM_RESERVATION.RoomNo AND " +
-                                "ROOM.HotelID=" + hotelID + " AND " +
-                                "Rtype='" + Rtype + "' AND " +
-                                "CheckInDate!='" + checkinDate + "' AND " +
-                                "CheckOutDate!='" + checkoutDate + "');";//SQL statement checks if date is available
-
-                System.out.println(query);
-                statement = connection.createStatement();
-                rs = statement.executeQuery(query);
-
-                if (rs.next()) {
-                    System.out.println("\nCongrats! Those dates are available.");
-                    break;
-                } else {
-                    System.out.println("We're sorry, those dates are unavailable.");
-                }*/
-
             }
 
             if (statement != null){
-                statement.close();  // FIXME: 5/3/2017 can we get rid of this?
+                statement.close();
             }
+
 
 
 
@@ -705,8 +710,11 @@ public class main {
                 rs.beforeFirst();
                 while (rs.next()) {   //if breakfasts are available
                     while (true) {
+                        System.out.println();
                         BType.add(rs.getString("BType"));
-                        System.out.print(rs.getString("BType") + " ($" + rs.getString("BPrice") + "/order): ");
+                        System.out.println(rs.getString("BType") + " ($" + rs.getString("BPrice") + "/order): ");
+                        System.out.println(rs.getString("Description"));
+                        System.out.print("Number of orders: ");
 
                         resp = scanner.nextLine();
                         if (resp.equalsIgnoreCase("exit")) {

@@ -54,11 +54,9 @@ public class main {
                     System.out.println("\nInvalid response!\n");
             }
             if (loggedIn) {
-                break;
+                statistics();
             }
         }
-
-        clearConsole();
     }
 
     private static boolean login() {
@@ -151,11 +149,42 @@ public class main {
             }
 
             System.out.println("\nmuh stats\n");
-            // TODO: 4/30/2017 computed highest rated room type per hotel
-            // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
-            // TODO: 4/30/2017 compute highest rated breakfast type across all hotels
-            // TODO: 4/30/2017 compute highest rated service type across all hotels
+            try {
+                // TODO: 4/30/2017 computed highest rated room type per hotel
 
+                query = "SELECT RType " +
+                        "FROM ROOM, ROOM_REVIEW " +
+                        "WHERE (CheckInDate BETWEEN startdatevar AND enddatevar) AND " +
+                        "EXISTS(SELECT RID, MAX(TOTAL_RRATING) " +
+                                "FROM (SELECT SUM(RATING) " +
+                                        "FROM ROOM_REVIEW " +
+                                        "GROUP BY RID AS RTYPE_TOTAL(TOTAL_RRATING) " +
+                                "WHERE CheckInDate BETWEEN startdatevar AND enddatevar);";
+
+                statement = connection.createStatement();
+                rs = statement.executeQuery(query);
+
+                rs.next();
+                System.out.println("Highest rated room type per hotel");
+
+
+                // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
+                // TODO: 4/30/2017 compute highest rated breakfast type across all hotels
+                // TODO: 4/30/2017 compute highest rated service type across all hotels
+            } catch (SQLException e) {
+                System.err.print("Error in SQL query. ");
+                System.err.println(e.getMessage());
+                return;
+            } finally {
+                if (statement != null) {
+                    try {
+                        statement.close();
+                    } catch (SQLException ex) {
+                        System.err.println("Error in closing SQL query");
+                        return;
+                    }
+                }
+            }
         }
     }
 
