@@ -14,7 +14,7 @@ public class main {
     private static boolean loggedIn;
     private static String email;
     private static String displayName;
-    private static String customerID;
+    private static int customerID;
 
     //variables for Scanner
     private static Scanner scanner;
@@ -61,7 +61,7 @@ public class main {
         ///////////////////////
         while (true) {
 
-            System.out.println("\n\n\nWelcome to the Hulton Reservation and Reviews app!");
+            System.out.println("\n\nWelcome to the Hulton Reservation and Reviews app!");
             System.out.println("1 | Login");
             System.out.println("0 | Exit");
             resp = scanner.nextLine();
@@ -105,7 +105,7 @@ public class main {
                     email = null;
                     displayName = null;
                     loggedIn = false;
-                    customerID = null;
+                    customerID = -1;
                     main(null);     //log out then return to main menu
                 case "0":
                     goodbye();
@@ -145,7 +145,7 @@ public class main {
         String pass = scanner.nextLine();
 
         //SQL statement to check user credentials
-        query = ("SELECT Name, Email, Password " +
+        query = ("SELECT CID, Name, Email, Password " +
                 "FROM CUSTOMER " +
                 "WHERE Email='" + email + "' AND Password='" + pass + "'");
 
@@ -158,7 +158,7 @@ public class main {
             } else {
                 displayName = rs.getString("Name");
                 loggedIn = true;
-                customerID = rs.getString("CID");
+                customerID = rs.getInt("CID");
                 return true;
             }
 
@@ -226,21 +226,44 @@ public class main {
 
 
         try {
-            statement = connection.createStatement();
-
+            int invoiceNo;
             LocalDate localDate = LocalDate.now();
             reserveDate = Date.valueOf(localDate);
 
-            query = null;  //insert credit card values
-            //rs = statement.executeQuery(query);   FIXME: uncomment
+            //insert into CREDIT_CARD
+            query = "INSERT INTO CREDIT_CARD " +
+                    "VALUES " +
+                    "('" + CNumber + "', '" + Ctype + "', '" + Baddress + "', '" + CCode + "', '" + ExpDate + "', '" + CName + "');";
+            statement = connection.createStatement();
+            statement.executeUpdate(query);
 
-            query = null;  //insert hotel values
-            //rs = statement.executeQuery(query);   FIXME: uncomment
+            if (statement != null) {
+                statement.close();
+            }
+
+            //insert into RESERVATION
+            query = "INSERT INTO RESERVATION " +
+                    "(CID, Cnumber, RDate) " +
+                    "VALUES " +
+                    "(" + customerID + ",'" + CNumber + "','" + reserveDate + "');";
+            statement = connection.createStatement();
+            invoiceNo = statement.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
+
+            if (statement != null) {
+                statement.close();
+            }
+
+
+            //insert into ROOM_RESERVATION
+            query = "INSERT INTO ROOM_RESERVATION " +
+                    "VALUES " +
+                    "(" + invoiceNo + "," + hotelID + "," + roomNo + ",'" + checkinDate + "','" + checkoutDate + "');";
+            statement.executeUpdate(query);
 
             System.out.println("\n\n\nCongratulations! You have successfully created your Hulton Hotels reservation.");
             while (true){
-                System.out.println("\nWould you like to add another room to this reservation?          (Y/N)");
-                System.out.println("(Note: This will add another reservation to your " + Ctype + "-**" + CNumber.substring(CNumber.length() - 4) + ")");
+                System.out.println("\nWould you like to add another room to this reservation?  (Y/N)");
+                System.out.println("This will add another reservation to your " + Ctype + "-**" + CNumber.substring(CNumber.length() - 4) + ".");
                 resp = scanner.nextLine();
 
                 switch (resp.toUpperCase()) {
@@ -249,6 +272,16 @@ public class main {
                         if (!pickRoom()) return;
                         if (!pickBreakfasts()) return;
                         if (!pickServices()) return;
+
+                        statement = connection.createStatement();
+                        query = "INSERT INTO ROOM_RESERVATION " +
+                                "VALUES " +
+                                "(" + invoiceNo + "," + hotelID + "," + roomNo + ",'" + checkinDate + "','" + checkoutDate + "');";
+                        statement.executeUpdate(query);
+
+                        if (statement != null) {
+                            statement.close();
+                        }
 
                         System.out.println("\n\n\nCongratulations! You have successfully created your Hulton Hotels reservation.");
                         continue;
@@ -302,12 +335,12 @@ public class main {
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
 
-                    int i = 1;
+                    int i = 0;
                     rs.beforeFirst();
                     while (rs.next()) {
+                        i++;
                         System.out.println(Integer.toString(i) + " | " +
                                 rs.getString("Country"));
-                        i++;
                     }
 
 
@@ -356,12 +389,12 @@ public class main {
                     statement = connection.createStatement();
                     rs = statement.executeQuery(query);
 
-                    int i = 1;
+                    int i = 0;
                     rs.beforeFirst();
                     while (rs.next()) {
+                        i++;
                         System.out.println(Integer.toString(i) + " | " +
                                 rs.getString("State"));
-                        i++;
                     }
 
 
@@ -414,13 +447,13 @@ public class main {
                     rs = statement.executeQuery(query);
 
                     System.out.println("Which hotel in " + state + ", " + country + " would you like to view?");
-                    int i = 1;
 
+                    int i = 0;
                     rs.beforeFirst();
                     while (rs.next()) {
+                        i++;
                         System.out.println(Integer.toString(i) + " | " +
                                 rs.getString("Street"));
-                        i++;
                     }
 
 
@@ -495,8 +528,10 @@ public class main {
 
     private static boolean pickRoom(){
         try {
+
+
             //pick a room type
-            query = "SELECT Rtype " +
+            query = "SELECT DISTINCT Rtype " +
                     "FROM ROOM " +
                     "WHERE HotelID='"+ hotelID + "';"; // sql statement that gets the room types available
 
@@ -506,13 +541,13 @@ public class main {
             roomTypes:
             while (true) {
                 System.out.println("\nWhat type of room would you like to reserve?");
-                int i = 1;
 
+                int i = 0;
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
-                    System.out.println(Integer.toString(i) + " | " + rs.getString("Rtype"));
                     i++;
+                    System.out.println(Integer.toString(i) + " | " + rs.getString("Rtype"));
                 }
 
 
@@ -620,11 +655,12 @@ public class main {
             rooms:
             while (true) {
                 System.out.println("\nWhich room would you like to reserve?");
-                int i = 1;
 
+                int i = 0;
                 //rs is unusable after a while loop; use rs.beforeFirst() to use rs again
                 rs.beforeFirst();
                 while (rs.next()) {
+                    i++;
                     System.out.print(Integer.toString(i) + " | $" +
                             rs.getString("Price") + " per day, " +
                             rs.getString("Capacity") + " people, Floor " +
@@ -637,7 +673,6 @@ public class main {
                         System.out.print(Double.toString(discount) + "% off");
                     }
                     System.out.println("\n\tDescription: " + rs.getString("Description"));
-                    i++;
                 }
 
 
@@ -912,15 +947,15 @@ public class main {
         // TODO: 4/30/2017 Add in SQL statements and test
         try {
             query = "SELECT * " +
-                    "FROM RESERVATION AS R, CREDIT_CARD AS C" +
-                    "WHERE R.Cnumber=C.Cnumber AND R.CID='" + customerID + "';"; //sql statement that gets the list of reservations the user has made
+                    "FROM RESERVATION AS R, CREDIT_CARD AS C " +
+                    "WHERE R.Cnumber=C.Cnumber and R.CID=" + customerID + ";";  //sql statement that gets the list of reservations the user has made
 
             statement = connection.createStatement();
             rs = statement.executeQuery(query);
 
             if (!rs.next()) {
-                System.out.println("You don't have any reservations to review currently.");
-                System.out.println("Returning to the main menu.\n");
+                System.out.println("\n\n\nYou don't have any reservations to review currently.");
+                System.out.println("Returning to the main menu.");
                 return;
             }
 
@@ -933,16 +968,16 @@ public class main {
             while (true) {
                 System.out.println("Please pick a reservation that you would like to review:");
 
-                int i = 1;
 
+                int i = 0;
                 rs.beforeFirst();
                 while (rs.next()) {
+                    i++;
                     System.out.println(Integer.toString(i) + " | Invoice: " +
                             rs.getString("InvoiceNo") + ",\tCard: " +
                             rs.getString("Ctype") + "-**" +
                             rs.getString("Cnumber").substring(CNumber.length() - 4) + ",\t Reserve Date: " +
                             rs.getString("Date"));
-                    i++;
                 }
 
 
@@ -988,16 +1023,16 @@ public class main {
             while (true) {
                 System.out.println("Please pick a room reservation that you would like to review:");
 
-                int i = 1;
 
+                int i = 0;
                 rs.beforeFirst();
                 while (rs.next()) {
+                    i++;
                     System.out.println(Integer.toString(i) + " | " +
                             rs.getString("State") + ", " +
                             rs.getString("Country") + " - " +
                             rs.getString("Rtype") + ", Room #" +
                             rs.getString("RoomNo"));
-                    i++;
                 }
 
                 resp = scanner.nextLine();
