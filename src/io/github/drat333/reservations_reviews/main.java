@@ -28,7 +28,6 @@ public class main {
 
 
 
-    // FIXME: 5/3/2017 assign to null at some point?
     //hotelSearch values
     private static int hotelID;
     private static Date checkinDate;
@@ -1046,7 +1045,6 @@ public class main {
 
 
     private static void leaveReviews(){
-        // TODO: 4/30/2017 Add in SQL statements and test
         try {
             query = "SELECT * " +
                     "FROM RESERVATION AS R, CREDIT_CARD AS C " +

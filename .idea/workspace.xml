@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BookmarkManager">
-    <bookmark url="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" line="685" />
+    <bookmark url="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" line="684" />
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -39,29 +40,29 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="423">
-              <caret line="1329" column="73" lean-forward="false" selection-start-line="1329" selection-start-column="73" selection-end-line="1329" selection-end-column="73" />
+            <state relative-caret-position="181">
+              <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <marker date="1493884579038" expanded="false" signature="50222:50232" ph=" { " />
-                <marker date="1493884579038" expanded="false" signature="50301:50307" ph=" }" />
+                <marker date="1493888095163" expanded="false" signature="50111:50121" ph=" { " />
+                <marker date="1493888095163" expanded="false" signature="50190:50196" ph=" }" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="188" column="92" lean-forward="false" selection-start-line="188" selection-start-column="92" selection-end-line="188" selection-end-column="92" />
+            <state relative-caret-position="119">
+              <caret line="213" column="18" lean-forward="false" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="18" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#10509#10510#0" expanded="true" />
-                <element signature="e#10593#10594#0" expanded="true" />
+                <element signature="e#10441#10442#0" expanded="true" />
+                <element signature="e#10525#10526#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -141,8 +142,8 @@
         <option value="$PROJECT_DIR$/lib/mysql-connector-java-5.1.41-bin.jar!/com/mysql/jdbc/ResultSetImpl.class" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/customerregistration/MySQLAccess.java" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java" />
-        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
+        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
       </list>
     </option>
   </component>
@@ -780,7 +781,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493887241050</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="Statistics app is working properly.">
+      <created>1493888022804</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1493888022804</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="TodoView">
@@ -794,9 +802,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Nl-Palette" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3281412" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -804,7 +813,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29595014" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.29595014" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296146" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -856,7 +865,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing required" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required" />
     <MESSAGE value="Reservation and Reviews app: started work on reviews portion" />
     <MESSAGE value="Started implementing reviews portion of Reservations and Reviews" />
@@ -881,38 +889,39 @@
     <MESSAGE value="Fix for using apostrophes in review text. Not fixing: quotes in review text." />
     <MESSAGE value="Two stat functions working correctly." />
     <MESSAGE value="Three stat functions working correctly." />
-    <option name="LAST_COMMIT_MESSAGE" value="Three stat functions working correctly." />
+    <MESSAGE value="Statistics app is working properly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Statistics app is working properly." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
-          <line>870</line>
+          <line>869</line>
           <properties />
           <option name="timeStamp" value="48" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
-          <line>337</line>
+          <line>336</line>
           <properties />
           <option name="timeStamp" value="50" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
-          <line>801</line>
+          <line>800</line>
           <properties />
           <option name="timeStamp" value="51" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
-          <line>871</line>
+          <line>870</line>
           <properties />
           <option name="timeStamp" value="52" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java</url>
-          <line>931</line>
+          <line>930</line>
           <properties />
           <option name="timeStamp" value="53" />
         </line-breakpoint>
@@ -1310,26 +1319,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="423">
-          <caret line="1329" column="73" lean-forward="false" selection-start-line="1329" selection-start-column="73" selection-end-line="1329" selection-end-column="73" />
+        <state relative-caret-position="119">
+          <caret line="213" column="18" lean-forward="false" selection-start-line="213" selection-start-column="18" selection-end-line="213" selection-end-column="18" />
           <folding>
             <element signature="imports" expanded="true" />
-            <marker date="1493884579038" expanded="false" signature="50222:50232" ph=" { " />
-            <marker date="1493884579038" expanded="false" signature="50301:50307" ph=" }" />
+            <element signature="e#10441#10442#0" expanded="true" />
+            <element signature="e#10525#10526#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="188" column="92" lean-forward="false" selection-start-line="188" selection-start-column="92" selection-end-line="188" selection-end-column="92" />
+        <state relative-caret-position="181">
+          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#10509#10510#0" expanded="true" />
-            <element signature="e#10593#10594#0" expanded="true" />
+            <marker date="1493888095163" expanded="false" signature="50111:50121" ph=" { " />
+            <marker date="1493888095163" expanded="false" signature="50190:50196" ph=" }" />
           </folding>
         </state>
       </provider>

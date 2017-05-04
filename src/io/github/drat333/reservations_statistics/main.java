@@ -150,7 +150,7 @@ public class main {
 
             System.out.println("\nmuh stats\n");
             try {
-                // TODO: 4/30/2017 computed highest rated room type per hotel
+                //computed highest rated room type per hotel
 
                 query = "SELECT HotelID, RType " +
                         "FROM(SELECT M.HotelID, M.RType, AVG(Rating) AS RAvgScore " +
@@ -181,7 +181,7 @@ public class main {
 
 
 
-                // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
+                //compute 5 best customers, in terms of money spent in reservations
 
                 query = "SELECT Name,totalcost " +
                         "FROM (SELECT Name, SUM(TotalCost) AS totalcost " +
@@ -211,7 +211,7 @@ public class main {
 
 
 
-                // TODO: 4/30/2017 compute highest rated breakfast type across all hotels
+                //compute highest rated breakfast type across all hotels
 
                 query = "SELECT HotelID, BType " +
                         "FROM(SELECT R.HotelID, B.BType, AVG(Rating) AS BAvgScore " +
@@ -237,7 +237,7 @@ public class main {
 
 
 
-                // TODO: 4/30/2017 compute highest rated service type across all hotels
+                //compute highest rated service type across all hotels
 
                 query = "SELECT HotelID, SType " +
                         "FROM(SELECT R.HotelID, S.SType, AVG(Rating) AS SAvgScore " +
