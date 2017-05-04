@@ -150,15 +150,17 @@ public class main {
 
             System.out.println("\nmuh stats\n");
             try {
-               /* // TODO: 4/30/2017 computed highest rated room type per hotel
+                // TODO: 4/30/2017 computed highest rated room type per hotel
 
-                query = "SELECT RType " +
-                        "FROM(SELECT RType, SUM(RATING) AS totalscore " +
-                        "FROM ROOM,ROOM_REVIEW " +
-                        "WHERE ROOM.HotelID=ROOM_REVIEW.HotelID AND " +
-                        "ROOM.RoomNo=ROOM_REVIEW.RoomNo " +
-                        "GROUP BY RType) as totalscore " +
-                        "HAVING MAX(totalscore);";
+                query = "SELECT HotelID, RType " +
+                        "FROM(SELECT M.HotelID, M.RType, AVG(Rating) AS RAvgScore " +
+                        "     FROM ROOM AS M,ROOM_REVIEW AS W,ROOM_RESERVATION AS R " +
+                        "     WHERE CheckInDate BETWEEN '" + startDate + "' AND '" + endDate + "' AND " +
+                        "        M.HotelID=W.HotelID AND M.HotelID=R.HotelID AND " +
+                        "        M.RoomNo=W.RoomNo AND M.RoomNo=R.RoomNo " +
+                        "     GROUP BY W.HotelID,RType) as avgscore " +
+                        "GROUP BY HotelID " +
+                        "HAVING MAX(RAvgScore);";
 
                 statement = connection.createStatement();
                 rs = statement.executeQuery(query);
@@ -176,7 +178,7 @@ public class main {
                 if (statement != null) {
                     statement.close();
                 }
-
+/*
                 // TODO: 4/30/2017 compute 5 best customers, in terms of money spent in reservations
 
                 query = "SELECT RType " +

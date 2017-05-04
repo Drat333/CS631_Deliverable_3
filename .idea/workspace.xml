@@ -56,12 +56,12 @@
       <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1307">
-              <caret line="250" column="50" lean-forward="false" selection-start-line="250" selection-start-column="50" selection-end-line="250" selection-end-column="50" />
+            <state relative-caret-position="355">
+              <caret line="161" column="34" lean-forward="true" selection-start-line="161" selection-start-column="34" selection-end-line="161" selection-end-column="34" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#10132#10133#0" expanded="true" />
-                <element signature="e#10216#10217#0" expanded="true" />
+                <element signature="e#10384#10385#0" expanded="true" />
+                <element signature="e#10468#10469#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -766,7 +766,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493884613494</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Two stat functions working correctly.">
+      <created>1493886506256</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1493886506256</updated>
+    </task>
+    <option name="localTasksCounter" value="28" />
     <servers />
   </component>
   <component name="TodoView">
@@ -780,7 +787,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1096" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32917964" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -791,7 +797,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29595014" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.29595014" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296146" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -843,7 +849,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Added runStatement method to MySQLAccess.java" />
     <MESSAGE value="Progress on reservation function of reservations &amp; reviews app" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing required" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing and SQL statements required" />
@@ -868,7 +873,8 @@
     <MESSAGE value="Fixes to Reservation portion." />
     <MESSAGE value="Working reviews." />
     <MESSAGE value="Fix for using apostrophes in review text. Not fixing: quotes in review text." />
-    <option name="LAST_COMMIT_MESSAGE" value="Fix for using apostrophes in review text. Not fixing: quotes in review text." />
+    <MESSAGE value="Two stat functions working correctly." />
+    <option name="LAST_COMMIT_MESSAGE" value="Two stat functions working correctly." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1311,12 +1317,12 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1307">
-          <caret line="250" column="50" lean-forward="false" selection-start-line="250" selection-start-column="50" selection-end-line="250" selection-end-column="50" />
+        <state relative-caret-position="355">
+          <caret line="161" column="34" lean-forward="true" selection-start-line="161" selection-start-column="34" selection-end-line="161" selection-end-column="34" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#10132#10133#0" expanded="true" />
-            <element signature="e#10216#10217#0" expanded="true" />
+            <element signature="e#10384#10385#0" expanded="true" />
+            <element signature="e#10468#10469#0" expanded="true" />
           </folding>
         </state>
       </provider>
