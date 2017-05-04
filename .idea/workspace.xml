@@ -6,7 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="f895165d-cf23-403f-a843-776de77e12c0" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" afterPath="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -20,6 +19,9 @@
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/CS631_Deliverable_3$main.coverage" NAME="main Coverage Results" MODIFIED="1493788804347" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>io.github.drat333.customerregistration.*</FILTER>
+    </SUITE>
+    <SUITE FILE_PATH="coverage/CS631_Deliverable_3$main__2_.coverage" NAME="main (2) Coverage Results" MODIFIED="1493886315689" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>io.github.drat333.reservations_statistics.*</FILTER>
     </SUITE>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
@@ -37,7 +39,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="423">
@@ -51,15 +53,15 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="main.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="865">
-              <caret line="245" column="94" lean-forward="false" selection-start-line="245" selection-start-column="94" selection-end-line="245" selection-end-column="94" />
+            <state relative-caret-position="1307">
+              <caret line="250" column="50" lean-forward="false" selection-start-line="250" selection-start-column="50" selection-end-line="250" selection-end-column="50" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#9417#9418#0" expanded="true" />
-                <element signature="e#9501#9502#0" expanded="true" />
+                <element signature="e#10132#10133#0" expanded="true" />
+                <element signature="e#10216#10217#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -139,8 +141,8 @@
         <option value="$PROJECT_DIR$/lib/mysql-connector-java-5.1.41-bin.jar!/com/mysql/jdbc/ResultSetImpl.class" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/customerregistration/MySQLAccess.java" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/customerregistration/main.java" />
-        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
         <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java" />
+        <option value="$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java" />
       </list>
     </option>
   </component>
@@ -757,7 +759,14 @@
       <option name="project" value="LOCAL" />
       <updated>1493883032709</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Fix for using apostrophes in review text. Not fixing: quotes in review text.">
+      <created>1493884613494</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1493884613494</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TodoView">
@@ -834,7 +843,6 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Moved JDBC (SQL) code to MySQLAccess.java" />
     <MESSAGE value="Added runStatement method to MySQLAccess.java" />
     <MESSAGE value="Progress on reservation function of reservations &amp; reviews app" />
     <MESSAGE value="Completion of reservation function of reservations &amp; reviews app. Testing required" />
@@ -859,7 +867,8 @@
     <MESSAGE value="Reservation &amp; Review: Reservations portion completed and working." />
     <MESSAGE value="Fixes to Reservation portion." />
     <MESSAGE value="Working reviews." />
-    <option name="LAST_COMMIT_MESSAGE" value="Working reviews." />
+    <MESSAGE value="Fix for using apostrophes in review text. Not fixing: quotes in review text." />
+    <option name="LAST_COMMIT_MESSAGE" value="Fix for using apostrophes in review text. Not fixing: quotes in review text." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -1288,18 +1297,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="865">
-          <caret line="245" column="94" lean-forward="false" selection-start-line="245" selection-start-column="94" selection-end-line="245" selection-end-column="94" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#9417#9418#0" expanded="true" />
-            <element signature="e#9501#9502#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_reviews/main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="423">
@@ -1308,6 +1305,18 @@
             <element signature="imports" expanded="true" />
             <marker date="1493884579038" expanded="false" signature="50222:50232" ph=" { " />
             <marker date="1493884579038" expanded="false" signature="50301:50307" ph=" }" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/io/github/drat333/reservations_statistics/main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1307">
+          <caret line="250" column="50" lean-forward="false" selection-start-line="250" selection-start-column="50" selection-end-line="250" selection-end-column="50" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#10132#10133#0" expanded="true" />
+            <element signature="e#10216#10217#0" expanded="true" />
           </folding>
         </state>
       </provider>
