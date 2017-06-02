@@ -1,5 +1,7 @@
 package io.github.drat333.reservations_reviews;
 
+import com.sun.org.apache.regexp.internal.RE;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -267,6 +269,10 @@ public class main {
                     "(" + customerID + ",'" + CNumber + "','" + reserveDate + "','" + totalCost + "');";
             statement = connection.createStatement();
             invoiceNo = statement.executeUpdate(query,Statement.RETURN_GENERATED_KEYS);
+            ResultSet keys = statement.getGeneratedKeys();
+            keys.next();
+            invoiceNo = keys.getInt(invoiceNo);
+
 
             if (statement != null) {
                 statement.close();
