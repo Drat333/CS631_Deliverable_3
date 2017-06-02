@@ -1,7 +1,5 @@
 package io.github.drat333.reservations_reviews;
 
-import com.sun.org.apache.regexp.internal.RE;
-
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
